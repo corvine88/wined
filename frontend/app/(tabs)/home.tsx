@@ -9,6 +9,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { api } from '../../src/api';
 import { colors, fonts, radius, spacing, shadows, wineTypeColors } from '../../src/theme';
 
+const LOGO = require('../../assets/brand/logo.png');
+
 type Wine = {
   wine_id: string; name: string; wine_type: string; location_name?: string;
   rating: number; front_photo?: string; notes?: string;
@@ -178,7 +180,9 @@ function WineCard({ wine, onPress }: { wine: Wine; onPress: () => void }) {
 
 const styles = StyleSheet.create({
   c: { flex: 1, backgroundColor: colors.background },
-  header: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.md },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.md },
+  logoSmall: { width: 56, height: 56, backgroundColor: '#111', borderRadius: 14 },
+  logoSmall: { width: 56, height: 56, backgroundColor: '#111', borderRadius: 14 },
   kicker: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, textTransform: 'uppercase', letterSpacing: 1.5 },
   h1: { fontFamily: fonts.headingBold, fontSize: 34, color: colors.text, marginTop: 4 },
   addBtn: { backgroundColor: colors.primary, width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },

@@ -9,7 +9,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../src/auth';
 import { colors, fonts, spacing, radius, shadows } from '../src/theme';
 
-const BG = 'https://images.pexels.com/photos/36658282/pexels-photo-36658282.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940';
+const HEADER_IMG = require('../assets/brand/header.jpg');
+const LOGO = require('../assets/brand/logo.png');
 
 export default function Login() {
   const { user, login, register, loginWithSessionId } = useAuth();
@@ -77,10 +78,10 @@ export default function Login() {
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.hero}>
-          <Image source={{ uri: BG }} style={styles.heroImg} />
+          <Image source={HEADER_IMG} style={styles.heroImg} />
           <View style={styles.heroOverlay} />
           <View style={styles.heroText}>
-            <Text style={styles.title}>wine D</Text>
+            <Image source={LOGO} style={styles.logo} resizeMode="contain" />
             <Text style={styles.subtitle}>Registra, esplora e ricorda ogni degustazione.</Text>
           </View>
         </View>
@@ -173,12 +174,13 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   scroll: { flexGrow: 1, backgroundColor: colors.background },
-  hero: { height: 320, position: 'relative' },
+  hero: { height: 360, position: 'relative' },
   heroImg: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
-  heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(44,42,41,0.55)' },
+  heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(44,42,41,0.35)' },
   heroText: { flex: 1, justifyContent: 'flex-end', padding: spacing.lg, paddingBottom: spacing.xl },
+  logo: { width: 160, height: 120, marginBottom: spacing.sm },
   title: { fontFamily: fonts.headingBold, fontSize: 42, lineHeight: 46, color: '#fff' },
-  subtitle: { fontFamily: fonts.body, fontSize: 16, color: '#F4EDD9', marginTop: spacing.sm },
+  subtitle: { fontFamily: fonts.body, fontSize: 15, color: '#F4EDD9', marginTop: 4 },
   card: {
     marginTop: -24,
     marginHorizontal: spacing.md,
