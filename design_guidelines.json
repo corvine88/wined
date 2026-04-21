@@ -1,0 +1,178 @@
+{
+  "theme": "LIGHT",
+  "archetype": "1 (Organic & Earthy)",
+  "language": "Italian",
+  "colors": {
+    "primary": "#7B2E40",
+    "primary_light": "#9A4257",
+    "background": "#F9F8F5",
+    "surface": "#FFFFFF",
+    "surface_alt": "#F2EFE8",
+    "text": "#2C2A29",
+    "text_muted": "#7A7570",
+    "border": "#E3DEC7",
+    "star_active": "#D4AF37",
+    "star_inactive": "#E3DEC7",
+    "wine_types": {
+      "Rosso": "#7B2E40",
+      "Bianco": "#D9C589",
+      "Rosato": "#ECA8A8",
+      "Spumante": "#E8D89A",
+      "Dolce": "#D99A58",
+      "Altro": "#A09E98"
+    }
+  },
+  "typography": {
+    "heading_font": "Cormorant Garamond",
+    "body_font": "Manrope",
+    "h1": { "fontSize": 32, "lineHeight": 40, "fontFamily": "Cormorant Garamond", "fontWeight": "700" },
+    "h2": { "fontSize": 24, "lineHeight": 32, "fontFamily": "Cormorant Garamond", "fontWeight": "600" },
+    "h3": { "fontSize": 20, "lineHeight": 28, "fontFamily": "Cormorant Garamond", "fontWeight": "600" },
+    "body_lg": { "fontSize": 18, "lineHeight": 26, "fontFamily": "Manrope", "fontWeight": "400" },
+    "body_base": { "fontSize": 16, "lineHeight": 24, "fontFamily": "Manrope", "fontWeight": "400" },
+    "body_sm": { "fontSize": 14, "lineHeight": 20, "fontFamily": "Manrope", "fontWeight": "400" },
+    "label": { "fontSize": 12, "lineHeight": 16, "fontFamily": "Manrope", "fontWeight": "600", "textTransform": "uppercase", "letterSpacing": 1.5 }
+  },
+  "spacing": {
+    "xs": 4,
+    "sm": 8,
+    "md": 16,
+    "lg": 24,
+    "xl": 32,
+    "2xl": 48
+  },
+  "components": {
+    "button_primary": {
+      "backgroundColor": "#7B2E40",
+      "borderRadius": 30,
+      "paddingVertical": 16,
+      "paddingHorizontal": 24,
+      "alignItems": "center",
+      "justifyContent": "center"
+    },
+    "button_primary_text": {
+      "color": "#FFFFFF",
+      "fontSize": 16,
+      "fontWeight": "600"
+    },
+    "button_google": {
+      "backgroundColor": "#FFFFFF",
+      "borderWidth": 1,
+      "borderColor": "#E3DEC7",
+      "borderRadius": 30,
+      "paddingVertical": 16,
+      "flexDirection": "row",
+      "alignItems": "center",
+      "justifyContent": "center"
+    },
+    "card": {
+      "backgroundColor": "#FFFFFF",
+      "borderRadius": 20,
+      "padding": 16,
+      "shadowColor": "#2C2A29",
+      "shadowOffset": { "width": 0, "height": 4 },
+      "shadowOpacity": 0.05,
+      "shadowRadius": 12,
+      "elevation": 3
+    },
+    "input": {
+      "backgroundColor": "#F9F8F5",
+      "borderWidth": 1,
+      "borderColor": "#E3DEC7",
+      "borderRadius": 16,
+      "padding": 16,
+      "fontSize": 16,
+      "color": "#2C2A29"
+    },
+    "photo_placeholder": {
+      "backgroundColor": "#F2EFE8",
+      "borderWidth": 1,
+      "borderStyle": "dashed",
+      "borderColor": "#C7C2B3",
+      "borderRadius": 16,
+      "alignItems": "center",
+      "justifyContent": "center",
+      "aspectRatio": 0.75
+    }
+  },
+  "layout_patterns": {
+    "general": "Mobile-first, organic layouts with curves and asymmetry. Soft shadows.",
+    "list_view": "Vertical scroll with horizontal filter chips. Cards should display wine name, type, location, rating, and a thumbnail of the front bottle.",
+    "add_wine_form": "Two side-by-side squares for front and back photo uploads at the top. Below: Name, Type (chips or select), Location (row with GPS icon button and text input), Rating (5 star icons), Notes (multiline input).",
+    "map_view": "Full screen map using react-native-maps. Custom markers for wine locations.",
+    "detail_view": "Immersive image header (front bottle). Overlapping card for details with rounded top corners. Elegant serif typography for title."
+  },
+  "copy_italian": {
+    "auth": {
+      "title": "Il Tuo Diario del Vino",
+      "subtitle": "Registra, esplora e ricorda ogni degustazione.",
+      "login": "Accedi",
+      "register": "Registrati",
+      "google": "Continua con Google",
+      "email": "Email",
+      "password": "Password"
+    },
+    "navigation": {
+      "home": "I Miei Vini",
+      "add": "Nuova Degustazione",
+      "map": "Mappa",
+      "profile": "Profilo"
+    },
+    "home": {
+      "search": "Cerca vino...",
+      "filter_all": "Tutti",
+      "empty_state": "Nessuna degustazione trovata. Aggiungi il tuo primo vino!"
+    },
+    "add_wine": {
+      "front_photo": "Fronte",
+      "back_photo": "Retro",
+      "wine_name": "Nome del Vino",
+      "type_label": "Tipologia",
+      "types": ["Rosso", "Bianco", "Rosato", "Spumante", "Dolce", "Altro", "+ Personalizzato"],
+      "location_label": "Luogo",
+      "location_placeholder": "Dove lo hai bevuto?",
+      "gps_button": "Usa Posizione",
+      "rating_label": "Valutazione",
+      "notes_label": "Note di Degustazione",
+      "notes_placeholder": "Profumi, sapori, abbinamenti...",
+      "submit": "Salva Degustazione",
+      "photo_options": "Scegli da Galleria o Scatta Foto"
+    },
+    "map": {
+      "title": "La Mia Mappa dei Vini"
+    }
+  },
+  "image_urls": {
+    "login_background": {
+      "url": "https://images.pexels.com/photos/36658282/pexels-photo-36658282.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "A glass of red wine on an outdoor table during sunset",
+      "category": "auth_background"
+    },
+    "dummy_wine_front": {
+      "url": "https://images.unsplash.com/photo-1733248113944-c4f7dc132dac?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwxfHx3aW5lJTIwYm90dGxlJTIwbGFiZWx8ZW58MHx8fHwxNzc2NzkxNjE1fDA&ixlib=rb-4.1.0&q=85",
+      "description": "A close up of a bottle of wine on a table",
+      "category": "placeholder_front"
+    },
+    "dummy_wine_back": {
+      "url": "https://images.unsplash.com/photo-1695634739311-d0e49339a089?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwyfHx3aW5lJTIwYm90dGxlJTIwbGFiZWx8ZW58MHx8fHwxNzc2NzkxNjE1fDA&ixlib=rb-4.1.0&q=85",
+      "description": "A bottle of wine with a label on it",
+      "category": "placeholder_back"
+    },
+    "map_header_bg": {
+      "url": "https://images.pexels.com/photos/19062081/pexels-photo-19062081.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Breathtaking aerial view of the lush vineyards",
+      "category": "map_header"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Build a React Native Expo application.",
+    "Use @react-native-google-signin/google-signin or expo-auth-session for Google Auth.",
+    "Use expo-image-picker for camera and gallery photo uploads.",
+    "Use expo-location for getting GPS coordinates.",
+    "Use react-native-maps for the map view.",
+    "Apply the styling rules exactly as defined, leveraging 'Cormorant Garamond' and 'Manrope' fonts via @expo-google-fonts.",
+    "Ensure all text is in Italian using the 'copy_italian' object as a reference.",
+    "Use standard React Native StyleSheet or Nativewind, mapping the colors and typography accurately.",
+    "Add 'testID' attributes (the React Native equivalent to data-testid) to all interactive elements for robust automated testing."
+  ]
+}
