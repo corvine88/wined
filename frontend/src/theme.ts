@@ -1,6 +1,6 @@
 export const colors = {
-  primary: '#7B2E40',
-  primaryLight: '#9A4257',
+  primary: '#365959',
+  primaryLight: '#4A7373',
   background: '#F9F8F5',
   surface: '#FFFFFF',
   surfaceAlt: '#F2EFE8',
@@ -16,7 +16,7 @@ export const colors = {
 };
 
 export const wineTypeColors: Record<string, string> = {
-  Rosso: '#7B2E40',
+  Rosso: '#8B2635',
   Bianco: '#D9C589',
   Rosato: '#ECA8A8',
   Spumante: '#E8D89A',

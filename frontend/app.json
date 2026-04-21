@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Diario del Vino",
+    "name": "wine D",
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -19,7 +19,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#7B2E40"
+        "backgroundColor": "#365959"
       },
       "edgeToEdgeEnabled": true,
       "permissions": [

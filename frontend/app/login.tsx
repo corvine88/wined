@@ -80,7 +80,7 @@ export default function Login() {
           <Image source={{ uri: BG }} style={styles.heroImg} />
           <View style={styles.heroOverlay} />
           <View style={styles.heroText}>
-            <Text style={styles.title}>Il Tuo Diario{'\n'}del Vino</Text>
+            <Text style={styles.title}>wine D</Text>
             <Text style={styles.subtitle}>Registra, esplora e ricorda ogni degustazione.</Text>
           </View>
         </View>
