@@ -1,30 +1,31 @@
-import { Text, View, StyleSheet, Image } from "react-native";
-
-const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+import React, { useEffect } from 'react';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useAuth } from '../src/auth';
+import { colors } from '../src/theme';
 
 export default function Index() {
-  console.log(EXPO_PUBLIC_BACKEND_URL, "EXPO_PUBLIC_BACKEND_URL");
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Handle web auth callback fragment
+    if (typeof window !== 'undefined' && window.location.hash?.includes('session_id=')) {
+      router.replace('/auth-callback');
+      return;
+    }
+    if (user === undefined) return;
+    if (user) router.replace('/(tabs)/home');
+    else router.replace('/login');
+  }, [user, router]);
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require("../assets/images/app-image.png")}
-        style={styles.image}
-      />
+    <View style={styles.c} testID="splash-screen">
+      <ActivityIndicator color={colors.primary} size="large" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0c0c0c",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-  },
+  c: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' },
 });

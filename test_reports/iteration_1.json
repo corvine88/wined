@@ -1,0 +1,33 @@
+{
+  "summary": "First iteration backend + frontend smoke test for Vini App (Italian wine tasting journal). Backend: 16/16 pytest tests pass covering auth (register/login/me/logout/emergent-session), wine-types (defaults+custom+duplicate rejection), wines full CRUD with filters (wine_type, location case-insensitive), 401 unauth enforcement, user isolation, and 404 for unknown wines. Frontend: login screen loads with Italian copy; admin login (admin@viniapp.com/admin123) navigates to /home which shows 'I Miei Vini' with add FAB and Per Tipologia/Per Luogo segment; Aggiungi flow fills name+location+stars and Salva creates a wine that appears as a card on home.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "global", "issues": ["React Native Web warnings: deprecated shadow* props (use boxShadow) and props.pointerEvents (use style.pointerEvents). Cosmetic only."]}
+    ],
+    "react_native_issues": [
+      {"component": "package versions", "issue": "Expo doctor reports version drift for @react-native-async-storage/async-storage (3.0.2 vs 2.2.0), expo-image-picker (55.0.19 vs ~17.0.10), expo-location (55.1.8 vs ~19.0.8), react-native-maps (1.27.2 vs 1.20.1). App works on web but native builds may break."}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_viniapp.py", "/app/test_reports/pytest/vini_results.xml"],
+  "action_items": [
+    "(Optional) Align expo package versions via `npx expo install --fix` to match SDK expected versions before native (iOS/Android) build.",
+    "(Optional) Replace deprecated shadow* style props with boxShadow and props.pointerEvents with style.pointerEvents in src/theme and affected components."
+  ],
+  "critical_code_review_comments": [
+    "server.py excludes MongoDB _id in all read queries — good.",
+    "CORS uses allow_origins=['*'] together with allow_credentials=True; browsers ignore credentials with wildcard origins. Login still works because frontend stores JWT as Bearer token in AsyncStorage, but httpOnly cookie auth for web (Google session_token) would not be usable cross-origin. Consider restricting to explicit origin(s) or documenting that web relies on Bearer for same-origin only.",
+    "Seed admin updates password if changed — idempotent and matches playbook.",
+    "bcrypt hashes generated at runtime (format $2b$) — good.",
+    "No brute-force lockout after repeated bad logins — playbook expects lockout after 5 fails; not implemented."
+  ],
+  "updated_files": ["/app/backend/tests/test_viniapp.py"],
+  "success_rate": {"backend": "100% (16/16)", "frontend": "100% of smoke flows (login, home, add, list)"},
+  "seed_data_creation": "Tests create TEST_-prefixed users, wine-types and wines; wines are cleaned up; TEST_ users remain (harmless).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Run `pytest /app/backend/tests/test_viniapp.py -v` to regress backend. Frontend public URL: https://tasting-map.preview.emergentagent.com. Admin: admin@viniapp.com/admin123. Map tab (web) and wine detail screen, profile/logout, custom wine-type modal from UI, and GPS button were not UI-tested this iteration but underlying APIs (POST /wine-types, wines CRUD) are verified.",
+  "rca_of_issue": "N/A — no bugs found."
+}
