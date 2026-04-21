@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { api, setToken } from './api';
+import { api, setToken, getToken } from './api';
 
 export type User = {
   user_id: string;
@@ -20,6 +20,10 @@ type AuthCtx = {
 
 const Ctx = createContext<AuthCtx>({} as AuthCtx);
 
+// Minimal placeholder used when we have a stored token but haven't validated it with /me yet.
+// Keeps user truthy so navigation stays on authenticated screens.
+const PLACEHOLDER_USER: User = { user_id: '_pending', email: '', auth_provider: 'email' };
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
 
@@ -28,19 +32,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const r = await api.get('/auth/me');
       setUser(r.data);
     } catch (e: any) {
-      // Only log out on actual 401. Keep trying on network errors.
+      // Only log out on a real 401 from the server. Ignore network / transient errors.
       if (e?.response?.status === 401) {
         await setToken(null);
         setUser(null);
-      } else {
-        // Network error / server down — keep current state
-        setUser((prev) => (prev === undefined ? null : prev));
       }
+      // else: keep current user (might be placeholder or real)
     }
   }, []);
 
   useEffect(() => {
-    refresh();
+    (async () => {
+      const token = await getToken();
+      if (token) {
+        // Optimistic: assume the stored token is valid, show authenticated UI immediately.
+        setUser((prev) => (prev && prev.user_id !== '_pending') ? prev : PLACEHOLDER_USER);
+        // Validate in background; will update or clear user as needed.
+        refresh();
+      } else {
+        setUser(null);
+      }
+    })();
   }, [refresh]);
 
   const login = async (email: string, password: string) => {
