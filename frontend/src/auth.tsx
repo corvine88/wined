@@ -27,8 +27,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const r = await api.get('/auth/me');
       setUser(r.data);
-    } catch {
-      setUser(null);
+    } catch (e: any) {
+      // Only log out on actual 401. Keep trying on network errors.
+      if (e?.response?.status === 401) {
+        await setToken(null);
+        setUser(null);
+      } else {
+        // Network error / server down — keep current state
+        setUser((prev) => (prev === undefined ? null : prev));
+      }
     }
   }, []);
 
