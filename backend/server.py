@@ -62,32 +62,46 @@ async def get_current_user(request: Request) -> dict:
         token = auth_header[7:]
     if not token:
         token = request.cookies.get("access_token")
-    if not token:
-        # Try session_token (Emergent auth)
-        session_token = request.cookies.get("session_token") or request.headers.get("X-Session-Token")
-        if session_token:
-            session = await db.user_sessions.find_one({"session_token": session_token}, {"_id": 0})
-            if session:
-                expires_at = session.get("expires_at")
-                if isinstance(expires_at, str):
-                    expires_at = datetime.fromisoformat(expires_at)
-                if expires_at and expires_at.tzinfo is None:
-                    expires_at = expires_at.replace(tzinfo=timezone.utc)
-                if expires_at and expires_at >= datetime.now(timezone.utc):
-                    user = await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0, "password_hash": 0})
-                    if user:
-                        return user
+
+    # Also check session_token cookie/header (Emergent Google auth)
+    session_token = request.cookies.get("session_token") or request.headers.get("X-Session-Token")
+    # If Bearer was sent but is not a valid JWT, it may be an Emergent session_token
+    candidates = []
+    if token:
+        candidates.append(("jwt_or_session", token))
+    if session_token and session_token != token:
+        candidates.append(("session", session_token))
+
+    if not candidates:
         raise HTTPException(status_code=401, detail="Not authenticated")
-    try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        user = await db.users.find_one({"user_id": payload["sub"]}, {"_id": 0, "password_hash": 0})
-        if not user:
-            raise HTTPException(status_code=401, detail="User not found")
-        return user
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+
+    # 1) Try as session_token in user_sessions collection
+    for _, t in candidates:
+        session = await db.user_sessions.find_one({"session_token": t}, {"_id": 0})
+        if session:
+            expires_at = session.get("expires_at")
+            if isinstance(expires_at, str):
+                expires_at = datetime.fromisoformat(expires_at)
+            if expires_at and expires_at.tzinfo is None:
+                expires_at = expires_at.replace(tzinfo=timezone.utc)
+            if expires_at and expires_at >= datetime.now(timezone.utc):
+                user = await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0, "password_hash": 0})
+                if user:
+                    return user
+
+    # 2) Try as JWT
+    for _, t in candidates:
+        try:
+            payload = jwt.decode(t, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+            user = await db.users.find_one({"user_id": payload["sub"]}, {"_id": 0, "password_hash": 0})
+            if user:
+                return user
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail="Token expired")
+        except jwt.InvalidTokenError:
+            continue
+
+    raise HTTPException(status_code=401, detail="Not authenticated")
 
 
 # ---- Models ----
