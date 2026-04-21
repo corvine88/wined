@@ -44,6 +44,27 @@ export default function AddWine() {
     setPhotoTarget(null);
     if (!target) return;
     try {
+      // Web: use a native file input to avoid SPA reload issues on mobile browsers
+      if (Platform.OS === 'web' && typeof document !== 'undefined') {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        if (src === 'camera') input.setAttribute('capture', 'environment');
+        input.onchange = async () => {
+          const file = input.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            const uri = reader.result as string;
+            if (target === 'front') setFrontPhoto(uri); else setBackPhoto(uri);
+          };
+          reader.readAsDataURL(file);
+        };
+        input.click();
+        return;
+      }
+
+      // Native: use expo-image-picker
       let res;
       if (src === 'camera') {
         const p = await ImagePicker.requestCameraPermissionsAsync();

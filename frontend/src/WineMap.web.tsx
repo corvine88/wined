@@ -1,10 +1,7 @@
-// Web stub: react-native-maps is native-only. Main agent loads the native version via .native.tsx.
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { colors, fonts, radius, spacing, shadows, wineTypeColors } from '../src/theme';
+import { colors, fonts, radius, spacing, shadows } from '../src/theme';
 
 type Wine = {
   wine_id: string; name: string; wine_type: string; location_name?: string;
@@ -12,37 +9,47 @@ type Wine = {
 };
 
 export default function WineMapWeb({ wines }: { wines: Wine[] }) {
-  const router = useRouter();
+  const [LeafletMap, setLeafletMap] = useState<any>(null);
+
+  useEffect(() => {
+    // Dynamic import: Leaflet touches `window` at module load, so only load in browser.
+    if (typeof window === 'undefined') return;
+    let cancelled = false;
+    import('./LeafletMap').then(mod => {
+      if (!cancelled) setLeafletMap(() => mod.default);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
   return (
-    <SafeAreaView style={s.c} edges={['top']}>
-      <Text style={s.h1}>La Mia Mappa dei Vini</Text>
-      <ScrollView contentContainerStyle={{ padding: spacing.md }}>
-        <Text style={s.note}>La mappa interattiva è disponibile su dispositivo mobile. Ecco l&apos;elenco dei luoghi:</Text>
-        {wines.length === 0 && <Text style={s.empty}>Nessun luogo registrato.</Text>}
-        {wines.map(w => (
-          <TouchableOpacity key={w.wine_id} style={s.card} onPress={() => router.push(`/wine/${w.wine_id}`)}>
-            <View style={[s.pin, { backgroundColor: wineTypeColors[w.wine_type] || colors.primary }]}>
-              <Ionicons name="wine" size={14} color="#fff" />
-            </View>
-            <View style={{ flex: 1, marginLeft: spacing.md }}>
-              <Text style={s.name}>{w.name}</Text>
-              <Text style={s.meta}>{w.location_name || `${w.latitude?.toFixed(3)}, ${w.longitude?.toFixed(3)}`}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+    <View style={s.c}>
+      <View style={s.mapWrap}>
+        {LeafletMap ? <LeafletMap wines={wines} /> : null}
+      </View>
+
+      <SafeAreaView edges={['top']} style={s.header} pointerEvents="box-none">
+        <View style={s.headerInner}>
+          <Text style={s.title}>La Mia Mappa dei Vini</Text>
+          <Text style={s.sub}>{wines.length} {wines.length === 1 ? 'luogo' : 'luoghi'}</Text>
+        </View>
+      </SafeAreaView>
+
+      {LeafletMap && wines.length === 0 && (
+        <View style={s.empty} pointerEvents="none">
+          <Text style={s.emptyTxt}>Nessun luogo registrato. Aggiungi un vino con la posizione!</Text>
+        </View>
+      )}
+    </View>
   );
 }
 
 const s = StyleSheet.create({
-  c: { flex: 1, backgroundColor: colors.background },
-  h1: { fontFamily: fonts.headingBold, fontSize: 28, color: colors.text, padding: spacing.md },
-  note: { fontFamily: fonts.body, color: colors.textMuted, marginBottom: spacing.md },
-  empty: { fontFamily: fonts.body, color: colors.textMuted, textAlign: 'center', marginTop: 40 },
-  card: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.surface, padding: spacing.md, borderRadius: radius.lg, marginBottom: spacing.sm, ...shadows.card },
-  pin: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
-  name: { fontFamily: fonts.headingBold, fontSize: 17, color: colors.text },
-  meta: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted, marginTop: 2 },
+  c: { flex: 1, backgroundColor: colors.background, position: 'relative' },
+  mapWrap: { flex: 1 },
+  header: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1000 },
+  headerInner: { margin: spacing.md, backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: radius.lg, padding: spacing.md, ...shadows.card },
+  title: { fontFamily: fonts.headingBold, fontSize: 20, color: colors.text },
+  sub: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted, marginTop: 2 },
+  empty: { position: 'absolute', top: '50%', left: 0, right: 0, alignItems: 'center', padding: spacing.lg },
+  emptyTxt: { backgroundColor: 'rgba(255,255,255,0.95)', padding: spacing.md, borderRadius: radius.lg, fontFamily: fonts.body, color: colors.textMuted, fontSize: 14, textAlign: 'center' },
 });
