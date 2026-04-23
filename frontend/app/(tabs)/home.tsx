@@ -102,7 +102,7 @@ export default function Home() {
         ))}
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxHeight: 44 }} contentContainerStyle={styles.chipsRow}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chipsScroll} contentContainerStyle={styles.chipsRow}>
         <TouchableOpacity
           testID="chip-all"
           style={[styles.chip, !activeChip && styles.chipActive]}
@@ -192,7 +192,8 @@ const styles = StyleSheet.create({
   segBtnActive: { backgroundColor: colors.surface, ...shadows.card },
   segTxt: { fontFamily: fonts.bodySemi, color: colors.textMuted, fontSize: 13 },
   segTxtActive: { color: colors.primary },
-  chipsRow: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm, gap: 8 },
+  chipsRow: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm, gap: 8, alignItems: 'center' },
+  chipsScroll: { flexGrow: 0, flexShrink: 0, marginBottom: spacing.sm },
   chip: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, marginRight: 8 },
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipTxt: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.text },
