@@ -143,6 +143,7 @@ class WineIn(BaseModel):
     notes: Optional[str] = ""
     front_photo: Optional[str] = ""  # base64
     back_photo: Optional[str] = ""   # base64
+    glass_photo: Optional[str] = ""  # base64
 
 
 class Wine(WineIn):
@@ -328,6 +329,7 @@ async def create_wine(body: WineIn, current_user: dict = Depends(get_current_use
         "notes": body.notes or "",
         "front_photo": body.front_photo or "",
         "back_photo": body.back_photo or "",
+        "glass_photo": body.glass_photo or "",
         "created_at": datetime.now(timezone.utc),
     }
     await db.wines.insert_one(doc.copy())
@@ -360,6 +362,35 @@ async def get_wine(wine_id: str, current_user: dict = Depends(get_current_user))
     return Wine(**wine)
 
 
+@api_router.get("/locations/suggest")
+async def suggest_locations(
+    lat: float,
+    lng: float,
+    radius_m: float = 200,
+    current_user: dict = Depends(get_current_user),
+):
+    # Roughly 1 degree latitude ~ 111_000 m; longitude depends on cos(lat)
+    dlat = radius_m / 111000.0
+    import math
+    dlng = radius_m / (111000.0 * max(0.1, math.cos(math.radians(lat))))
+    q = {
+        "user_id": current_user["user_id"],
+        "latitude": {"$gte": lat - dlat, "$lte": lat + dlat},
+        "longitude": {"$gte": lng - dlng, "$lte": lng + dlng},
+        "location_name": {"$ne": ""},
+    }
+    cursor = db.wines.find(q, {"_id": 0, "location_name": 1, "latitude": 1, "longitude": 1})
+    docs = await cursor.to_list(200)
+    # dedupe names, preserving most common
+    counts: dict = {}
+    for d in docs:
+        name = (d.get("location_name") or "").strip()
+        if name:
+            counts[name] = counts.get(name, 0) + 1
+    suggestions = sorted(counts.items(), key=lambda x: -x[1])[:5]
+    return {"suggestions": [s[0] for s in suggestions]}
+
+
 @api_router.delete("/wines/{wine_id}")
 async def delete_wine(wine_id: str, current_user: dict = Depends(get_current_user)):
     res = await db.wines.delete_one({"wine_id": wine_id, "user_id": current_user["user_id"]})
@@ -383,6 +414,8 @@ async def update_wine(wine_id: str, body: WineIn, current_user: dict = Depends(g
         update["front_photo"] = body.front_photo
     if body.back_photo:
         update["back_photo"] = body.back_photo
+    if body.glass_photo:
+        update["glass_photo"] = body.glass_photo
     res = await db.wines.update_one(
         {"wine_id": wine_id, "user_id": current_user["user_id"]}, {"$set": update}
     )

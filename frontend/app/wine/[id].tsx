@@ -8,7 +8,7 @@ import { colors, fonts, spacing, radius, shadows, wineTypeColors } from '../../s
 
 type Wine = {
   wine_id: string; name: string; wine_type: string; location_name?: string;
-  rating: number; notes?: string; front_photo?: string; back_photo?: string;
+  rating: number; notes?: string; front_photo?: string; back_photo?: string; glass_photo?: string;
   latitude?: number | null; longitude?: number | null; created_at?: string;
 };
 
@@ -29,7 +29,7 @@ export default function WineDetail() {
   }, [id]);
 
   const del = () => {
-    Alert.alert('Elimina', 'Sei sicuro?', [
+    Alert.alert('Elimina', 'Sei sicuro di voler eliminare questa degustazione?', [
       { text: 'Annulla', style: 'cancel' },
       {
         text: 'Elimina', style: 'destructive', onPress: async () => {
@@ -37,6 +37,10 @@ export default function WineDetail() {
         }
       },
     ]);
+  };
+
+  const edit = () => {
+    router.push({ pathname: '/(tabs)/add', params: { id: String(id) } });
   };
 
   if (loading) {
@@ -66,9 +70,14 @@ export default function WineDetail() {
             <TouchableOpacity testID="back-btn" onPress={() => router.back()} style={s.iconBtn}>
               <Ionicons name="chevron-back" size={22} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity testID="delete-btn" onPress={del} style={s.iconBtn}>
-              <Ionicons name="trash-outline" size={20} color="#fff" />
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: 10 }}>
+              <TouchableOpacity testID="edit-btn" onPress={edit} style={s.iconBtn}>
+                <Ionicons name="create-outline" size={20} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity testID="delete-btn" onPress={del} style={s.iconBtn}>
+                <Ionicons name="trash-outline" size={20} color="#fff" />
+              </TouchableOpacity>
+            </View>
           </SafeAreaView>
         </View>
 
@@ -104,12 +113,30 @@ export default function WineDetail() {
             </>
           ) : null}
 
-          {wine.back_photo ? (
+          {(wine.back_photo || wine.glass_photo) && (
             <>
-              <Text style={s.section}>Retro Bottiglia</Text>
-              <Image source={{ uri: wine.back_photo }} style={s.backImg} />
+              <Text style={s.section}>Galleria</Text>
+              <View style={s.gallery}>
+                {wine.back_photo ? (
+                  <View style={s.galItem}>
+                    <Image source={{ uri: wine.back_photo }} style={s.galImg} />
+                    <Text style={s.galLabel}>Retro</Text>
+                  </View>
+                ) : null}
+                {wine.glass_photo ? (
+                  <View style={s.galItem}>
+                    <Image source={{ uri: wine.glass_photo }} style={s.galImg} />
+                    <Text style={s.galLabel}>Bicchiere</Text>
+                  </View>
+                ) : null}
+              </View>
             </>
-          ) : null}
+          )}
+
+          <TouchableOpacity testID="edit-btn-bottom" style={s.editBtnBottom} onPress={edit}>
+            <Ionicons name="create-outline" size={18} color={colors.primary} />
+            <Text style={s.editBtnBottomTxt}>Modifica Degustazione</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -133,5 +160,10 @@ const s = StyleSheet.create({
   infoTxt: { fontFamily: fonts.body, fontSize: 15, color: colors.text, marginLeft: 8 },
   section: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.textMuted, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: spacing.lg, marginBottom: spacing.sm },
   notes: { fontFamily: fonts.body, fontSize: 15, lineHeight: 24, color: colors.text },
-  backImg: { width: '100%', aspectRatio: 0.75, borderRadius: radius.lg, marginTop: spacing.sm },
+  gallery: { flexDirection: 'row', gap: 12 },
+  galItem: { flex: 1 },
+  galImg: { width: '100%', aspectRatio: 0.75, borderRadius: radius.lg },
+  galLabel: { fontFamily: fonts.bodySemi, fontSize: 11, color: colors.textMuted, textTransform: 'uppercase', letterSpacing: 0.8, marginTop: 6, textAlign: 'center' },
+  editBtnBottom: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: spacing.xl, padding: 14, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.primary },
+  editBtnBottomTxt: { fontFamily: fonts.bodySemi, fontSize: 15, color: colors.primary, marginLeft: 8 },
 });

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image,
   ActivityIndicator, Alert, Platform, KeyboardAvoidingView, Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,8 +13,13 @@ import { colors, fonts, radius, spacing, shadows, wineTypeColors } from '../../s
 
 const DEFAULTS = ['Rosso', 'Bianco', 'Rosato', 'Spumante', 'Dolce', 'Altro'];
 
-export default function AddWine() {
+type PhotoTarget = 'front' | 'back' | 'glass';
+
+export default function AddOrEditWine() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ id?: string }>();
+  const editingId = typeof params.id === 'string' && params.id ? params.id : null;
+
   const [name, setName] = useState('');
   const [wineType, setWineType] = useState('Rosso');
   const [customTypes, setCustomTypes] = useState<string[]>([]);
@@ -24,12 +29,16 @@ export default function AddWine() {
   const [notes, setNotes] = useState('');
   const [frontPhoto, setFrontPhoto] = useState<string | null>(null);
   const [backPhoto, setBackPhoto] = useState<string | null>(null);
+  const [glassPhoto, setGlassPhoto] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [gpsLoading, setGpsLoading] = useState(false);
   const [customModal, setCustomModal] = useState(false);
   const [customName, setCustomName] = useState('');
-  const [photoTarget, setPhotoTarget] = useState<'front' | 'back' | null>(null);
+  const [photoTarget, setPhotoTarget] = useState<PhotoTarget | null>(null);
+  const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
+  const [loadingWine, setLoadingWine] = useState(!!editingId);
 
+  // Load custom types
   useEffect(() => {
     (async () => {
       try {
@@ -39,12 +48,53 @@ export default function AddWine() {
     })();
   }, []);
 
+  // If editing, load the wine
+  useEffect(() => {
+    if (!editingId) return;
+    (async () => {
+      try {
+        const r = await api.get(`/wines/${editingId}`);
+        const w = r.data;
+        setName(w.name || '');
+        setWineType(w.wine_type || 'Rosso');
+        setRating(w.rating || 0);
+        setLocation(w.location_name || '');
+        if (w.latitude != null && w.longitude != null) {
+          setCoords({ lat: w.latitude, lng: w.longitude });
+        }
+        setNotes(w.notes || '');
+        setFrontPhoto(w.front_photo || null);
+        setBackPhoto(w.back_photo || null);
+        setGlassPhoto(w.glass_photo || null);
+      } catch (e: any) {
+        Alert.alert('Errore', 'Impossibile caricare il vino');
+        router.back();
+      } finally {
+        setLoadingWine(false);
+      }
+    })();
+  }, [editingId, router]);
+
+  // Reset form when the screen is re-opened in "add" mode (no id)
+  useEffect(() => {
+    if (editingId) return;
+    setName(''); setWineType('Rosso'); setRating(0); setLocation('');
+    setCoords(null); setNotes(''); setFrontPhoto(null); setBackPhoto(null); setGlassPhoto(null);
+    setLocationSuggestions([]);
+  }, [editingId]);
+
   const pickPhoto = async (src: 'camera' | 'gallery') => {
     const target = photoTarget;
     setPhotoTarget(null);
     if (!target) return;
+
+    const apply = (uri: string) => {
+      if (target === 'front') setFrontPhoto(uri);
+      else if (target === 'back') setBackPhoto(uri);
+      else setGlassPhoto(uri);
+    };
+
     try {
-      // Web: use a native file input to avoid SPA reload issues on mobile browsers
       if (Platform.OS === 'web' && typeof document !== 'undefined') {
         const input = document.createElement('input');
         input.type = 'file';
@@ -54,17 +104,13 @@ export default function AddWine() {
           const file = input.files?.[0];
           if (!file) return;
           const reader = new FileReader();
-          reader.onload = () => {
-            const uri = reader.result as string;
-            if (target === 'front') setFrontPhoto(uri); else setBackPhoto(uri);
-          };
+          reader.onload = () => apply(reader.result as string);
           reader.readAsDataURL(file);
         };
         input.click();
         return;
       }
 
-      // Native: use expo-image-picker
       let res;
       if (src === 'camera') {
         const p = await ImagePicker.requestCameraPermissionsAsync();
@@ -79,10 +125,17 @@ export default function AddWine() {
       const asset = res.assets?.[0];
       if (!asset) return;
       const uri = asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri;
-      if (target === 'front') setFrontPhoto(uri); else setBackPhoto(uri);
+      apply(uri);
     } catch (e: any) {
       Alert.alert('Errore foto', e?.message || '');
     }
+  };
+
+  const fetchLocationSuggestions = async (lat: number, lng: number) => {
+    try {
+      const r = await api.get('/locations/suggest', { params: { lat, lng, radius_m: 200 } });
+      setLocationSuggestions(r.data.suggestions || []);
+    } catch {}
   };
 
   const useGPS = async () => {
@@ -91,15 +144,20 @@ export default function AddWine() {
       const p = await Location.requestForegroundPermissionsAsync();
       if (!p.granted) { Alert.alert('Permesso posizione negato'); return; }
       const pos = await Location.getCurrentPositionAsync({});
-      setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-      try {
-        const rev = await Location.reverseGeocodeAsync({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
-        const first = rev?.[0];
-        if (first) {
-          const parts = [first.name, first.city || first.region, first.country].filter(Boolean);
-          if (parts.length) setLocation(parts.join(', '));
-        }
-      } catch {}
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      setCoords({ lat, lng });
+      fetchLocationSuggestions(lat, lng);
+      if (!location) {
+        try {
+          const rev = await Location.reverseGeocodeAsync({ latitude: lat, longitude: lng });
+          const first = rev?.[0];
+          if (first) {
+            const parts = [first.name, first.city || first.region, first.country].filter(Boolean);
+            if (parts.length) setLocation(parts.join(', '));
+          }
+        } catch {}
+      }
     } catch (e: any) {
       Alert.alert('GPS non disponibile', e?.message || '');
     } finally { setGpsLoading(false); }
@@ -123,7 +181,7 @@ export default function AddWine() {
     if (!name.trim()) { Alert.alert('Nome richiesto'); return; }
     setSaving(true);
     try {
-      await api.post('/wines', {
+      const body = {
         name: name.trim(),
         wine_type: wineType,
         location_name: location,
@@ -133,14 +191,29 @@ export default function AddWine() {
         notes,
         front_photo: frontPhoto || '',
         back_photo: backPhoto || '',
-      });
-      router.replace('/(tabs)/home');
+        glass_photo: glassPhoto || '',
+      };
+      if (editingId) {
+        await api.put(`/wines/${editingId}`, body);
+        router.replace(`/wine/${editingId}`);
+      } else {
+        await api.post('/wines', body);
+        router.replace('/(tabs)/home');
+      }
     } catch (e: any) {
       Alert.alert('Errore', e?.response?.data?.detail || 'Salvataggio fallito');
     } finally { setSaving(false); }
   };
 
   const allTypes = [...DEFAULTS, ...customTypes];
+
+  if (loadingWine) {
+    return (
+      <SafeAreaView style={s.c} edges={['top']}>
+        <ActivityIndicator color={colors.primary} style={{ marginTop: 80 }} />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={s.c} edges={['top']}>
@@ -149,7 +222,7 @@ export default function AddWine() {
           <TouchableOpacity testID="back-btn" onPress={() => router.back()} style={s.backBtn}>
             <Ionicons name="chevron-back" size={22} color={colors.text} />
           </TouchableOpacity>
-          <Text style={s.h1}>Nuova Degustazione</Text>
+          <Text style={s.h1}>{editingId ? 'Modifica Degustazione' : 'Nuova Degustazione'}</Text>
           <View style={{ width: 40 }} />
         </View>
 
@@ -157,6 +230,7 @@ export default function AddWine() {
           <View style={s.photoRow}>
             <PhotoSlot label="Fronte" uri={frontPhoto} onPress={() => setPhotoTarget('front')} testID="front-photo" />
             <PhotoSlot label="Retro" uri={backPhoto} onPress={() => setPhotoTarget('back')} testID="back-photo" />
+            <PhotoSlot label="Bicchiere" uri={glassPhoto} onPress={() => setPhotoTarget('glass')} testID="glass-photo" />
           </View>
 
           <Text style={s.label}>Nome del Vino</Text>
@@ -207,6 +281,24 @@ export default function AddWine() {
               📍 {coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}
             </Text>
           )}
+          {locationSuggestions.length > 0 && (
+            <View style={s.sugWrap} testID="location-suggestions">
+              <Text style={s.sugLabel}>Usato in precedenza qui vicino:</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {locationSuggestions.map((sug, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    testID={`sug-${i}`}
+                    style={s.sugChip}
+                    onPress={() => setLocation(sug)}
+                  >
+                    <Ionicons name="time-outline" size={12} color={colors.primary} />
+                    <Text style={s.sugChipTxt} numberOfLines={1}>{sug}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
 
           <Text style={s.label}>Valutazione</Text>
           <View style={s.starsRow}>
@@ -229,7 +321,9 @@ export default function AddWine() {
           />
 
           <TouchableOpacity testID="save-btn" style={s.saveBtn} onPress={save} disabled={saving}>
-            {saving ? <ActivityIndicator color="#fff" /> : <Text style={s.saveTxt}>Salva Degustazione</Text>}
+            {saving ? <ActivityIndicator color="#fff" /> : (
+              <Text style={s.saveTxt}>{editingId ? 'Salva Modifiche' : 'Salva Degustazione'}</Text>
+            )}
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -290,7 +384,7 @@ function PhotoSlot({ label, uri, onPress, testID }: { label: string; uri: string
         <Image source={{ uri }} style={s.photoImg} />
       ) : (
         <View style={s.photoPlaceholder}>
-          <Ionicons name="camera-outline" size={28} color={colors.textMuted} />
+          <Ionicons name={label === 'Bicchiere' ? 'wine-outline' : 'camera-outline'} size={26} color={colors.textMuted} />
           <Text style={s.photoLabel}>{label}</Text>
         </View>
       )}
@@ -303,14 +397,14 @@ const s = StyleSheet.create({
   c: { flex: 1, backgroundColor: colors.background },
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.md, paddingVertical: spacing.sm },
   backBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
-  h1: { fontFamily: fonts.headingBold, fontSize: 22, color: colors.text },
-  photoRow: { flexDirection: 'row', gap: 12, marginBottom: spacing.lg },
+  h1: { fontFamily: fonts.headingBold, fontSize: 20, color: colors.text, flex: 1, textAlign: 'center' },
+  photoRow: { flexDirection: 'row', gap: 8, marginBottom: spacing.lg },
   photo: { flex: 1, aspectRatio: 0.75, borderRadius: radius.lg, backgroundColor: colors.surface, overflow: 'hidden', position: 'relative', ...shadows.card },
   photoImg: { width: '100%', height: '100%' },
   photoPlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surfaceAlt, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.borderStrong, borderRadius: radius.lg },
-  photoLabel: { marginTop: 8, fontFamily: fonts.bodySemi, color: colors.textMuted, fontSize: 13 },
-  photoTag: { position: 'absolute', top: 8, left: 8, backgroundColor: 'rgba(44,42,41,0.65)', paddingHorizontal: 10, paddingVertical: 3, borderRadius: radius.pill },
-  photoTagTxt: { color: '#fff', fontFamily: fonts.bodySemi, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 },
+  photoLabel: { marginTop: 6, fontFamily: fonts.bodySemi, color: colors.textMuted, fontSize: 11 },
+  photoTag: { position: 'absolute', top: 6, left: 6, backgroundColor: 'rgba(44,42,41,0.65)', paddingHorizontal: 8, paddingVertical: 2, borderRadius: radius.pill },
+  photoTagTxt: { color: '#fff', fontFamily: fonts.bodySemi, fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.6 },
   label: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.textMuted, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: spacing.sm, marginTop: spacing.sm },
   input: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: radius.lg, padding: 14, fontSize: 15, color: colors.text, fontFamily: fonts.body, marginBottom: spacing.md },
   typeChip: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, marginRight: 8 },
@@ -321,7 +415,11 @@ const s = StyleSheet.create({
   dot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
   locationRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: spacing.sm },
   gpsBtn: { width: 50, height: 50, backgroundColor: colors.primary, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center' },
-  coordsTxt: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginBottom: spacing.md },
+  coordsTxt: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginBottom: spacing.sm },
+  sugWrap: { marginBottom: spacing.md, backgroundColor: colors.surfaceAlt, padding: spacing.sm, borderRadius: radius.md },
+  sugLabel: { fontFamily: fonts.bodySemi, fontSize: 11, color: colors.textMuted, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.8 },
+  sugChip: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.primary, backgroundColor: colors.surface, marginRight: 6, maxWidth: 220 },
+  sugChipTxt: { fontFamily: fonts.bodyMedium, fontSize: 12, color: colors.primary, marginLeft: 4 },
   starsRow: { flexDirection: 'row', marginBottom: spacing.md },
   saveBtn: { backgroundColor: colors.primary, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center', marginTop: spacing.lg },
   saveTxt: { color: '#fff', fontFamily: fonts.bodySemi, fontSize: 16 },
