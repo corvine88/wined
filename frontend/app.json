@@ -1,15 +1,16 @@
 {
   "expo": {
     "name": "wine D",
-    "slug": "frontend",
+    "slug": "wined",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "diariodelvino",
+    "scheme": "wined",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.wined.app",
       "infoPlist": {
         "NSCameraUsageDescription": "Scatta foto delle tue bottiglie di vino",
         "NSPhotoLibraryUsageDescription": "Scegli foto delle bottiglie dalla galleria",
@@ -17,6 +18,8 @@
       }
     },
     "android": {
+      "package": "com.wined.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#365959"
@@ -57,7 +60,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#F9F8F5"
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
