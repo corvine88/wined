@@ -48,7 +48,7 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
   return (
     <View style={{ flex: 1 }}>
       <MapView
-        provider={PROVIDER_DEFAULT}
+        provider={null}
         style={{ flex: 1 }}
         initialRegion={initialRegion}
         onMapReady={() => setMapReady(true)}
