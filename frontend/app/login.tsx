@@ -53,7 +53,9 @@ export default function Login() {
         return;
       }
       // Native: open auth in web browser and catch redirect fragment
-      const redirectUrl = `${process.env.EXPO_PUBLIC_BACKEND_URL}/auth-callback`;
+      // Use the app's custom URL scheme (defined in app.json) so the redirect
+      // works on the deployed app regardless of backend URL.
+      const redirectUrl = 'wined://auth-callback';
       const result = await WebBrowser.openAuthSessionAsync(
         `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`,
         redirectUrl,
