@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } fr
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { colors, fonts, radius, spacing, shadows, wineTypeColors } from '../src/theme';
 
 type Wine = {
