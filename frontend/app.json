@@ -24,6 +24,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#365959"
       },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCC2q2B2J6lZGEGvYz3LrAC-CJm2V10RAM"
+        }
+      },
       "edgeToEdgeEnabled": true,
       "permissions": [
         "android.permission.CAMERA",
