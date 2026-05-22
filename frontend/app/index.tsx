@@ -6,15 +6,24 @@ import { getToken } from '../src/api';
 import { colors, fonts } from '../src/theme';
 
 function hasSessionIdInHash() {
-  if (typeof window === 'undefined') return false;
-  return !!window.location.hash?.includes('session_id=');
+  try {
+    if (typeof window === 'undefined') return false;
+    const loc = (window as any).location;
+    if (!loc || typeof loc.hash !== 'string') return false;
+    return loc.hash.includes('session_id=');
+  } catch {
+    return false;
+  }
 }
 
 function clearHash() {
-  if (typeof window === 'undefined') return;
-  if (window.history?.replaceState) {
-    window.history.replaceState(null, '', window.location.pathname + window.location.search);
-  }
+  try {
+    if (typeof window === 'undefined') return;
+    const loc = (window as any).location;
+    const hist = (window as any).history;
+    if (!loc || !hist?.replaceState) return;
+    hist.replaceState(null, '', (loc.pathname || '') + (loc.search || ''));
+  } catch {}
 }
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '(undefined)';

@@ -16,11 +16,13 @@ export default function AuthCallback() {
 
     const run = async () => {
       try {
-        if (typeof window === 'undefined') {
+        if (typeof window === 'undefined' || !(window as any).location) {
           router.replace('/login');
           return;
         }
-        const hash = window.location.hash || '';
+        const loc = (window as any).location;
+        const hist = (window as any).history;
+        const hash = (typeof loc.hash === 'string' ? loc.hash : '') || '';
         const params = new URLSearchParams(hash.replace(/^#/, ''));
         const sid = params.get('session_id');
         if (!sid) {
@@ -29,8 +31,8 @@ export default function AuthCallback() {
         }
         await loginWithSessionId(sid);
         // Clear hash
-        if (window.history?.replaceState) {
-          window.history.replaceState(null, '', window.location.pathname);
+        if (hist?.replaceState) {
+          hist.replaceState(null, '', loc.pathname || '/');
         }
         router.replace('/(tabs)/home');
       } catch (e: any) {
