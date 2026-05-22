@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { api, setToken, getToken } from './api';
 
 export type User = {
@@ -20,64 +20,92 @@ type AuthCtx = {
 
 const Ctx = createContext<AuthCtx>({} as AuthCtx);
 
-// Minimal placeholder used when we have a stored token but haven't validated it with /me yet.
-// Keeps user truthy so navigation stays on authenticated screens.
 const PLACEHOLDER_USER: User = { user_id: '_pending', email: '', auth_provider: 'email' };
+const INIT_TIMEOUT_MS = 5000; // mai bloccato più di 5s sulla rotella iniziale
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
+  const settledRef = useRef(false);
+
+  const settle = useCallback((u: User | null) => {
+    if (settledRef.current) return;
+    settledRef.current = true;
+    setUser(u);
+  }, []);
 
   const refresh = useCallback(async () => {
     try {
       const r = await api.get('/auth/me');
+      settledRef.current = true;
       setUser(r.data);
     } catch (e: any) {
-      // Only log out on a real 401 from the server. Ignore network / transient errors.
       if (e?.response?.status === 401) {
         await setToken(null);
-        setUser(null);
+        settle(null);
       }
-      // else: keep current user (might be placeholder or real)
+      // altrimenti: tieni lo stato attuale (placeholder o real)
     }
-  }, []);
+  }, [settle]);
 
   useEffect(() => {
+    let cancelled = false;
+
+    // Safety net: se entro INIT_TIMEOUT_MS non abbiamo definito user, forza login screen.
+    const safety = setTimeout(() => {
+      if (cancelled || settledRef.current) return;
+      settle(null);
+    }, INIT_TIMEOUT_MS);
+
     (async () => {
-      const token = await getToken();
-      if (token) {
-        // Optimistic: assume the stored token is valid, show authenticated UI immediately.
-        setUser((prev) => (prev && prev.user_id !== '_pending') ? prev : PLACEHOLDER_USER);
-        // Validate in background; will update or clear user as needed.
-        refresh();
-      } else {
-        setUser(null);
+      try {
+        const token = await getToken();
+        if (cancelled || settledRef.current) return;
+        if (token) {
+          // Mostra subito UI autenticata (placeholder) — niente blocco anche se /auth/me è lento
+          settledRef.current = true;
+          setUser(PLACEHOLDER_USER);
+          refresh(); // valida in background
+        } else {
+          settle(null);
+        }
+      } catch {
+        settle(null);
+      } finally {
+        clearTimeout(safety);
       }
     })();
-  }, [refresh]);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(safety);
+    };
+  }, [refresh, settle]);
 
   const login = async (email: string, password: string) => {
     const r = await api.post('/auth/login', { email, password });
     if (r.data.access_token) await setToken(r.data.access_token);
+    settledRef.current = true;
     setUser(r.data.user);
   };
 
   const register = async (email: string, password: string, name?: string) => {
     const r = await api.post('/auth/register', { email, password, name });
     if (r.data.access_token) await setToken(r.data.access_token);
+    settledRef.current = true;
     setUser(r.data.user);
   };
 
   const loginWithSessionId = async (session_id: string) => {
     const r = await api.post('/auth/session', { session_id });
     if (r.data.access_token) await setToken(r.data.access_token);
+    settledRef.current = true;
     setUser(r.data.user);
   };
 
   const logout = async () => {
-    try {
-      await api.post('/auth/logout');
-    } catch {}
+    try { await api.post('/auth/logout'); } catch {}
     await setToken(null);
+    settledRef.current = true;
     setUser(null);
   };
 
