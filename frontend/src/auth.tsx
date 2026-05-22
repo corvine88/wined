@@ -10,75 +10,86 @@ export type User = {
 };
 
 type AuthCtx = {
-  user: User | null | undefined; // undefined = loading
+  user: User | null | undefined;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name?: string) => Promise<void>;
   loginWithSessionId: (session_id: string) => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
+  bootLogs: string[];
 };
 
 const Ctx = createContext<AuthCtx>({} as AuthCtx);
 
 const PLACEHOLDER_USER: User = { user_id: '_pending', email: '', auth_provider: 'email' };
-const INIT_TIMEOUT_MS = 5000; // mai bloccato più di 5s sulla rotella iniziale
+const INIT_TIMEOUT_MS = 5000;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
+  const [bootLogs, setBootLogs] = useState<string[]>([]);
   const settledRef = useRef(false);
 
-  const settle = useCallback((u: User | null) => {
+  const log = (msg: string) => {
+    const line = `[auth] ${msg}`;
+    console.log(line);
+    setBootLogs((prev) => [...prev, line]);
+  };
+
+  const settle = useCallback((u: User | null, reason: string) => {
     if (settledRef.current) return;
     settledRef.current = true;
+    log(`settle(${u === null ? 'null' : 'user'}) — ${reason}`);
     setUser(u);
   }, []);
 
   const refresh = useCallback(async () => {
     try {
+      log('refresh: GET /auth/me');
       const r = await api.get('/auth/me');
+      log(`refresh: /auth/me → ${r.status}`);
       settledRef.current = true;
       setUser(r.data);
     } catch (e: any) {
+      log(`refresh: error ${e?.response?.status || ''} ${e?.message || ''}`);
       if (e?.response?.status === 401) {
         await setToken(null);
-        settle(null);
+        settle(null, '401 from /me');
       }
-      // altrimenti: tieni lo stato attuale (placeholder o real)
     }
   }, [settle]);
 
   useEffect(() => {
     let cancelled = false;
+    log('AuthProvider mount');
 
-    // Safety net: se entro INIT_TIMEOUT_MS non abbiamo definito user, forza login screen.
     const safety = setTimeout(() => {
       if (cancelled || settledRef.current) return;
-      settle(null);
+      settle(null, 'safety timeout 5s');
     }, INIT_TIMEOUT_MS);
 
     (async () => {
       try {
+        log('calling getToken()');
         const token = await getToken();
+        log(`getToken() done → ${token ? 'present' : 'absent'}`);
         if (cancelled || settledRef.current) return;
         if (token) {
-          // Mostra subito UI autenticata (placeholder) — niente blocco anche se /auth/me è lento
           settledRef.current = true;
+          log('token present → set placeholder, refresh in bg');
           setUser(PLACEHOLDER_USER);
-          refresh(); // valida in background
+          refresh();
         } else {
-          settle(null);
+          settle(null, 'no token');
         }
-      } catch {
-        settle(null);
+      } catch (e: any) {
+        log(`init error: ${e?.message || String(e)}`);
+        settle(null, 'init error');
       } finally {
         clearTimeout(safety);
       }
     })();
 
-    return () => {
-      cancelled = true;
-      clearTimeout(safety);
-    };
+    return () => { cancelled = true; clearTimeout(safety); };
   }, [refresh, settle]);
 
   const login = async (email: string, password: string) => {
@@ -110,7 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <Ctx.Provider value={{ user, login, register, loginWithSessionId, logout, refresh }}>
+    <Ctx.Provider value={{ user, login, register, loginWithSessionId, logout, refresh, bootLogs }}>
       {children}
     </Ctx.Provider>
   );
