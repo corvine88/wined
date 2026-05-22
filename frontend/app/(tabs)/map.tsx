@@ -17,7 +17,8 @@ export default function MapScreen() {
   const load = useCallback(async () => {
     try {
       const r = await api.get('/wines');
-      setWines((r.data || []).filter((w: Wine) => w.latitude != null && w.longitude != null));
+console.log('raw wines count:', r.data?.length);
+setWines((r.data || []).filter((w: Wine) => w.latitude != null && w.longitude != null));
     } catch {}
     finally { setLoading(false); }
   }, []);

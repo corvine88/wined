@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } fr
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import MapView, { Marker, UrlTile, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import { colors, fonts, radius, spacing, shadows, wineTypeColors } from '../src/theme';
 
 type Wine = {
@@ -31,6 +31,7 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
   const [error, setError] = useState<string | null>(null);
 
   const clusters = useMemo(() => clusterize(wines), [wines]);
+  console.log('clusters:', clusters.length, 'wines:', wines.length);
 
   const initialRegion = clusters[0]
     ? { latitude: clusters[0].lat, longitude: clusters[0].lng, latitudeDelta: 3, longitudeDelta: 3 }
@@ -39,7 +40,7 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
   if (error) {
     return (
       <View style={s.errBox}>
-        <Ionicons name="warning-outline" size={36} color={colors.danger} />
+        <Ionicons name="warning-outline" size={36} color={colors.danger}/>
         <Text style={s.errTxt}>Mappa non disponibile: {error}</Text>
       </View>
     );
@@ -48,18 +49,11 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
   return (
     <View style={{ flex: 1 }}>
       <MapView
-        provider={null}
         style={{ flex: 1 }}
         initialRegion={initialRegion}
         onMapReady={() => setMapReady(true)}
         onPress={() => setSelected(null)}
       >
-        {/* OpenStreetMap tiles → no Google API key required on Android */}
-        <UrlTile
-          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          maximumZ={19}
-          flipY={false}
-        />
         {clusters.map(c => {
           const first = c.wines[0];
           const isCluster = c.wines.length > 1;
@@ -69,7 +63,7 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
               key={c.key}
               coordinate={{ latitude: c.lat, longitude: c.lng }}
               onPress={(e) => { e.stopPropagation?.(); setSelected(c); }}
-              tracksViewChanges={false}
+              tracksViewChanges={true}
             >
               <View style={[s.pin, { backgroundColor: color }]}>
                 {isCluster
