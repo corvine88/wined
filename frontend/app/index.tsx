@@ -5,7 +5,7 @@ import * as storage from '../src/storage';
 import { colors, fonts } from '../src/theme';
 
 const LOGO = require('../assets/images/splash-icon.png');
-const MIN_SPLASH_MS = 2000;
+const MIN_SPLASH_MS = 3000;
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
