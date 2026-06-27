@@ -24,7 +24,7 @@ export default function TabLayout() {
   }
 
   const baseHeight = Platform.OS === 'ios' ? 60 : 56;
-  const bottomInset = Math.max(insets.bottom, Platform.OS === 'android' ? 8 : 0);
+  const bottomInset = insets.bottom + 16;
 
   return (
     <Tabs

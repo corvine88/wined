@@ -84,7 +84,7 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
 
       <SafeAreaView edges={['top']} style={s.mapHeader} pointerEvents="box-none">
         <View style={s.mapHeaderInner}>
-          <Text style={s.mapTitle}>La Mia Mappa</Text>
+          <Text style={s.mapTitle}>La Mappa Degustativa</Text>
           <Text style={s.mapSub}>{wines.length} {wines.length === 1 ? 'luogo' : 'luoghi'}</Text>
         </View>
       </SafeAreaView>

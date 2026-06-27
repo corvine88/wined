@@ -49,11 +49,11 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  c: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center', paddingBottom: 40 },
-  center: { alignItems: 'center', justifyContent: 'center' },
+  c: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'space-between', paddingBottom: 80, paddingTop: 80 },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   logo: { width: 160, height: 160, marginBottom: 16 },
   tagline: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted, textAlign: 'center' },
   claim: { fontFamily: fonts.headingBold, fontSize: 22, color: '#2F5350', textAlign: 'center', marginTop: 4, marginBottom: 24 },
   spinner: { marginTop: 8 },
-  copyright: { position: 'absolute', bottom: 40, fontFamily: fonts.body, fontSize: 11, color: colors.textMuted },
+  copyright: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted },
 });
