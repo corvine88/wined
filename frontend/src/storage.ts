@@ -38,9 +38,13 @@ function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+let winesCache: Wine[] | null = null;
+
 export async function getWines(): Promise<Wine[]> {
+  if (winesCache) return winesCache;
   const wines = await readJSON<Wine[]>(WINES_KEY, []);
-  return wines.map((w) => ({ ...w, macro_category: w.macro_category || 'Vino' }));
+  winesCache = wines.map((w) => ({ ...w, macro_category: w.macro_category || 'Vino' }));
+  return winesCache;
 }
 
 export async function getWine(id: string): Promise<Wine | null> {
@@ -51,8 +55,8 @@ export async function getWine(id: string): Promise<Wine | null> {
 export async function createWine(input: Omit<Wine, 'wine_id' | 'created_at'>): Promise<Wine> {
   const wines = await getWines();
   const wine: Wine = { ...input, wine_id: generateId(), created_at: new Date().toISOString() };
-  wines.unshift(wine);
-  await writeJSON(WINES_KEY, wines);
+  winesCache = [wine, ...wines];
+  await writeJSON(WINES_KEY, winesCache);
   return wine;
 }
 
@@ -60,13 +64,14 @@ export async function updateWine(id: string, input: Omit<Wine, 'wine_id' | 'crea
   const wines = await getWines();
   const idx = wines.findIndex((w) => w.wine_id === id);
   if (idx === -1) return;
-  wines[idx] = { ...wines[idx], ...input };
-  await writeJSON(WINES_KEY, wines);
+  winesCache = wines.map((w, i) => (i === idx ? { ...w, ...input } : w));
+  await writeJSON(WINES_KEY, winesCache);
 }
 
 export async function deleteWine(id: string): Promise<void> {
   const wines = await getWines();
-  await writeJSON(WINES_KEY, wines.filter((w) => w.wine_id !== id));
+  winesCache = wines.filter((w) => w.wine_id !== id);
+  await writeJSON(WINES_KEY, winesCache);
 }
 
 function distanceMeters(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -99,5 +104,6 @@ export async function saveProfile(profile: Profile): Promise<void> {
 }
 
 export async function clearAllData(): Promise<void> {
+  winesCache = null;
   await AsyncStorage.multiRemove([WINES_KEY, PROFILE_KEY, 'custom_subcategories']);
 }

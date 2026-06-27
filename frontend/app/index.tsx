@@ -1,23 +1,38 @@
 import React, { useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet, Image, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useProfile } from '../src/profile';
+import * as storage from '../src/storage';
 import { colors, fonts } from '../src/theme';
 
 const LOGO = require('../assets/images/splash-icon.png');
+const MIN_SPLASH_MS = 2000;
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export default function Index() {
-  const { profile } = useProfile();
   const router = useRouter();
 
   useEffect(() => {
-    if (profile === undefined) return;
-    if (profile) {
-      router.replace('/(tabs)/home');
-    } else {
-      router.replace('/onboarding');
-    }
-  }, [profile, router]);
+    let cancelled = false;
+
+    (async () => {
+      const [profile] = await Promise.all([
+        storage.getProfile(),
+        storage.getWines(), // preload in background so home.tsx finds them already cached
+        delay(MIN_SPLASH_MS),
+      ]);
+      if (cancelled) return;
+      if (profile) {
+        router.replace('/(tabs)/home');
+      } else {
+        router.replace('/onboarding');
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [router]);
 
   return (
     <View style={styles.c} testID="splash-screen">
