@@ -3,14 +3,9 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIn
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { api } from '../../src/api';
+import * as storage from '../../src/storage';
+import type { Wine } from '../../src/storage';
 import { colors, fonts, spacing, radius, shadows, wineTypeColors } from '../../src/theme';
-
-type Wine = {
-  wine_id: string; name: string; wine_type: string; location_name?: string;
-  rating: number; notes?: string; front_photo?: string; back_photo?: string; glass_photo?: string;
-  latitude?: number | null; longitude?: number | null; created_at?: string;
-};
 
 export default function WineDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -21,8 +16,8 @@ export default function WineDetail() {
   useEffect(() => {
     (async () => {
       try {
-        const r = await api.get(`/wines/${id}`);
-        setWine(r.data);
+        const w = await storage.getWine(id);
+        setWine(w);
       } catch {}
       finally { setLoading(false); }
     })();
@@ -33,7 +28,7 @@ export default function WineDetail() {
       { text: 'Annulla', style: 'cancel' },
       {
         text: 'Elimina', style: 'destructive', onPress: async () => {
-          try { await api.delete(`/wines/${id}`); router.back(); } catch {}
+          try { await storage.deleteWine(id); router.back(); } catch {}
         }
       },
     ]);

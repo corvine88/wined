@@ -5,7 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts as useCormorant, CormorantGaramond_600SemiBold, CormorantGaramond_700Bold } from '@expo-google-fonts/cormorant-garamond';
 import { useFonts as useManrope, Manrope_400Regular, Manrope_500Medium, Manrope_600SemiBold, Manrope_700Bold } from '@expo-google-fonts/manrope';
 import { View, ActivityIndicator } from 'react-native';
-import { AuthProvider } from '../src/auth';
+import { ProfileProvider } from '../src/profile';
 import { colors } from '../src/theme';
 
 export default function RootLayout() {
@@ -22,16 +22,15 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <AuthProvider>
+      <ProfileProvider>
         <StatusBar style="dark" />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
           <Stack.Screen name="index" />
-          <Stack.Screen name="login" />
-          <Stack.Screen name="auth-callback" />
+          <Stack.Screen name="onboarding" />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="wine/[id]" options={{ presentation: 'card' }} />
         </Stack>
-      </AuthProvider>
+      </ProfileProvider>
     </SafeAreaProvider>
   );
 }

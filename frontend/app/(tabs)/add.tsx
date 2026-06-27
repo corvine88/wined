@@ -8,7 +8,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
-import { api } from '../../src/api';
+import * as storage from '../../src/storage';
 import { colors, fonts, radius, spacing, shadows, wineTypeColors } from '../../src/theme';
 
 const DEFAULTS = ['Rosso', 'Bianco', 'Rosato', 'Spumante', 'Dolce', 'Altro'];
@@ -42,8 +42,8 @@ export default function AddOrEditWine() {
   useEffect(() => {
     (async () => {
       try {
-        const r = await api.get('/wine-types');
-        setCustomTypes((r.data.custom || []).map((c: any) => c.name));
+        const types = await storage.getCustomTypes();
+        setCustomTypes(types);
       } catch {}
     })();
   }, []);
@@ -53,8 +53,8 @@ export default function AddOrEditWine() {
     if (!editingId) return;
     (async () => {
       try {
-        const r = await api.get(`/wines/${editingId}`);
-        const w = r.data;
+        const w = await storage.getWine(editingId);
+        if (!w) throw new Error('not found');
         setName(w.name || '');
         setWineType(w.wine_type || 'Rosso');
         setRating(w.rating || 0);
@@ -66,7 +66,7 @@ export default function AddOrEditWine() {
         setFrontPhoto(w.front_photo || null);
         setBackPhoto(w.back_photo || null);
         setGlassPhoto(w.glass_photo || null);
-      } catch (e: any) {
+      } catch {
         Alert.alert('Errore', 'Impossibile caricare il vino');
         router.back();
       } finally {
@@ -133,8 +133,8 @@ export default function AddOrEditWine() {
 
   const fetchLocationSuggestions = async (lat: number, lng: number) => {
     try {
-      const r = await api.get('/locations/suggest', { params: { lat, lng, radius_m: 200 } });
-      setLocationSuggestions(r.data.suggestions || []);
+      const names = await storage.getNearbyLocationNames(lat, lng, 200);
+      setLocationSuggestions(names);
     } catch {}
   };
 
@@ -167,13 +167,13 @@ export default function AddOrEditWine() {
     const n = customName.trim();
     if (!n) return;
     try {
-      await api.post('/wine-types', { name: n });
+      await storage.addCustomType(n);
       setCustomTypes(prev => Array.from(new Set([...prev, n])));
       setWineType(n);
       setCustomName('');
       setCustomModal(false);
-    } catch (e: any) {
-      Alert.alert('Errore', e?.response?.data?.detail || '');
+    } catch {
+      Alert.alert('Errore', 'Impossibile salvare la tipologia');
     }
   };
 
@@ -194,14 +194,14 @@ export default function AddOrEditWine() {
         glass_photo: glassPhoto || '',
       };
       if (editingId) {
-        await api.put(`/wines/${editingId}`, body);
+        await storage.updateWine(editingId, body);
         router.replace(`/wine/${editingId}`);
       } else {
-        await api.post('/wines', body);
+        await storage.createWine(body);
         router.replace('/(tabs)/home');
       }
-    } catch (e: any) {
-      Alert.alert('Errore', e?.response?.data?.detail || 'Salvataggio fallito');
+    } catch {
+      Alert.alert('Errore', 'Salvataggio fallito');
     } finally { setSaving(false); }
   };
 

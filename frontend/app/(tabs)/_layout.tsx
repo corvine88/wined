@@ -2,20 +2,20 @@ import React, { useEffect } from 'react';
 import { Tabs, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAuth } from '../../src/auth';
+import { useProfile } from '../../src/profile';
 import { colors, fonts } from '../../src/theme';
 import { View, ActivityIndicator, Platform } from 'react-native';
 
 export default function TabLayout() {
-  const { user } = useAuth();
+  const { profile } = useProfile();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    if (user === null) router.replace('/login');
-  }, [user, router]);
+    if (profile === null) router.replace('/onboarding');
+  }, [profile, router]);
 
-  if (user === undefined || user === null) {
+  if (profile === undefined || profile === null) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background }}>
         <ActivityIndicator color={colors.primary} />

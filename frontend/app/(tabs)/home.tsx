@@ -6,16 +6,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { api } from '../../src/api';
+import * as storage from '../../src/storage';
+import type { Wine } from '../../src/storage';
 import { colors, fonts, radius, spacing, shadows, wineTypeColors } from '../../src/theme';
 
 const LOGO = require('../../assets/brand/logo.png');
-
-type Wine = {
-  wine_id: string; name: string; wine_type: string; location_name?: string;
-  rating: number; front_photo?: string; notes?: string;
-  latitude?: number | null; longitude?: number | null;
-};
 
 export default function Home() {
   const router = useRouter();
@@ -29,8 +24,8 @@ export default function Home() {
 
   const fetchWines = useCallback(async () => {
     try {
-      const r = await api.get('/wines');
-      setWines(r.data);
+      const data = await storage.getWines();
+      setWines(data);
     } catch {}
     finally { setLoading(false); setRefreshing(false); }
   }, []);

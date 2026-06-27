@@ -1,14 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { useFocusEffect } from 'expo-router';
-import { api } from '../../src/api';
+import * as storage from '../../src/storage';
+import type { Wine } from '../../src/storage';
 import { colors } from '../../src/theme';
 import WineMap from '../../src/WineMap';
-
-type Wine = {
-  wine_id: string; name: string; wine_type: string; location_name?: string;
-  latitude?: number | null; longitude?: number | null; front_photo?: string;
-};
 
 export default function MapScreen() {
   const [wines, setWines] = useState<Wine[]>([]);
@@ -16,9 +12,8 @@ export default function MapScreen() {
 
   const load = useCallback(async () => {
     try {
-      const r = await api.get('/wines');
-console.log('raw wines count:', r.data?.length);
-setWines((r.data || []).filter((w: Wine) => w.latitude != null && w.longitude != null));
+      const data = await storage.getWines();
+      setWines(data.filter((w) => w.latitude != null && w.longitude != null));
     } catch {}
     finally { setLoading(false); }
   }, []);
