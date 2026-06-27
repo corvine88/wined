@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet, Image, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as storage from '../src/storage';
 import { colors, fonts } from '../src/theme';
@@ -35,7 +36,7 @@ export default function Index() {
   }, [router]);
 
   return (
-    <View style={styles.c} testID="splash-screen">
+    <SafeAreaView style={styles.c} edges={['bottom']} testID="splash-screen">
       <View style={styles.center}>
         <Image source={LOGO} style={styles.logo} resizeMode="contain" />
         <Text style={styles.tagline}>e tu come lo vedi il bicchiere?</Text>
@@ -43,16 +44,16 @@ export default function Index() {
         <ActivityIndicator color={colors.primary} size="large" style={styles.spinner} />
       </View>
       <Text style={styles.copyright}>© 2026 Serena Bosca</Text>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  c: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center', paddingBottom: 24 },
+  c: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center', paddingBottom: 40 },
   center: { alignItems: 'center', justifyContent: 'center' },
   logo: { width: 160, height: 160, marginBottom: 16 },
   tagline: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted, textAlign: 'center' },
   claim: { fontFamily: fonts.headingBold, fontSize: 22, color: '#2F5350', textAlign: 'center', marginTop: 4, marginBottom: 24 },
   spinner: { marginTop: 8 },
-  copyright: { position: 'absolute', bottom: 24, fontFamily: fonts.body, fontSize: 11, color: colors.textMuted },
+  copyright: { position: 'absolute', bottom: 40, fontFamily: fonts.body, fontSize: 11, color: colors.textMuted },
 });

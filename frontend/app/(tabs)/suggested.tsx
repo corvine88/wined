@@ -88,7 +88,7 @@ export default function Suggested() {
           contentContainerStyle={{ padding: spacing.md, paddingBottom: 100 }}
           ListEmptyComponent={
             <View style={s.empty} testID="empty-state">
-              <Ionicons name="gift-outline" size={48} color={colors.textMuted} />
+              <Ionicons name="happy-outline" size={48} color={colors.textMuted} />
               <Text style={s.emptyTxt}>Nessun suggerimento ricevuto. Importa un file .vibico da un amico!</Text>
             </View>
           }
@@ -103,7 +103,7 @@ export default function Suggested() {
               </View>
               <View style={{ flex: 1, marginLeft: spacing.md }}>
                 <View style={s.fromBadge}>
-                  <Ionicons name="gift-outline" size={11} color={colors.primary} />
+                  <Ionicons name="happy-outline" size={11} color={colors.primary} />
                   <Text style={s.fromBadgeTxt}>Da {item.shared_by}</Text>
                 </View>
                 <Text style={s.cardTitle} numberOfLines={1}>{item.name}</Text>

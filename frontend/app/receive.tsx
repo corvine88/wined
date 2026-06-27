@@ -83,7 +83,7 @@ export default function Receive() {
 
       <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 40 }}>
         <View style={s.sharedBadge}>
-          <Ionicons name="gift-outline" size={14} color={colors.primary} />
+          <Ionicons name="happy-outline" size={14} color={colors.primary} />
           <Text style={s.sharedBadgeTxt}>Condiviso da: {shared_by}</Text>
         </View>
 

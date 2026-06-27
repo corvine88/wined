@@ -44,7 +44,7 @@ export default function TabLayout() {
     >
       <Tabs.Screen name="home" options={{ title: 'Degustazioni', tabBarIcon: ({ color, size }) => <Ionicons name="wine" size={size} color={color} /> }} />
       <Tabs.Screen name="map" options={{ title: 'Mappa', tabBarIcon: ({ color, size }) => <Ionicons name="map" size={size} color={color} /> }} />
-      <Tabs.Screen name="add" options={{ title: 'Aggiungi', tabBarIcon: ({ size }) => <Ionicons name="add-circle" size={size + 6} color={colors.primary} /> }} />
+      <Tabs.Screen name="add" options={{ title: 'Aggiungi', tabBarIcon: ({ size }) => <View style={{ marginBottom: 4 }}><Ionicons name="add-circle" size={size + 6} color={colors.primary} /></View> }} />
       <Tabs.Screen name="suggested" options={{ title: 'Suggeriti', tabBarIcon: ({ color, size }) => <Ionicons name="happy-outline" size={size} color={color} /> }} />
       <Tabs.Screen name="profile" options={{ title: 'Profilo', tabBarIcon: ({ color, size }) => <Ionicons name="person-circle-outline" size={size} color={color} /> }} />
     </Tabs>

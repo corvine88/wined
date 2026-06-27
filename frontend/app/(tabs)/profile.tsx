@@ -56,7 +56,7 @@ export default function Profile() {
 
       <TouchableOpacity testID="reset-btn" style={s.resetBtn} onPress={resetData} disabled={resetting}>
         <Ionicons name="trash-outline" size={20} color={colors.danger} />
-        <Text style={s.resetTxt}>{resetting ? 'Reimpostazione...' : 'Reimposta app'}</Text>
+        <Text style={s.resetTxt}>{resetting ? 'Eliminazione...' : 'Elimina tutti i dati'}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
