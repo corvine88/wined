@@ -36,6 +36,16 @@
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.RECORD_AUDIO"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            { "mimeType": "application/octet-stream", "pathPattern": ".*\\.vibico" },
+            { "mimeType": "application/json", "pathPattern": ".*\\.vibico" }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
       ]
     },
     "web": {

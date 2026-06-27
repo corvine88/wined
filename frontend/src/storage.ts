@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WINES_KEY = 'wines';
 const PROFILE_KEY = 'profile';
+const SUGGESTED_KEY = 'suggested_wines';
 
 export type Wine = {
   wine_id: string;
@@ -20,6 +21,11 @@ export type Wine = {
 };
 
 export type Profile = { name: string; picture?: string };
+
+export type SuggestedWine = Wine & {
+  shared_by: string;
+  received_at: string;
+};
 
 async function readJSON<T>(key: string, fallback: T): Promise<T> {
   try {
@@ -105,5 +111,26 @@ export async function saveProfile(profile: Profile): Promise<void> {
 
 export async function clearAllData(): Promise<void> {
   winesCache = null;
-  await AsyncStorage.multiRemove([WINES_KEY, PROFILE_KEY, 'custom_subcategories']);
+  await AsyncStorage.multiRemove([WINES_KEY, PROFILE_KEY, 'custom_subcategories', SUGGESTED_KEY]);
+}
+
+export async function getSuggestedWines(): Promise<SuggestedWine[]> {
+  return readJSON<SuggestedWine[]>(SUGGESTED_KEY, []);
+}
+
+export async function saveSuggestedWine(wine: Wine, sharedBy: string): Promise<SuggestedWine> {
+  const suggested = await getSuggestedWines();
+  const entry: SuggestedWine = {
+    ...wine,
+    wine_id: generateId(),
+    shared_by: sharedBy,
+    received_at: new Date().toISOString(),
+  };
+  await writeJSON(SUGGESTED_KEY, [entry, ...suggested]);
+  return entry;
+}
+
+export async function deleteSuggestedWine(id: string): Promise<void> {
+  const suggested = await getSuggestedWines();
+  await writeJSON(SUGGESTED_KEY, suggested.filter((w) => w.wine_id !== id));
 }

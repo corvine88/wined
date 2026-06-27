@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as storage from '../../src/storage';
 import type { Wine } from '../../src/storage';
 import * as categories from '../../src/categories';
+import { shareWine } from '../../src/share';
 import { colors, fonts, spacing, radius, shadows } from '../../src/theme';
 
 export default function WineDetail() {
@@ -13,6 +14,7 @@ export default function WineDetail() {
   const router = useRouter();
   const [wine, setWine] = useState<Wine | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -37,6 +39,19 @@ export default function WineDetail() {
 
   const edit = () => {
     router.push({ pathname: '/(tabs)/add', params: { id: String(id) } });
+  };
+
+  const share = async () => {
+    if (!wine || sharing) return;
+    setSharing(true);
+    try {
+      const profile = await storage.getProfile();
+      await shareWine(wine, profile?.name || 'Un amico');
+    } catch (e: any) {
+      Alert.alert('Errore', e?.message || 'Condivisione non riuscita');
+    } finally {
+      setSharing(false);
+    }
   };
 
   if (loading) {
@@ -67,6 +82,9 @@ export default function WineDetail() {
               <Ionicons name="chevron-back" size={22} color="#fff" />
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', gap: 10 }}>
+              <TouchableOpacity testID="share-btn" onPress={share} style={s.iconBtn} disabled={sharing}>
+                {sharing ? <ActivityIndicator size="small" color="#fff" /> : <Ionicons name="share-outline" size={20} color="#fff" />}
+              </TouchableOpacity>
               <TouchableOpacity testID="edit-btn" onPress={edit} style={s.iconBtn}>
                 <Ionicons name="create-outline" size={20} color="#fff" />
               </TouchableOpacity>
