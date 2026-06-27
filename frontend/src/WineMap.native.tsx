@@ -4,10 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import MapView, { Marker } from 'react-native-maps';
-import { colors, fonts, radius, spacing, shadows, wineTypeColors } from '../src/theme';
+import { colors, fonts, radius, spacing, shadows } from '../src/theme';
+import { getCategoryColor } from './categories';
 
 type Wine = {
-  wine_id: string; name: string; wine_type: string; location_name?: string;
+  wine_id: string; name: string; macro_category: string; wine_type: string; location_name?: string;
   latitude?: number | null; longitude?: number | null; front_photo?: string; rating?: number;
 };
 
@@ -57,7 +58,7 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
         {clusters.map(c => {
           const first = c.wines[0];
           const isCluster = c.wines.length > 1;
-          const color = isCluster ? colors.primary : (wineTypeColors[first.wine_type] || colors.primary);
+          const color = isCluster ? colors.primary : getCategoryColor(first.macro_category);
           return (
             <Marker
               key={c.key}
@@ -83,7 +84,7 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
 
       <SafeAreaView edges={['top']} style={s.mapHeader} pointerEvents="box-none">
         <View style={s.mapHeaderInner}>
-          <Text style={s.mapTitle}>La Mia Mappa dei Vini</Text>
+          <Text style={s.mapTitle}>La Mia Mappa</Text>
           <Text style={s.mapSub}>{wines.length} {wines.length === 1 ? 'luogo' : 'luoghi'}</Text>
         </View>
       </SafeAreaView>
@@ -102,13 +103,13 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
               {w.front_photo ? (
                 <Image source={{ uri: w.front_photo }} style={s.selImg} />
               ) : (
-                <View style={[s.selImg, { alignItems: 'center', justifyContent: 'center', backgroundColor: wineTypeColors[w.wine_type] || colors.primary }]}>
+                <View style={[s.selImg, { alignItems: 'center', justifyContent: 'center', backgroundColor: getCategoryColor(w.macro_category) }]}>
                   <Ionicons name="wine" size={18} color="#fff" />
                 </View>
               )}
               <View style={{ flex: 1, marginLeft: 10 }}>
                 <Text style={s.selName} numberOfLines={1}>{w.name}</Text>
-                <Text style={s.selMeta} numberOfLines={1}>{w.wine_type}{w.location_name ? ` · ${w.location_name}` : ''}</Text>
+                <Text style={s.selMeta} numberOfLines={1}>{w.macro_category} · {w.wine_type}{w.location_name ? ` · ${w.location_name}` : ''}</Text>
               </View>
               <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
             </TouchableOpacity>

@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, fonts, radius, spacing, shadows } from '../src/theme';
 
 type Wine = {
-  wine_id: string; name: string; wine_type: string; location_name?: string;
+  wine_id: string; name: string; macro_category: string; wine_type: string; location_name?: string;
   latitude?: number | null; longitude?: number | null;
 };
 

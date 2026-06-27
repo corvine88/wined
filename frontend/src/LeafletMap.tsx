@@ -1,14 +1,15 @@
 // Web-only Leaflet component. Safe against SSR — imported only after mount.
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'expo-router';
-import { colors, wineTypeColors } from '../src/theme';
+import { colors } from '../src/theme';
+import { getCategoryColor } from './categories';
 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
 type Wine = {
-  wine_id: string; name: string; wine_type: string; location_name?: string;
+  wine_id: string; name: string; macro_category: string; wine_type: string; location_name?: string;
   latitude?: number | null; longitude?: number | null; rating?: number;
 };
 
@@ -95,7 +96,7 @@ export default function LeafletMap({ wines }: { wines: Wine[] }) {
       />
       {clusters.map(cluster => {
         const first = cluster.wines[0];
-        const color = wineTypeColors[first.wine_type] || colors.primary;
+        const color = getCategoryColor(first.macro_category);
         const icon = cluster.wines.length > 1
           ? makeClusterPin(cluster.wines.length, colors.primary)
           : makeSinglePin(color);
@@ -122,11 +123,11 @@ export default function LeafletMap({ wines }: { wines: Wine[] }) {
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ width: 10, height: 10, borderRadius: 5, background: wineTypeColors[w.wine_type] || colors.primary, display: 'inline-block' }} />
+                      <span style={{ width: 10, height: 10, borderRadius: 5, background: getCategoryColor(w.macro_category), display: 'inline-block' }} />
                       <span style={{ fontWeight: 700, fontSize: 15, color: '#2C2A29' }}>{w.name}</span>
                     </div>
                     <div style={{ fontSize: 12, color: '#7A7570', marginTop: 2 }}>
-                      {w.wine_type}{w.rating ? ` · ${'★'.repeat(w.rating)}` : ''}
+                      {w.macro_category} · {w.wine_type}{w.rating ? ` · ${'★'.repeat(w.rating)}` : ''}
                     </div>
                     {w.location_name ? (
                       <div style={{ fontSize: 12, color: '#7A7570' }}>{w.location_name}</div>

@@ -5,7 +5,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as storage from '../../src/storage';
 import type { Wine } from '../../src/storage';
-import { colors, fonts, spacing, radius, shadows, wineTypeColors } from '../../src/theme';
+import * as categories from '../../src/categories';
+import { colors, fonts, spacing, radius, shadows } from '../../src/theme';
 
 export default function WineDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -56,8 +57,8 @@ export default function WineDetail() {
           {wine.front_photo ? (
             <Image source={{ uri: wine.front_photo }} style={s.hero} />
           ) : (
-            <View style={[s.hero, { alignItems: 'center', justifyContent: 'center', backgroundColor: wineTypeColors[wine.wine_type] || colors.primary }]}>
-              <Ionicons name="wine" size={80} color="#fff" />
+            <View style={[s.hero, { alignItems: 'center', justifyContent: 'center', backgroundColor: categories.getCategoryColor(wine.macro_category) }]}>
+              <Text style={{ fontSize: 64 }}>{categories.getCategoryEmoji(wine.macro_category)}</Text>
             </View>
           )}
           <View style={s.heroOverlay} />
@@ -78,8 +79,8 @@ export default function WineDetail() {
 
         <View style={s.contentCard}>
           <View style={s.typeBadge}>
-            <View style={[s.dot, { backgroundColor: wineTypeColors[wine.wine_type] || colors.primary }]} />
-            <Text style={s.typeBadgeTxt}>{wine.wine_type}</Text>
+            <View style={[s.dot, { backgroundColor: categories.getCategoryColor(wine.macro_category) }]} />
+            <Text style={s.typeBadgeTxt}>{categories.getCategoryEmoji(wine.macro_category)} {wine.macro_category} · {wine.wine_type}</Text>
           </View>
           <Text style={s.title}>{wine.name}</Text>
           <View style={s.starsRow}>

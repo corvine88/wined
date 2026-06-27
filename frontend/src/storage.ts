@@ -1,12 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WINES_KEY = 'wines';
-const TYPES_KEY = 'wine_types';
 const PROFILE_KEY = 'profile';
 
 export type Wine = {
   wine_id: string;
   name: string;
+  macro_category: string;
   wine_type: string;
   location_name?: string;
   latitude?: number | null;
@@ -39,7 +39,8 @@ function generateId(): string {
 }
 
 export async function getWines(): Promise<Wine[]> {
-  return readJSON<Wine[]>(WINES_KEY, []);
+  const wines = await readJSON<Wine[]>(WINES_KEY, []);
+  return wines.map((w) => ({ ...w, macro_category: w.macro_category || 'Vino' }));
 }
 
 export async function getWine(id: string): Promise<Wine | null> {
@@ -66,18 +67,6 @@ export async function updateWine(id: string, input: Omit<Wine, 'wine_id' | 'crea
 export async function deleteWine(id: string): Promise<void> {
   const wines = await getWines();
   await writeJSON(WINES_KEY, wines.filter((w) => w.wine_id !== id));
-}
-
-export async function getCustomTypes(): Promise<string[]> {
-  return readJSON<string[]>(TYPES_KEY, []);
-}
-
-export async function addCustomType(name: string): Promise<void> {
-  const types = await getCustomTypes();
-  if (!types.includes(name)) {
-    types.push(name);
-    await writeJSON(TYPES_KEY, types);
-  }
 }
 
 function distanceMeters(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -110,5 +99,5 @@ export async function saveProfile(profile: Profile): Promise<void> {
 }
 
 export async function clearAllData(): Promise<void> {
-  await AsyncStorage.multiRemove([WINES_KEY, TYPES_KEY, PROFILE_KEY]);
+  await AsyncStorage.multiRemove([WINES_KEY, PROFILE_KEY, 'custom_subcategories']);
 }

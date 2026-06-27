@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image,
   ActivityIndicator, Alert, Platform, KeyboardAvoidingView, Modal,
@@ -9,9 +9,9 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
 import * as storage from '../../src/storage';
-import { colors, fonts, radius, spacing, shadows, wineTypeColors } from '../../src/theme';
-
-const DEFAULTS = ['Rosso', 'Bianco', 'Rosato', 'Spumante', 'Dolce', 'Altro'];
+import * as categories from '../../src/categories';
+import type { MacroCategory } from '../../src/categories';
+import { colors, fonts, radius, spacing, shadows } from '../../src/theme';
 
 type PhotoTarget = 'front' | 'back' | 'glass';
 
@@ -20,9 +20,10 @@ export default function AddOrEditWine() {
   const params = useLocalSearchParams<{ id?: string }>();
   const editingId = typeof params.id === 'string' && params.id ? params.id : null;
 
+  const [macroCategory, setMacroCategory] = useState<MacroCategory | null>(null);
   const [name, setName] = useState('');
-  const [wineType, setWineType] = useState('Rosso');
-  const [customTypes, setCustomTypes] = useState<string[]>([]);
+  const [wineType, setWineType] = useState('');
+  const [subcategories, setSubcategories] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
   const [location, setLocation] = useState('');
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
@@ -38,15 +39,16 @@ export default function AddOrEditWine() {
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
   const [loadingWine, setLoadingWine] = useState(!!editingId);
 
-  // Load custom types
+  // Load subcategories whenever the macro category changes
   useEffect(() => {
+    if (!macroCategory) { setSubcategories([]); return; }
     (async () => {
       try {
-        const types = await storage.getCustomTypes();
-        setCustomTypes(types);
+        const subs = await categories.getAllSubcategories(macroCategory);
+        setSubcategories(subs);
       } catch {}
     })();
-  }, []);
+  }, [macroCategory]);
 
   // If editing, load the wine
   useEffect(() => {
@@ -55,8 +57,9 @@ export default function AddOrEditWine() {
       try {
         const w = await storage.getWine(editingId);
         if (!w) throw new Error('not found');
+        setMacroCategory((w.macro_category as MacroCategory) || 'Vino');
         setName(w.name || '');
-        setWineType(w.wine_type || 'Rosso');
+        setWineType(w.wine_type || '');
         setRating(w.rating || 0);
         setLocation(w.location_name || '');
         if (w.latitude != null && w.longitude != null) {
@@ -78,7 +81,8 @@ export default function AddOrEditWine() {
   // Reset form when the screen is re-opened in "add" mode (no id)
   useEffect(() => {
     if (editingId) return;
-    setName(''); setWineType('Rosso'); setRating(0); setLocation('');
+    setMacroCategory(null);
+    setName(''); setWineType(''); setRating(0); setLocation('');
     setCoords(null); setNotes(''); setFrontPhoto(null); setBackPhoto(null); setGlassPhoto(null);
     setLocationSuggestions([]);
   }, [editingId]);
@@ -163,26 +167,29 @@ export default function AddOrEditWine() {
     } finally { setGpsLoading(false); }
   };
 
-  const addCustomType = async () => {
+  const addCustomSubcategory = async () => {
     const n = customName.trim();
-    if (!n) return;
+    if (!n || !macroCategory) return;
     try {
-      await storage.addCustomType(n);
-      setCustomTypes(prev => Array.from(new Set([...prev, n])));
+      await categories.addCustomSubcategory(macroCategory, n);
+      setSubcategories(prev => Array.from(new Set([...prev, n])));
       setWineType(n);
       setCustomName('');
       setCustomModal(false);
     } catch {
-      Alert.alert('Errore', 'Impossibile salvare la tipologia');
+      Alert.alert('Errore', 'Impossibile salvare la sotto-categoria');
     }
   };
 
   const save = async () => {
+    if (!macroCategory) { Alert.alert('Scegli una categoria'); return; }
     if (!name.trim()) { Alert.alert('Nome richiesto'); return; }
+    if (!wineType) { Alert.alert('Scegli una sotto-categoria'); return; }
     setSaving(true);
     try {
       const body = {
         name: name.trim(),
+        macro_category: macroCategory,
         wine_type: wineType,
         location_name: location,
         latitude: coords?.lat ?? null,
@@ -205,12 +212,36 @@ export default function AddOrEditWine() {
     } finally { setSaving(false); }
   };
 
-  const allTypes = [...DEFAULTS, ...customTypes];
-
   if (loadingWine) {
     return (
       <SafeAreaView style={s.c} edges={['top']}>
         <ActivityIndicator color={colors.primary} style={{ marginTop: 80 }} />
+      </SafeAreaView>
+    );
+  }
+
+  // Step 1: choose macro category
+  if (!macroCategory) {
+    return (
+      <SafeAreaView style={s.c} edges={['top']}>
+        <View style={s.topBar}>
+          <View style={{ width: 40 }} />
+          <Text style={s.h1}>Cosa stai degustando?</Text>
+          <View style={{ width: 40 }} />
+        </View>
+        <View style={s.macroGrid}>
+          {categories.MACRO_CATEGORIES.map((m) => (
+            <TouchableOpacity
+              key={m}
+              testID={`macro-${m}`}
+              style={s.macroCard}
+              onPress={() => setMacroCategory(m)}
+            >
+              <Text style={s.macroEmoji}>{categories.CATEGORIES[m].emoji}</Text>
+              <Text style={s.macroLabel}>{m}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </SafeAreaView>
     );
   }
@@ -227,13 +258,23 @@ export default function AddOrEditWine() {
         </View>
 
         <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 120 }} keyboardShouldPersistTaps="handled">
+          <TouchableOpacity
+            testID="change-macro-btn"
+            style={s.macroBadge}
+            onPress={() => { setMacroCategory(null); setWineType(''); }}
+          >
+            <Text style={s.macroBadgeEmoji}>{categories.CATEGORIES[macroCategory].emoji}</Text>
+            <Text style={s.macroBadgeTxt}>{macroCategory}</Text>
+            <Ionicons name="chevron-down" size={14} color={colors.primary} />
+          </TouchableOpacity>
+
           <View style={s.photoRow}>
             <PhotoSlot label="Fronte" uri={frontPhoto} onPress={() => setPhotoTarget('front')} testID="front-photo" />
             <PhotoSlot label="Retro" uri={backPhoto} onPress={() => setPhotoTarget('back')} testID="back-photo" />
             <PhotoSlot label="Bicchiere" uri={glassPhoto} onPress={() => setPhotoTarget('glass')} testID="glass-photo" />
           </View>
 
-          <Text style={s.label}>Nome del Vino</Text>
+          <Text style={s.label}>Nome</Text>
           <TextInput
             testID="name-input"
             placeholder="Es. Barolo 2018"
@@ -243,16 +284,15 @@ export default function AddOrEditWine() {
             onChangeText={setName}
           />
 
-          <Text style={s.label}>Tipologia</Text>
+          <Text style={s.label}>Sotto-categoria</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
-            {allTypes.map(t => (
+            {subcategories.map(t => (
               <TouchableOpacity
                 key={t}
                 testID={`type-${t}`}
                 onPress={() => setWineType(t)}
                 style={[s.typeChip, wineType === t && s.typeChipActive]}
               >
-                <View style={[s.dot, { backgroundColor: wineTypeColors[t] || colors.primaryLight }]} />
                 <Text style={[s.typeChipTxt, wineType === t && s.typeChipTxtActive]}>{t}</Text>
               </TouchableOpacity>
             ))}
@@ -348,14 +388,14 @@ export default function AddOrEditWine() {
         </TouchableOpacity>
       </Modal>
 
-      {/* Custom type modal */}
+      {/* Custom subcategory modal */}
       <Modal visible={customModal} transparent animationType="fade" onRequestClose={() => setCustomModal(false)}>
         <View style={s.modalOverlay}>
           <View style={[s.modalSheet, { alignSelf: 'center', margin: spacing.lg, borderRadius: radius.xl }]}>
-            <Text style={s.modalTitle}>Nuova Tipologia</Text>
+            <Text style={s.modalTitle}>Nuova Sotto-categoria</Text>
             <TextInput
               testID="custom-type-input"
-              placeholder="Nome tipologia"
+              placeholder="Nome sotto-categoria"
               placeholderTextColor={colors.textMuted}
               style={s.input}
               value={customName}
@@ -366,7 +406,7 @@ export default function AddOrEditWine() {
               <TouchableOpacity style={[s.sheetBtn, { flex: 1, justifyContent: 'center', backgroundColor: colors.surfaceAlt }]} onPress={() => setCustomModal(false)}>
                 <Text style={s.sheetBtnTxt}>Annulla</Text>
               </TouchableOpacity>
-              <TouchableOpacity testID="custom-type-save" style={[s.sheetBtn, { flex: 1, justifyContent: 'center', backgroundColor: colors.primary }]} onPress={addCustomType}>
+              <TouchableOpacity testID="custom-type-save" style={[s.sheetBtn, { flex: 1, justifyContent: 'center', backgroundColor: colors.primary }]} onPress={addCustomSubcategory}>
                 <Text style={[s.sheetBtnTxt, { color: '#fff' }]}>Aggiungi</Text>
               </TouchableOpacity>
             </View>
@@ -398,6 +438,20 @@ const s = StyleSheet.create({
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.md, paddingVertical: spacing.sm },
   backBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
   h1: { fontFamily: fonts.headingBold, fontSize: 20, color: colors.text, flex: 1, textAlign: 'center' },
+  macroGrid: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', padding: spacing.md, gap: spacing.md, alignContent: 'flex-start' },
+  macroCard: {
+    width: '46%', aspectRatio: 1, backgroundColor: colors.surface, borderRadius: radius.xl,
+    alignItems: 'center', justifyContent: 'center', ...shadows.card,
+  },
+  macroEmoji: { fontSize: 48, marginBottom: spacing.sm },
+  macroLabel: { fontFamily: fonts.bodySemi, fontSize: 16, color: colors.text },
+  macroBadge: {
+    flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', gap: 6,
+    backgroundColor: colors.surfaceAlt, paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.pill,
+    marginBottom: spacing.md,
+  },
+  macroBadgeEmoji: { fontSize: 16 },
+  macroBadgeTxt: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.text },
   photoRow: { flexDirection: 'row', gap: 8, marginBottom: spacing.lg },
   photo: { flex: 1, aspectRatio: 0.75, borderRadius: radius.lg, backgroundColor: colors.surface, overflow: 'hidden', position: 'relative', ...shadows.card },
   photoImg: { width: '100%', height: '100%' },
@@ -412,7 +466,6 @@ const s = StyleSheet.create({
   typeChipTxt: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.text, marginLeft: 4 },
   typeChipTxtActive: { color: '#fff' },
   typeChipAdd: { borderStyle: 'dashed', borderColor: colors.primary, backgroundColor: colors.surface },
-  dot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
   locationRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: spacing.sm },
   gpsBtn: { width: 50, height: 50, backgroundColor: colors.primary, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center' },
   coordsTxt: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginBottom: spacing.sm },
