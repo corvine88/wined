@@ -3,6 +3,7 @@ import { View, ActivityIndicator, StyleSheet, Image, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as storage from '../src/storage';
+import * as googleDrive from '../src/googleDrive';
 import { colors, fonts } from '../src/theme';
 
 const LOGO = require('../assets/images/splash-icon.png');
@@ -19,16 +20,20 @@ export default function Index() {
     let cancelled = false;
 
     (async () => {
-      const [profile] = await Promise.all([
+      const [profile, , tutorialSeen] = await Promise.all([
         storage.getProfile(),
         storage.getWines(), // preload in background so home.tsx finds them already cached
+        storage.getTutorialSeen(),
         delay(MIN_SPLASH_MS),
       ]);
       if (cancelled) return;
-      if (profile) {
-        router.replace('/(tabs)/home');
-      } else {
+      if (!profile) {
         router.replace('/onboarding');
+      } else if (!tutorialSeen) {
+        router.replace('/tutorial');
+      } else {
+        googleDrive.backupIfDue(); // fire-and-forget: backup automatico se sono passati 7+ giorni
+        router.replace('/(tabs)/home');
       }
     })();
 

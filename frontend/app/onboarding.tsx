@@ -8,6 +8,8 @@ import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { useProfile } from '../src/profile';
+import * as storage from '../src/storage';
+import * as googleDrive from '../src/googleDrive';
 import { colors, fonts, spacing, radius, shadows } from '../src/theme';
 
 export default function Onboarding() {
@@ -16,6 +18,7 @@ export default function Onboarding() {
   const [name, setName] = useState('');
   const [picture, setPicture] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [restoring, setRestoring] = useState(false);
 
   const pickPhoto = async () => {
     try {
@@ -53,9 +56,27 @@ export default function Onboarding() {
     setSaving(true);
     try {
       await saveProfile({ name: name.trim(), picture: picture || undefined });
-      router.replace('/(tabs)/home');
+      router.replace('/tutorial');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const restoreFromGoogleDrive = async () => {
+    setRestoring(true);
+    try {
+      if (!(await googleDrive.isConnected())) {
+        await googleDrive.connect();
+      }
+      await googleDrive.restore();
+      const restoredProfile = await storage.getProfile();
+      if (restoredProfile) await saveProfile(restoredProfile);
+      await storage.setTutorialSeen(); // chi ripristina un backup è già un utente esperto
+      router.replace('/(tabs)/home');
+    } catch (e: any) {
+      Alert.alert('Errore', e?.message || 'Ripristino da Google Drive non riuscito');
+    } finally {
+      setRestoring(false);
     }
   };
 
@@ -87,8 +108,13 @@ export default function Onboarding() {
             autoFocus
           />
 
-          <TouchableOpacity testID="continue-btn" style={s.btn} onPress={submit} disabled={saving}>
+          <TouchableOpacity testID="continue-btn" style={s.btn} onPress={submit} disabled={saving || restoring}>
             <Text style={s.btnTxt}>{saving ? 'Salvataggio...' : 'Continua'}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity testID="restore-backup-btn" style={s.restoreBtn} onPress={restoreFromGoogleDrive} disabled={saving || restoring}>
+            <Ionicons name="cloud-download-outline" size={16} color={colors.primary} />
+            <Text style={s.restoreBtnTxt}>{restoring ? 'Ripristino in corso...' : 'Ripristina da backup (Google Drive)'}</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -112,4 +138,6 @@ const s = StyleSheet.create({
   },
   btn: { backgroundColor: colors.primary, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center' },
   btnTxt: { color: '#fff', fontFamily: fonts.bodySemi, fontSize: 16 },
+  restoreBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 14, marginTop: spacing.md },
+  restoreBtnTxt: { color: colors.primary, fontFamily: fonts.bodySemi, fontSize: 14, marginLeft: 6 },
 });

@@ -72,3 +72,11 @@ export async function getAllSubcategories(macro: MacroCategory): Promise<string[
   const custom = await getCustomSubcategories(macro);
   return [...builtIn, ...custom];
 }
+
+export async function getCustomSubcategoriesMap(): Promise<Record<string, string[]>> {
+  return readCustomMap();
+}
+
+export async function setCustomSubcategoriesMap(map: Record<string, string[]>): Promise<void> {
+  await writeCustomMap(map);
+}

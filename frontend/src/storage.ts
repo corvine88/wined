@@ -1,8 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getCustomSubcategoriesMap, setCustomSubcategoriesMap } from './categories';
 
 const WINES_KEY = 'wines';
 const PROFILE_KEY = 'profile';
 const SUGGESTED_KEY = 'suggested_wines';
+const TUTORIAL_SEEN_KEY = 'tutorial_seen';
 
 export type Wine = {
   wine_id: string;
@@ -111,7 +113,15 @@ export async function saveProfile(profile: Profile): Promise<void> {
 
 export async function clearAllData(): Promise<void> {
   winesCache = null;
-  await AsyncStorage.multiRemove([WINES_KEY, PROFILE_KEY, 'custom_subcategories', SUGGESTED_KEY]);
+  await AsyncStorage.multiRemove([WINES_KEY, PROFILE_KEY, 'custom_subcategories', SUGGESTED_KEY, TUTORIAL_SEEN_KEY]);
+}
+
+export async function getTutorialSeen(): Promise<boolean> {
+  return (await AsyncStorage.getItem(TUTORIAL_SEEN_KEY)) === 'true';
+}
+
+export async function setTutorialSeen(): Promise<void> {
+  await AsyncStorage.setItem(TUTORIAL_SEEN_KEY, 'true');
 }
 
 export async function getSuggestedWines(): Promise<SuggestedWine[]> {
@@ -133,4 +143,30 @@ export async function saveSuggestedWine(wine: Wine, sharedBy: string): Promise<S
 export async function deleteSuggestedWine(id: string): Promise<void> {
   const suggested = await getSuggestedWines();
   await writeJSON(SUGGESTED_KEY, suggested.filter((w) => w.wine_id !== id));
+}
+
+export type BackupPayload = {
+  version: '1.0';
+  exported_at: string;
+  profile: Profile | null;
+  wines: Wine[];
+  custom_subcategories: Record<string, string[]>;
+};
+
+export async function exportBackupPayload(): Promise<BackupPayload> {
+  const [profile, wines, custom_subcategories] = await Promise.all([
+    getProfile(),
+    getWines(),
+    getCustomSubcategoriesMap(),
+  ]);
+  return { version: '1.0', exported_at: new Date().toISOString(), profile, wines, custom_subcategories };
+}
+
+export async function importBackupPayload(payload: BackupPayload): Promise<void> {
+  winesCache = payload.wines || [];
+  await Promise.all([
+    writeJSON(WINES_KEY, winesCache),
+    payload.profile ? saveProfile(payload.profile) : Promise.resolve(),
+    setCustomSubcategoriesMap(payload.custom_subcategories || {}),
+  ]);
 }
