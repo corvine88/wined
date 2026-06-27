@@ -47,7 +47,7 @@ export default function Login() {
   const googleLogin = async () => {
     try {
       if (Platform.OS === 'web' && typeof window !== 'undefined') {
-        // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+        // Non modificare questo URL né aggiungere fallback/redirect alternativi: romperebbe l'autenticazione
         const redirectUrl = window.location.origin + '/auth-callback';
         window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
         return;

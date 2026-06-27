@@ -1,4 +1,4 @@
-# 📦 Build APK Android per wine D
+# 📦 Build APK Android per ViBiCo
 
 Questa guida ti permette di generare un file `.apk` installabile su qualunque dispositivo Android per condividere l'app con gli amici.
 
@@ -6,7 +6,7 @@ Questa guida ti permette di generare un file `.apk` installabile su qualunque di
 
 1. **Account Expo gratuito** → registrati su https://expo.dev (basta una mail, niente carta di credito)
 2. **Node.js sul tuo computer** → scarica da https://nodejs.org (versione LTS)
-3. **Scarica il progetto** dal pannello Emergent: clicca "Save to GitHub" oppure scarica lo ZIP.
+3. **Scarica il progetto** dal repository del progetto (es. clona o scarica lo ZIP da GitHub).
 
 ## Passi per generare l'APK
 
@@ -60,19 +60,19 @@ https://expo.dev/artifacts/eas/xxxxxx.apk
 2. Tocca "Scarica" → poi tocca il file scaricato
 3. Android chiederà di **abilitare "Installa da fonti sconosciute"** (solo la prima volta) → conferma
 4. Tocca "Installa" → app installata 🎉
-5. L'app appare nel drawer come "wine D" con la tua icona
+5. L'app appare nel drawer come "ViBiCo" con la tua icona
 
 ## Modifiche future
 
 Quando vuoi aggiornare l'app:
-1. Modifichi il codice (su Emergent o in locale)
+1. Modifichi il codice in locale
 2. Incrementa `versionCode` in `app.json` (es. da 1 a 2)
 3. Rilancia `eas build --platform android --profile preview`
 4. Distribuisci il nuovo APK
 
 ## Note importanti
 
-- ⚠️ **Backend**: l'APK punta al backend Emergent (`https://tasting-map.preview.emergentagent.com`). Se fai il **deploy nativo su Emergent**, sostituisci l'URL in `eas.json` → campo `EXPO_PUBLIC_BACKEND_URL` con quello di produzione, poi rilancia la build.
+- ⚠️ **Backend**: l'APK punta all'URL configurato in `eas.json` → campo `EXPO_PUBLIC_BACKEND_URL`. Se cambi backend, aggiorna quel valore e rilancia la build.
 - 💰 **Costi**: Expo offre **30 build gratis al mese** sul tier free. Più che sufficienti.
 - 🔐 **Keystore**: Expo lo genera e lo conserva per te. Conservalo se vuoi passare un giorno al Play Store ufficiale.
 - 📱 **iOS**: per l'IPA serve account Apple Developer ($99/anno) — non incluso in questa guida.

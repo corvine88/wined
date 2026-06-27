@@ -16,7 +16,6 @@ type AuthCtx = {
   loginWithSessionId: (session_id: string) => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
-  bootLogs: string[];
 };
 
 const Ctx = createContext<AuthCtx>({} as AuthCtx);
@@ -26,64 +25,48 @@ const INIT_TIMEOUT_MS = 5000;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
-  const [bootLogs, setBootLogs] = useState<string[]>([]);
   const settledRef = useRef(false);
 
-  const log = (msg: string) => {
-    const line = `[auth] ${msg}`;
-    console.log(line);
-    setBootLogs((prev) => [...prev, line]);
-  };
-
-  const settle = useCallback((u: User | null, reason: string) => {
+  const settle = useCallback((u: User | null) => {
     if (settledRef.current) return;
     settledRef.current = true;
-    log(`settle(${u === null ? 'null' : 'user'}) — ${reason}`);
     setUser(u);
   }, []);
 
   const refresh = useCallback(async () => {
     try {
-      log('refresh: GET /auth/me');
       const r = await api.get('/auth/me');
-      log(`refresh: /auth/me → ${r.status}`);
       settledRef.current = true;
       setUser(r.data);
     } catch (e: any) {
-      log(`refresh: error ${e?.response?.status || ''} ${e?.message || ''}`);
       if (e?.response?.status === 401) {
         await setToken(null);
-        settle(null, '401 from /me');
+        settle(null);
       }
     }
   }, [settle]);
 
   useEffect(() => {
     let cancelled = false;
-    log('AuthProvider mount');
 
     const safety = setTimeout(() => {
       if (cancelled || settledRef.current) return;
-      settle(null, 'safety timeout 5s');
+      settle(null);
     }, INIT_TIMEOUT_MS);
 
     (async () => {
       try {
-        log('calling getToken()');
         const token = await getToken();
-        log(`getToken() done → ${token ? 'present' : 'absent'}`);
         if (cancelled || settledRef.current) return;
         if (token) {
           settledRef.current = true;
-          log('token present → set placeholder, refresh in bg');
           setUser(PLACEHOLDER_USER);
           refresh();
         } else {
-          settle(null, 'no token');
+          settle(null);
         }
-      } catch (e: any) {
-        log(`init error: ${e?.message || String(e)}`);
-        settle(null, 'init error');
+      } catch {
+        settle(null);
       } finally {
         clearTimeout(safety);
       }
@@ -121,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <Ctx.Provider value={{ user, login, register, loginWithSessionId, logout, refresh, bootLogs }}>
+    <Ctx.Provider value={{ user, login, register, loginWithSessionId, logout, refresh }}>
       {children}
     </Ctx.Provider>
   );
