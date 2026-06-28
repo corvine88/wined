@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useURL } from 'expo-linking';
@@ -38,6 +38,7 @@ export default function NotFound() {
     let cancelled = false;
     (async () => {
       console.warn('[not-found] URL non riconosciuto da Expo Router:', url);
+      Alert.alert('URL ricevuto', url);
       const candidates = candidateUris(url);
       console.warn('[not-found] candidate URI da provare:', candidates);
       for (const uri of candidates) {
