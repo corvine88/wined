@@ -37,18 +37,22 @@ export default function NotFound() {
 
     let cancelled = false;
     (async () => {
-      console.warn('[not-found] unmatched URL received:', url);
-      for (const uri of candidateUris(url)) {
+      console.warn('[not-found] URL non riconosciuto da Expo Router:', url);
+      const candidates = candidateUris(url);
+      console.warn('[not-found] candidate URI da provare:', candidates);
+      for (const uri of candidates) {
         try {
           const payload = await readVibicoFileAtUri(uri);
+          console.warn('[not-found] lettura riuscita con candidate URI:', uri);
           if (cancelled) return;
           setPendingSharePayload(payload);
           router.replace('/receive');
           return;
-        } catch {
-          // try next candidate
+        } catch (e: any) {
+          console.warn('[not-found] candidate URI fallita:', uri, '-', e?.message || String(e));
         }
       }
+      console.warn('[not-found] tutti i candidate URI sono falliti, mostro schermata di errore');
       if (!cancelled) setStatus('failed');
     })();
 
