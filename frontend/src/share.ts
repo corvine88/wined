@@ -50,17 +50,23 @@ export async function shareWine(wine: Wine, sharedBy: string): Promise<void> {
   });
 }
 
+// Il riconoscimento è basato esclusivamente sul contenuto del file (type === 'vibico_share'),
+// non sull'estensione o sul MIME type: WhatsApp e altre app spesso rinominano o tolgono
+// l'estensione .vibico durante il salvataggio/invio, quindi non possiamo fare affidamento su di essa.
 export function parseVibicoPayload(raw: string): VibicoSharePayload {
   const data = JSON.parse(raw);
   if (data?.type !== 'vibico_share' || !data?.wine?.name) {
-    throw new Error('File .vibico non valido');
+    throw new Error('Questo file non è una degustazione ViBiCo valida');
   }
   return data as VibicoSharePayload;
 }
 
 export async function pickVibicoFile(): Promise<VibicoSharePayload | null> {
+  // Nessun filtro per MIME type/estensione: un file .vibico rinominato da WhatsApp
+  // può arrivare con qualunque MIME type o senza estensione. La validazione vera
+  // avviene dopo, leggendo il contenuto con parseVibicoPayload.
   const res = await DocumentPicker.getDocumentAsync({
-    type: ['application/json', '*/*'],
+    type: '*/*',
     copyToCacheDirectory: true,
   });
   if (res.canceled || !res.assets?.[0]) return null;

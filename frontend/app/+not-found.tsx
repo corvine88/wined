@@ -14,6 +14,10 @@ import { colors, fonts, spacing, radius } from '../src/theme';
 //    from the sharing app (WhatsApp, Drive, ...) got reported to us prefixed
 //    with our own "wined://" scheme instead of its real "content://" scheme.
 //    We try a few candidate URIs to recover the original file before giving up.
+// Note: we never check the filename/extension here — each candidate is read and
+// handed to parseVibicoPayload, which accepts it only if the JSON content has
+// type === 'vibico_share'. WhatsApp and other apps often strip or rename the
+// .vibico extension, so extension-based detection would silently fail for them.
 function candidateUris(raw: string): string[] {
   const candidates = [raw];
   const stripped = raw.replace(/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//, '');
