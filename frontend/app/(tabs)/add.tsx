@@ -237,7 +237,7 @@ export default function AddOrEditWine() {
               style={s.macroCard}
               onPress={() => setMacroCategory(m)}
             >
-              <Text style={s.macroEmoji}>{categories.CATEGORIES[m].emoji}</Text>
+              <Image source={categories.CATEGORIES[m].icon} style={s.macroIcon} resizeMode="contain" />
               <Text style={s.macroLabel}>{m}</Text>
             </TouchableOpacity>
           ))}
@@ -263,7 +263,7 @@ export default function AddOrEditWine() {
             style={s.macroBadge}
             onPress={() => { setMacroCategory(null); setWineType(''); }}
           >
-            <Text style={s.macroBadgeEmoji}>{categories.CATEGORIES[macroCategory].emoji}</Text>
+            <Image source={categories.CATEGORIES[macroCategory].icon} style={s.macroBadgeIcon} resizeMode="contain" />
             <Text style={s.macroBadgeTxt}>{macroCategory}</Text>
             <Ionicons name="chevron-down" size={14} color={colors.primary} />
           </TouchableOpacity>
@@ -443,14 +443,14 @@ const s = StyleSheet.create({
     width: '46%', aspectRatio: 1, backgroundColor: colors.surface, borderRadius: radius.xl,
     alignItems: 'center', justifyContent: 'center', ...shadows.card,
   },
-  macroEmoji: { fontSize: 48, marginBottom: spacing.sm },
+  macroIcon: { width: 52, height: 52, marginBottom: spacing.sm },
   macroLabel: { fontFamily: fonts.bodySemi, fontSize: 16, color: colors.text },
   macroBadge: {
     flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', gap: 6,
     backgroundColor: colors.surfaceAlt, paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.pill,
     marginBottom: spacing.md,
   },
-  macroBadgeEmoji: { fontSize: 16 },
+  macroBadgeIcon: { width: 18, height: 18 },
   macroBadgeTxt: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.text },
   photoRow: { flexDirection: 'row', gap: 8, marginBottom: spacing.lg },
   photo: { flex: 1, aspectRatio: 0.75, borderRadius: radius.lg, backgroundColor: colors.surface, overflow: 'hidden', position: 'relative', ...shadows.card },

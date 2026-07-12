@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions,
+  View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions,
   NativeSyntheticEvent, NativeScrollEvent, ActivityIndicator, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,31 +13,31 @@ const TEAL = '#2f5350';
 const TERRACOTTA = '#a65b4b';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-type Slide = { emoji: string; title: string; description: string };
+type Slide = { image: number; title: string; description: string };
 
 const SLIDES: Slide[] = [
   {
-    emoji: '🥂',
+    image: require('../assets/tutorial/welcome.png'),
     title: 'Benvenuto in ViBiCo!',
     description: 'Il tuo diario personale di degustazione',
   },
   {
-    emoji: '➕',
+    image: require('../assets/tutorial/record.png'),
     title: 'Registra ogni sorso',
     description: 'Salva vini, birre, cocktail e bibite con foto, note e la posizione dove li hai assaggiati',
   },
   {
-    emoji: '🗺️',
+    image: require('../assets/tutorial/map.png'),
     title: 'La tua mappa degustativa',
     description: 'Scopri tutti i luoghi dove hai degustato con i pin sulla mappa',
   },
   {
-    emoji: '😊',
+    image: require('../assets/tutorial/share.png'),
     title: 'Condividi con gli amici',
     description: 'Manda le tue degustazioni agli amici e ricevi i loro suggeriti',
   },
   {
-    emoji: '☁️',
+    image: require('../assets/tutorial/backup.png'),
     title: 'I tuoi dati al sicuro',
     description: 'Collega Google Drive per fare il backup automatico. Non perderai mai nulla, anche se cambi telefono.',
   },
@@ -95,7 +95,7 @@ export default function Tutorial() {
       >
         {SLIDES.map((slide, i) => (
           <View key={i} style={[s.slide, { width: SCREEN_WIDTH }]}>
-            <Text style={s.emoji}>{slide.emoji}</Text>
+            <Image source={slide.image} style={s.image} resizeMode="contain" />
             <Text style={s.title}>{slide.title}</Text>
             <Text style={s.description}>{slide.description}</Text>
 
@@ -132,7 +132,7 @@ export default function Tutorial() {
 const s = StyleSheet.create({
   c: { flex: 1, backgroundColor: '#F9F8F5' },
   slide: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.xl },
-  emoji: { fontSize: 88, marginBottom: spacing.xl },
+  image: { width: 180, height: 180, marginBottom: spacing.xl },
   title: { fontFamily: fonts.headingBold, fontSize: 28, color: TEAL, textAlign: 'center', marginBottom: spacing.md },
   description: { fontFamily: fonts.body, fontSize: 15, color: '#7A7570', textAlign: 'center', lineHeight: 22, paddingHorizontal: spacing.md },
   gdriveBtn: { backgroundColor: TEAL, borderRadius: radius.pill, paddingVertical: 14, paddingHorizontal: 28, marginTop: spacing.xl },

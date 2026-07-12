@@ -1,22 +1,27 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { ImageSourcePropType } from 'react-native';
 
 export type MacroCategory = 'Vino' | 'Birra' | 'Cocktail' | 'Bibite';
 
-export const CATEGORIES: Record<MacroCategory, { emoji: string; subcategories: string[] }> = {
+export const CATEGORIES: Record<MacroCategory, { emoji: string; icon: ImageSourcePropType; subcategories: string[] }> = {
   Vino: {
     emoji: '🍷',
+    icon: require('../assets/categories/vino.png'),
     subcategories: ['Rossi', 'Bianchi', 'Rosati', 'Bollicine', 'Dolci', 'Liquorosi', 'Macerati', 'Arancioni', 'Asiatici', 'Dealcolati'],
   },
   Birra: {
     emoji: '🍺',
+    icon: require('../assets/categories/birra.png'),
     subcategories: ['Lager', 'Ale', 'Wheat', 'Dark / Roasted', 'IPA / Hoppy', 'Sour / Wild', 'Belghe / Trappiste', 'Analcoliche'],
   },
   Cocktail: {
     emoji: '🍸',
+    icon: require('../assets/categories/cocktail.png'),
     subcategories: ['Spritz-style', 'Long drink', 'Short drink', 'Sour / Citrus', 'Tiki / Punch', 'Digestivi / Amari', 'Mocktail', 'Signature'],
   },
   Bibite: {
     emoji: '🥤',
+    icon: require('../assets/categories/bibite.png'),
     subcategories: ['Gassate', 'Tè freddi', 'Succhi & estratti', 'Fermentati', 'Energy drink', 'Infusi / Tisane', 'Asiatiche', 'Acque'],
   },
 };
@@ -36,6 +41,10 @@ export function getCategoryColor(macro?: string | null): string {
 
 export function getCategoryEmoji(macro?: string | null): string {
   return CATEGORIES[(macro as MacroCategory)]?.emoji || '🍷';
+}
+
+export function getCategoryIcon(macro?: string | null): ImageSourcePropType {
+  return CATEGORIES[(macro as MacroCategory)]?.icon || CATEGORIES.Vino.icon;
 }
 
 const CUSTOM_KEY = 'custom_subcategories';

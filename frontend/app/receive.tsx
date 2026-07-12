@@ -91,13 +91,14 @@ export default function Receive() {
           <Image source={{ uri: wine.front_photo }} style={s.hero} />
         ) : (
           <View style={[s.hero, { alignItems: 'center', justifyContent: 'center', backgroundColor: categories.getCategoryColor(wine.macro_category) }]}>
-            <Text style={{ fontSize: 56 }}>{categories.getCategoryEmoji(wine.macro_category)}</Text>
+            <Image source={categories.getCategoryIcon(wine.macro_category)} style={{ width: 64, height: 64 }} resizeMode="contain" />
           </View>
         )}
 
         <View style={s.typeBadge}>
           <View style={[s.dot, { backgroundColor: categories.getCategoryColor(wine.macro_category) }]} />
-          <Text style={s.typeBadgeTxt}>{categories.getCategoryEmoji(wine.macro_category)} {wine.macro_category} · {wine.wine_type}</Text>
+          <Image source={categories.getCategoryIcon(wine.macro_category)} style={s.typeBadgeIcon} resizeMode="contain" />
+          <Text style={s.typeBadgeTxt}>{wine.macro_category} · {wine.wine_type}</Text>
         </View>
         <Text style={s.title}>{wine.name}</Text>
         <View style={s.starsRow}>
@@ -155,6 +156,7 @@ const s = StyleSheet.create({
   sharedBadgeTxt: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.primary, marginLeft: 4 },
   hero: { width: '100%', aspectRatio: 0.9, borderRadius: radius.xl, marginBottom: spacing.md, ...shadows.card },
   typeBadge: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', backgroundColor: colors.surfaceAlt, paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, marginBottom: spacing.sm },
+  typeBadgeIcon: { width: 14, height: 14, marginRight: 4 },
   typeBadgeTxt: { fontFamily: fonts.bodySemi, fontSize: 11, color: colors.text, textTransform: 'uppercase', letterSpacing: 0.8 },
   dot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
   title: { fontFamily: fonts.headingBold, fontSize: 30, color: colors.text, lineHeight: 34 },

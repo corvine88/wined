@@ -98,7 +98,7 @@ export default function Suggested() {
                 {item.front_photo ? (
                   <Image source={{ uri: item.front_photo }} style={s.thumbImg} />
                 ) : (
-                  <Text style={s.thumbEmoji}>{categories.getCategoryEmoji(item.macro_category)}</Text>
+                  <Image source={categories.getCategoryIcon(item.macro_category)} style={s.thumbIcon} resizeMode="contain" />
                 )}
               </View>
               <View style={{ flex: 1, marginLeft: spacing.md }}>
@@ -134,7 +134,7 @@ const s = StyleSheet.create({
   card: { flexDirection: 'row', backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.md, marginBottom: spacing.md, ...shadows.card },
   thumb: { width: 64, height: 84, borderRadius: radius.md, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
   thumbImg: { width: '100%', height: '100%' },
-  thumbEmoji: { fontSize: 28 },
+  thumbIcon: { width: 32, height: 32 },
   fromBadge: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', backgroundColor: colors.surfaceAlt, paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill, marginBottom: 4 },
   fromBadgeTxt: { fontFamily: fonts.bodySemi, fontSize: 10, color: colors.primary, marginLeft: 4, textTransform: 'uppercase', letterSpacing: 0.6 },
   cardTitle: { fontFamily: fonts.headingBold, fontSize: 18, color: colors.text },

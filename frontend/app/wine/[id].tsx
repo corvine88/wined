@@ -73,7 +73,7 @@ export default function WineDetail() {
             <Image source={{ uri: wine.front_photo }} style={s.hero} />
           ) : (
             <View style={[s.hero, { alignItems: 'center', justifyContent: 'center', backgroundColor: categories.getCategoryColor(wine.macro_category) }]}>
-              <Text style={{ fontSize: 64 }}>{categories.getCategoryEmoji(wine.macro_category)}</Text>
+              <Image source={categories.getCategoryIcon(wine.macro_category)} style={{ width: 72, height: 72 }} resizeMode="contain" />
             </View>
           )}
           <View style={s.heroOverlay} />
@@ -98,7 +98,8 @@ export default function WineDetail() {
         <View style={s.contentCard}>
           <View style={s.typeBadge}>
             <View style={[s.dot, { backgroundColor: categories.getCategoryColor(wine.macro_category) }]} />
-            <Text style={s.typeBadgeTxt}>{categories.getCategoryEmoji(wine.macro_category)} {wine.macro_category} · {wine.wine_type}</Text>
+            <Image source={categories.getCategoryIcon(wine.macro_category)} style={s.typeBadgeIcon} resizeMode="contain" />
+            <Text style={s.typeBadgeTxt}>{wine.macro_category} · {wine.wine_type}</Text>
           </View>
           <Text style={s.title}>{wine.name}</Text>
           <View style={s.starsRow}>
@@ -166,6 +167,7 @@ const s = StyleSheet.create({
   iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(0,0,0,0.35)', alignItems: 'center', justifyContent: 'center' },
   contentCard: { backgroundColor: colors.surface, marginTop: -40, borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: spacing.lg, minHeight: 300, ...shadows.card },
   typeBadge: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', backgroundColor: colors.surfaceAlt, paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, marginBottom: spacing.sm },
+  typeBadgeIcon: { width: 14, height: 14, marginRight: 4 },
   typeBadgeTxt: { fontFamily: fonts.bodySemi, fontSize: 11, color: colors.text, textTransform: 'uppercase', letterSpacing: 0.8 },
   dot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
   title: { fontFamily: fonts.headingBold, fontSize: 34, color: colors.text, lineHeight: 38 },

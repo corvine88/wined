@@ -117,7 +117,7 @@ export default function Home() {
                 style={[styles.chip, macroFilter === m && styles.chipActive]}
                 onPress={() => setMacroFilter(m)}
               >
-                <Text style={styles.chipEmoji}>{categories.CATEGORIES[m].emoji}</Text>
+                <Image source={categories.CATEGORIES[m].icon} style={styles.chipIcon} resizeMode="contain" />
                 <Text style={[styles.chipTxt, macroFilter === m && styles.chipTxtActive]}>{m}</Text>
               </TouchableOpacity>
             ))}
@@ -195,7 +195,7 @@ function WineCard({ wine, onPress }: { wine: Wine; onPress: () => void }) {
         {wine.front_photo ? (
           <Image source={{ uri: wine.front_photo }} style={styles.thumbImg} />
         ) : (
-          <Text style={styles.thumbEmoji}>{categories.getCategoryEmoji(wine.macro_category)}</Text>
+          <Image source={categories.getCategoryIcon(wine.macro_category)} style={styles.thumbIcon} resizeMode="contain" />
         )}
       </View>
       <View style={{ flex: 1, marginLeft: spacing.md }}>
@@ -239,12 +239,12 @@ const styles = StyleSheet.create({
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipTxt: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.text },
   chipTxtActive: { color: '#fff' },
-  chipEmoji: { fontSize: 14 },
+  chipIcon: { width: 16, height: 16 },
   dot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
   card: { flexDirection: 'row', backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.md, marginBottom: spacing.md, ...shadows.card },
   thumb: { width: 72, height: 96, borderRadius: radius.md, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
   thumbImg: { width: '100%', height: '100%' },
-  thumbEmoji: { fontSize: 32 },
+  thumbIcon: { width: 36, height: 36 },
   cardTitle: { fontFamily: fonts.headingBold, fontSize: 20, color: colors.text, marginTop: 2 },
   cardMeta: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted, marginLeft: 4 },
   row: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
