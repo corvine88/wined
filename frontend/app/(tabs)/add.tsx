@@ -239,8 +239,10 @@ export default function AddOrEditWine() {
               style={s.macroCard}
               onPress={() => setMacroCategory(m)}
             >
-              <Image source={categories.CATEGORIES[m].icon} style={s.macroIcon} resizeMode="contain" />
-              <Text style={s.macroLabel}>{t(`categories.macro.${m}`)}</Text>
+              <View style={s.macroCardContent}>
+                <Image source={categories.CATEGORIES[m].icon} style={s.macroIcon} resizeMode="contain" />
+                <Text style={s.macroLabel}>{t(`categories.macro.${m}`)}</Text>
+              </View>
             </TouchableOpacity>
           ))}
         </View>
@@ -447,6 +449,7 @@ const s = StyleSheet.create({
     width: '46%', aspectRatio: 1, backgroundColor: colors.surface, borderRadius: radius.xl,
     alignItems: 'center', justifyContent: 'center', ...shadows.card,
   },
+  macroCardContent: { flex: 1, width: '100%', alignItems: 'center', justifyContent: 'center' },
   macroIcon: { width: 52, height: 52, marginBottom: spacing.sm },
   macroLabel: { fontFamily: fonts.bodySemi, fontSize: 16, color: colors.text },
   macroBadge: {

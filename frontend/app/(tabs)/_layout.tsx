@@ -38,7 +38,7 @@ export default function TabLayout() {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
           height: baseHeight + bottomInset,
-          paddingTop: 8,
+          paddingTop: 12,
           paddingBottom: bottomInset,
         },
         tabBarLabelStyle: { fontFamily: fonts.bodySemi, fontSize: 11 },
@@ -46,7 +46,7 @@ export default function TabLayout() {
     >
       <Tabs.Screen name="home" options={{ title: t('tabs.home'), tabBarIcon: ({ color, size }) => <Ionicons name="wine" size={size} color={color} /> }} />
       <Tabs.Screen name="map" options={{ title: t('tabs.map'), tabBarIcon: ({ color, size }) => <Ionicons name="map" size={size} color={color} /> }} />
-      <Tabs.Screen name="add" options={{ title: t('tabs.add'), tabBarIcon: ({ size }) => <View style={{ marginTop: 2, marginBottom: 4 }}><Ionicons name="add-circle" size={size + 2} color={colors.primary} /></View> }} />
+      <Tabs.Screen name="add" options={{ title: t('tabs.add'), tabBarIcon: ({ size }) => <View style={{ marginBottom: 4 }}><Ionicons name="add-circle" size={size} color={colors.primary} /></View> }} />
       <Tabs.Screen name="suggested" options={{ title: t('tabs.suggested'), tabBarIcon: ({ color, size }) => <Ionicons name="happy-outline" size={size} color={color} /> }} />
       <Tabs.Screen name="profile" options={{ title: t('tabs.profile'), tabBarIcon: ({ color, size }) => <Ionicons name="person-circle-outline" size={size} color={color} /> }} />
     </Tabs>
