@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import { Tabs, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useProfile } from '../../src/profile';
 import { colors, fonts } from '../../src/theme';
 import { View, ActivityIndicator, Platform } from 'react-native';
 
 export default function TabLayout() {
+  const { t } = useTranslation();
   const { profile } = useProfile();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -42,11 +44,11 @@ export default function TabLayout() {
         tabBarLabelStyle: { fontFamily: fonts.bodySemi, fontSize: 11 },
       }}
     >
-      <Tabs.Screen name="home" options={{ title: 'Degustazioni', tabBarIcon: ({ color, size }) => <Ionicons name="wine" size={size} color={color} /> }} />
-      <Tabs.Screen name="map" options={{ title: 'Mappa', tabBarIcon: ({ color, size }) => <Ionicons name="map" size={size} color={color} /> }} />
-      <Tabs.Screen name="add" options={{ title: 'Aggiungi', tabBarIcon: ({ size }) => <View style={{ marginBottom: 4 }}><Ionicons name="add-circle" size={size + 6} color={colors.primary} /></View> }} />
-      <Tabs.Screen name="suggested" options={{ title: 'Suggeriti', tabBarIcon: ({ color, size }) => <Ionicons name="happy-outline" size={size} color={color} /> }} />
-      <Tabs.Screen name="profile" options={{ title: 'Profilo', tabBarIcon: ({ color, size }) => <Ionicons name="person-circle-outline" size={size} color={color} /> }} />
+      <Tabs.Screen name="home" options={{ title: t('tabs.home'), tabBarIcon: ({ color, size }) => <Ionicons name="wine" size={size} color={color} /> }} />
+      <Tabs.Screen name="map" options={{ title: t('tabs.map'), tabBarIcon: ({ color, size }) => <Ionicons name="map" size={size} color={color} /> }} />
+      <Tabs.Screen name="add" options={{ title: t('tabs.add'), tabBarIcon: ({ size }) => <View style={{ marginTop: 2, marginBottom: 4 }}><Ionicons name="add-circle" size={size + 2} color={colors.primary} /></View> }} />
+      <Tabs.Screen name="suggested" options={{ title: t('tabs.suggested'), tabBarIcon: ({ color, size }) => <Ionicons name="happy-outline" size={size} color={color} /> }} />
+      <Tabs.Screen name="profile" options={{ title: t('tabs.profile'), tabBarIcon: ({ color, size }) => <Ionicons name="person-circle-outline" size={size} color={color} /> }} />
     </Tabs>
   );
 }

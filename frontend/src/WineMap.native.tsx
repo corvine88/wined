@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } fr
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import MapView, { Marker } from 'react-native-maps';
 import { colors, fonts, radius, spacing, shadows } from '../src/theme';
 import { getCategoryColor } from './categories';
@@ -26,6 +27,7 @@ function clusterize(wines: Wine[]): Cluster[] {
 }
 
 export default function WineMapNative({ wines }: { wines: Wine[] }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const [selected, setSelected] = useState<Cluster | null>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -42,7 +44,7 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
     return (
       <View style={s.errBox}>
         <Ionicons name="warning-outline" size={36} color={colors.danger}/>
-        <Text style={s.errTxt}>Mappa non disponibile: {error}</Text>
+        <Text style={s.errTxt}>{t('map.errorUnavailable', { error })}</Text>
       </View>
     );
   }
@@ -84,15 +86,15 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
 
       <SafeAreaView edges={['top']} style={s.mapHeader} pointerEvents="box-none">
         <View style={s.mapHeaderInner}>
-          <Text style={s.mapTitle}>La Mappa Degustativa</Text>
-          <Text style={s.mapSub}>{wines.length} {wines.length === 1 ? 'luogo' : 'luoghi'}</Text>
+          <Text style={s.mapTitle}>{t('map.nativeTitle')}</Text>
+          <Text style={s.mapSub}>{t('map.placesCount', { count: wines.length })}</Text>
         </View>
       </SafeAreaView>
 
       {selected && (
         <View style={s.selCard}>
           <Text style={s.selHeader}>
-            {selected.wines.length > 1 ? `${selected.wines.length} degustazioni qui` : 'Degustazione'}
+            {selected.wines.length > 1 ? t('map.multiTastingHeader', { count: selected.wines.length }) : t('map.singleTastingHeader')}
           </Text>
           {selected.wines.slice(0, 3).map(w => (
             <TouchableOpacity
@@ -109,13 +111,13 @@ export default function WineMapNative({ wines }: { wines: Wine[] }) {
               )}
               <View style={{ flex: 1, marginLeft: 10 }}>
                 <Text style={s.selName} numberOfLines={1}>{w.name}</Text>
-                <Text style={s.selMeta} numberOfLines={1}>{w.macro_category} · {w.wine_type}{w.location_name ? ` · ${w.location_name}` : ''}</Text>
+                <Text style={s.selMeta} numberOfLines={1}>{t(`categories.macro.${w.macro_category}`)} · {t(`categories.sub.${w.wine_type}`, { defaultValue: w.wine_type })}{w.location_name ? ` · ${w.location_name}` : ''}</Text>
               </View>
               <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
             </TouchableOpacity>
           ))}
           {selected.wines.length > 3 && (
-            <Text style={s.selMore}>+ altri {selected.wines.length - 3}</Text>
+            <Text style={s.selMore}>{t('map.moreCount', { count: selected.wines.length - 3 })}</Text>
           )}
           <TouchableOpacity style={s.selClose} onPress={() => setSelected(null)}>
             <Ionicons name="close" size={16} color={colors.textMuted} />

@@ -1,0 +1,246 @@
+{
+  "common": {
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "error": "Errore"
+  },
+  "splash": {
+    "tagline": "e tu come lo vedi il bicchiere?",
+    "claim": "dipende da cosa c'è dentro",
+    "copyright": "© 2026 Serena Bosca"
+  },
+  "onboarding": {
+    "title": "Come ti chiami?",
+    "subtitle": "Personalizza il tuo profilo per iniziare a registrare le tue degustazioni.",
+    "avatarLabel": "Foto profilo (opzionale)",
+    "namePlaceholder": "Il tuo nome",
+    "ageConsent": "Dichiaro di avere l'età legale per il consumo di alcolici nel mio paese",
+    "continue": "Continua",
+    "saving": "Salvataggio...",
+    "restoreBackup": "Ripristina da backup (Google Drive)",
+    "restoring": "Ripristino in corso...",
+    "alertEnterName": "Inserisci il tuo nome",
+    "alertPhotoErrorTitle": "Errore foto",
+    "alertPermissionDenied": "Permesso negato",
+    "alertRestoreErrorDefault": "Ripristino da Google Drive non riuscito"
+  },
+  "tutorial": {
+    "slides": {
+      "welcome": {
+        "title": "Benvenuto in ViBiCo!",
+        "description": "Il tuo diario personale di degustazione"
+      },
+      "record": {
+        "title": "Registra ogni sorso",
+        "description": "Salva vini, birre, cocktail e bibite con foto, note e la posizione dove li hai assaggiati"
+      },
+      "map": {
+        "title": "La tua mappa degustativa",
+        "description": "Scopri tutti i luoghi dove hai degustato con i pin sulla mappa"
+      },
+      "share": {
+        "title": "Condividi con gli amici",
+        "description": "Manda le tue degustazioni agli amici e ricevi i loro suggeriti"
+      },
+      "backup": {
+        "title": "I tuoi dati al sicuro",
+        "description": "Collega Google Drive per fare il backup automatico. Non perderai mai nulla, anche se cambi telefono."
+      }
+    },
+    "connectGoogleDrive": "Connetti Google Drive",
+    "next": "Avanti",
+    "start": "Inizia!",
+    "skip": "Salta",
+    "alertConnectErrorDefault": "Connessione a Google Drive non riuscita"
+  },
+  "tabs": {
+    "home": "Degustazioni",
+    "map": "Mappa",
+    "add": "Aggiungi",
+    "suggested": "Suggeriti",
+    "profile": "Profilo"
+  },
+  "home": {
+    "kicker": "Benvenuto",
+    "title": "Le Mie Degustazioni",
+    "searchPlaceholder": "Cerca...",
+    "segmentByType": "Per Categoria",
+    "segmentByLocation": "Per Luogo",
+    "filterAll": "Tutti",
+    "filterAllFem": "Tutte",
+    "emptyState": "Nessuna degustazione. Aggiungi la tua prima!"
+  },
+  "add": {
+    "chooseCategoryTitle": "Cosa stai degustando?",
+    "newTitle": "Nuova Degustazione",
+    "editTitle": "Modifica Degustazione",
+    "photoFront": "Fronte",
+    "photoBack": "Retro",
+    "photoGlass": "Bicchiere",
+    "nameLabel": "Nome",
+    "namePlaceholder": "Es. Barolo 2018",
+    "subcategoryLabel": "Sotto-categoria",
+    "customChip": "Personalizzato",
+    "locationLabel": "Luogo",
+    "locationPlaceholder": "Dove lo hai bevuto?",
+    "nearbyUsedLabel": "Usato in precedenza qui vicino:",
+    "ratingLabel": "Valutazione",
+    "notesLabel": "Note di Degustazione",
+    "notesPlaceholder": "Profumi, sapori, abbinamenti...",
+    "saveNew": "Salva Degustazione",
+    "saveEdit": "Salva Modifiche",
+    "disclaimer": "Bevi responsabilmente.\nIl gusto è nel sorso, non nella quantità.",
+    "photoModalTitle": "Scegli da Galleria o Scatta Foto",
+    "takePhoto": "Scatta Foto",
+    "chooseFromGallery": "Scegli da Galleria",
+    "customSubcategoryModalTitle": "Nuova Sotto-categoria",
+    "customSubcategoryPlaceholder": "Nome sotto-categoria",
+    "addBtn": "Aggiungi",
+    "alertChooseCategory": "Scegli una categoria",
+    "alertNameRequired": "Nome richiesto",
+    "alertChooseSubcategory": "Scegli una sotto-categoria",
+    "alertLoadErrorMessage": "Impossibile caricare il vino",
+    "alertSaveErrorMessage": "Salvataggio fallito",
+    "alertPermissionDenied": "Permesso negato",
+    "alertPhotoErrorTitle": "Errore foto",
+    "alertGpsPermissionDenied": "Permesso posizione negato",
+    "alertGpsUnavailableTitle": "GPS non disponibile",
+    "alertCustomSubcategoryErrorMessage": "Impossibile salvare la sotto-categoria"
+  },
+  "map": {
+    "nativeTitle": "La Mappa Degustativa",
+    "webTitle": "La Mia Mappa dei Vini",
+    "placesCount_one": "{{count}} luogo",
+    "placesCount_other": "{{count}} luoghi",
+    "errorUnavailable": "Mappa non disponibile: {{error}}",
+    "emptyState": "Nessun luogo registrato. Aggiungi un vino con la posizione!",
+    "singleTastingHeader": "Degustazione",
+    "multiTastingHeader": "{{count}} degustazioni qui",
+    "moreCount": "+ altri {{count}}",
+    "openCard": "Apri scheda"
+  },
+  "profile": {
+    "title": "Profilo",
+    "deviceOnlyBadge": "Solo su questo dispositivo",
+    "defaultUserName": "Utente",
+    "backupSectionTitle": "Backup",
+    "dropbox": "Dropbox",
+    "onedrive": "OneDrive",
+    "comingSoon": "Prossimamente",
+    "resetBtn": "Elimina tutti i dati",
+    "resetBtnBusy": "Eliminazione...",
+    "resetConfirmTitle": "Elimina tutti i dati",
+    "resetConfirmMessage": "Verranno eliminati il profilo e tutte le degustazioni salvate su questo dispositivo. Continuare?",
+    "feedbackText": "Hai suggerimenti o problemi ad usare l'app? Scrivimi!",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Termini di Servizio",
+    "copyright": "© 2026 Serena Bosca",
+    "googleDrive": {
+      "title": "Google Drive",
+      "connected": "Connesso",
+      "notConnected": "Non connesso",
+      "connect": "Connetti",
+      "backupNow": "Backup ora",
+      "restore": "Ripristina",
+      "disconnect": "Disconnetti",
+      "lastBackup": "Ultimo backup: {{date}}",
+      "noBackupYet": "Nessun backup ancora eseguito",
+      "connectErrorDefault": "Connessione a Google Drive non riuscita",
+      "backupErrorDefault": "Backup non riuscito",
+      "restoreConfirmTitle": "Ripristina da Google Drive",
+      "restoreConfirmMessage": "I dati locali (profilo e degustazioni) verranno sovrascritti con quelli del backup. Continuare?",
+      "restoreDoneTitle": "Fatto",
+      "restoreDoneMessage": "Dati ripristinati da Google Drive.",
+      "restoreErrorDefault": "Ripristino non riuscito",
+      "disconnectConfirmTitle": "Disconnetti Google Drive",
+      "disconnectConfirmMessage": "Il backup automatico verrà interrotto. Continuare?"
+    }
+  },
+  "suggested": {
+    "kicker": "Dagli Amici",
+    "title": "Suggeriti",
+    "emptyState": "Nessun suggerimento ricevuto. Importa un file .vibico da un amico!",
+    "fromLabel": "Da {{name}}",
+    "addToCollectionBtn": "Nella collezione",
+    "deleteConfirmTitle": "Elimina suggerimento",
+    "deleteConfirmMessage": "Eliminare \"{{name}}\"?",
+    "importErrorMessage": "File .vibico non valido",
+    "collectErrorMessage": "Impossibile spostare nella collezione"
+  },
+  "receive": {
+    "title": "Degustazione ricevuta",
+    "sharedBy": "Condiviso da: {{name}}",
+    "notesLabel": "Note",
+    "galleryLabel": "Galleria",
+    "saveToSuggestedBtn": "Salva nei Suggeriti",
+    "addToCollectionBtn": "Aggiungi alla mia collezione",
+    "ignoreBtn": "Ignora",
+    "emptyState": "Nessuna degustazione da importare.",
+    "saveErrorMessage": "Impossibile salvare nei Suggeriti",
+    "addErrorMessage": "Impossibile aggiungere alla collezione"
+  },
+  "wineDetail": {
+    "notesLabel": "Note",
+    "galleryLabel": "Galleria",
+    "backLabel": "Retro",
+    "glassLabel": "Bicchiere",
+    "editBtn": "Modifica Degustazione",
+    "deleteConfirmTitle": "Elimina",
+    "deleteConfirmMessage": "Sei sicuro di voler eliminare questa degustazione?",
+    "notFound": "Non trovato",
+    "shareErrorDefault": "Condivisione non riuscita",
+    "defaultSharedByName": "Un amico"
+  },
+  "notFound": {
+    "checking": "Apertura file in corso...",
+    "title": "Non riesco ad aprire questo link",
+    "message": "Se stavi aprendo un file .vibico condiviso da un'altra app, prova a usare \"Importa file\" nella tab Suggeriti invece di aprirlo direttamente.",
+    "goToSuggested": "Vai a Suggeriti",
+    "goHome": "Torna alla home",
+    "urlReceivedAlertTitle": "URL ricevuto"
+  },
+  "categories": {
+    "macro": {
+      "Vino": "Vino",
+      "Birra": "Birra",
+      "Cocktail": "Cocktail",
+      "Bibite": "Bibite"
+    },
+    "sub": {
+      "Rossi": "Rossi",
+      "Bianchi": "Bianchi",
+      "Rosati": "Rosati",
+      "Bollicine": "Bollicine",
+      "Dolci": "Dolci",
+      "Liquorosi": "Liquorosi",
+      "Macerati": "Macerati",
+      "Arancioni": "Arancioni",
+      "Asiatici": "Asiatici",
+      "Dealcolati": "Dealcolati",
+      "Lager": "Lager",
+      "Ale": "Ale",
+      "Wheat": "Wheat",
+      "Dark / Roasted": "Dark / Roasted",
+      "IPA / Hoppy": "IPA / Hoppy",
+      "Sour / Wild": "Sour / Wild",
+      "Belghe / Trappiste": "Belghe / Trappiste",
+      "Analcoliche": "Analcoliche",
+      "Spritz-style": "Spritz-style",
+      "Long drink": "Long drink",
+      "Short drink": "Short drink",
+      "Sour / Citrus": "Sour / Citrus",
+      "Tiki / Punch": "Tiki / Punch",
+      "Digestivi / Amari": "Digestivi / Amari",
+      "Mocktail": "Mocktail",
+      "Signature": "Signature",
+      "Gassate": "Gassate",
+      "Tè freddi": "Tè freddi",
+      "Succhi & estratti": "Succhi & estratti",
+      "Fermentati": "Fermentati",
+      "Energy drink": "Energy drink",
+      "Infusi / Tisane": "Infusi / Tisane",
+      "Asiatiche": "Asiatiche",
+      "Acque": "Acque"
+    }
+  }
+}

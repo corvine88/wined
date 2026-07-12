@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useURL } from 'expo-linking';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { readVibicoFileAtUri, setPendingSharePayload } from '../src/share';
 import { colors, fonts, spacing, radius } from '../src/theme';
 
@@ -29,6 +30,7 @@ function candidateUris(raw: string): string[] {
 }
 
 export default function NotFound() {
+  const { t } = useTranslation();
   const router = useRouter();
   const url = useURL();
   const [status, setStatus] = useState<'checking' | 'failed'>('checking');
@@ -42,7 +44,7 @@ export default function NotFound() {
     let cancelled = false;
     (async () => {
       console.warn('[not-found] URL non riconosciuto da Expo Router:', url);
-      Alert.alert('URL ricevuto', url);
+      Alert.alert(t('notFound.urlReceivedAlertTitle'), url);
       const candidates = candidateUris(url);
       console.warn('[not-found] candidate URI da provare:', candidates);
       for (const uri of candidates) {
@@ -68,7 +70,7 @@ export default function NotFound() {
     return (
       <SafeAreaView style={s.c}>
         <ActivityIndicator color={colors.primary} size="large" />
-        <Text style={s.txt}>Apertura file in corso...</Text>
+        <Text style={s.txt}>{t('notFound.checking')}</Text>
       </SafeAreaView>
     );
   }
@@ -76,16 +78,13 @@ export default function NotFound() {
   return (
     <SafeAreaView style={s.c}>
       <Ionicons name="alert-circle-outline" size={40} color={colors.textMuted} />
-      <Text style={s.title}>Non riesco ad aprire questo link</Text>
-      <Text style={s.txt}>
-        Se stavi aprendo un file .vibico condiviso da un&apos;altra app, prova a usare
-        &quot;Importa file&quot; nella tab Suggeriti invece di aprirlo direttamente.
-      </Text>
+      <Text style={s.title}>{t('notFound.title')}</Text>
+      <Text style={s.txt}>{t('notFound.message')}</Text>
       <TouchableOpacity style={s.btn} onPress={() => router.replace('/(tabs)/suggested')}>
-        <Text style={s.btnTxt}>Vai a Suggeriti</Text>
+        <Text style={s.btnTxt}>{t('notFound.goToSuggested')}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={s.linkBtn} onPress={() => router.replace('/(tabs)/home')}>
-        <Text style={s.linkTxt}>Torna alla home</Text>
+        <Text style={s.linkTxt}>{t('notFound.goHome')}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

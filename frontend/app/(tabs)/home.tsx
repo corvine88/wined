@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import * as storage from '../../src/storage';
 import type { Wine } from '../../src/storage';
 import * as categories from '../../src/categories';
@@ -13,6 +14,7 @@ import type { MacroCategory } from '../../src/categories';
 import { colors, fonts, radius, spacing, shadows } from '../../src/theme';
 
 export default function Home() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [wines, setWines] = useState<Wine[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,8 +63,8 @@ export default function Home() {
     <SafeAreaView style={styles.c} edges={['top']}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.kicker}>Benvenuto</Text>
-          <Text style={styles.h1}>Le Mie Degustazioni</Text>
+          <Text style={styles.kicker}>{t('home.kicker')}</Text>
+          <Text style={styles.h1}>{t('home.title')}</Text>
         </View>
         <TouchableOpacity
           testID="add-fab"
@@ -77,7 +79,7 @@ export default function Home() {
         <Ionicons name="search" size={18} color={colors.textMuted} />
         <TextInput
           testID="search-input"
-          placeholder="Cerca..."
+          placeholder={t('home.searchPlaceholder')}
           placeholderTextColor={colors.textMuted}
           style={styles.search}
           value={search}
@@ -94,7 +96,7 @@ export default function Home() {
             style={[styles.segBtn, viewBy === v && styles.segBtnActive]}
           >
             <Text style={[styles.segTxt, viewBy === v && styles.segTxtActive]}>
-              {v === 'type' ? 'Per Categoria' : 'Per Luogo'}
+              {v === 'type' ? t('home.segmentByType') : t('home.segmentByLocation')}
             </Text>
           </TouchableOpacity>
         ))}
@@ -108,7 +110,7 @@ export default function Home() {
               style={[styles.chip, !macroFilter && styles.chipActive]}
               onPress={() => setMacroFilter(null)}
             >
-              <Text style={[styles.chipTxt, !macroFilter && styles.chipTxtActive]}>Tutti</Text>
+              <Text style={[styles.chipTxt, !macroFilter && styles.chipTxtActive]}>{t('home.filterAll')}</Text>
             </TouchableOpacity>
             {categories.MACRO_CATEGORIES.map(m => (
               <TouchableOpacity
@@ -118,7 +120,7 @@ export default function Home() {
                 onPress={() => setMacroFilter(m)}
               >
                 <Image source={categories.CATEGORIES[m].icon} style={styles.chipIcon} resizeMode="contain" />
-                <Text style={[styles.chipTxt, macroFilter === m && styles.chipTxtActive]}>{m}</Text>
+                <Text style={[styles.chipTxt, macroFilter === m && styles.chipTxtActive]}>{t(`categories.macro.${m}`)}</Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -130,7 +132,7 @@ export default function Home() {
                 style={[styles.chip, !subFilter && styles.chipActive]}
                 onPress={() => setSubFilter(null)}
               >
-                <Text style={[styles.chipTxt, !subFilter && styles.chipTxtActive]}>Tutte</Text>
+                <Text style={[styles.chipTxt, !subFilter && styles.chipTxtActive]}>{t('home.filterAllFem')}</Text>
               </TouchableOpacity>
               {subOptions.map(c => (
                 <TouchableOpacity
@@ -139,7 +141,7 @@ export default function Home() {
                   style={[styles.chip, subFilter === c && styles.chipActive]}
                   onPress={() => setSubFilter(c)}
                 >
-                  <Text style={[styles.chipTxt, subFilter === c && styles.chipTxtActive]}>{c}</Text>
+                  <Text style={[styles.chipTxt, subFilter === c && styles.chipTxtActive]}>{t(`categories.sub.${c}`, { defaultValue: c })}</Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -152,7 +154,7 @@ export default function Home() {
             style={[styles.chip, !locFilter && styles.chipActive]}
             onPress={() => setLocFilter(null)}
           >
-            <Text style={[styles.chipTxt, !locFilter && styles.chipTxtActive]}>Tutti</Text>
+            <Text style={[styles.chipTxt, !locFilter && styles.chipTxtActive]}>{t('home.filterAll')}</Text>
           </TouchableOpacity>
           {locations.map(c => (
             <TouchableOpacity
@@ -178,7 +180,7 @@ export default function Home() {
           ListEmptyComponent={
             <View style={styles.empty} testID="empty-state">
               <Ionicons name="wine-outline" size={48} color={colors.textMuted} />
-              <Text style={styles.emptyTxt}>Nessuna degustazione. Aggiungi la tua prima!</Text>
+              <Text style={styles.emptyTxt}>{t('home.emptyState')}</Text>
             </View>
           }
           renderItem={({ item }) => <WineCard wine={item} onPress={() => router.push(`/wine/${item.wine_id}`)} />}
@@ -189,6 +191,7 @@ export default function Home() {
 }
 
 function WineCard({ wine, onPress }: { wine: Wine; onPress: () => void }) {
+  const { t } = useTranslation();
   return (
     <TouchableOpacity testID={`wine-card-${wine.wine_id}`} style={styles.card} onPress={onPress}>
       <View style={styles.thumb}>
@@ -201,7 +204,7 @@ function WineCard({ wine, onPress }: { wine: Wine; onPress: () => void }) {
       <View style={{ flex: 1, marginLeft: spacing.md }}>
         <View style={styles.typeBadge}>
           <View style={[styles.dot, { backgroundColor: categories.getCategoryColor(wine.macro_category) }]} />
-          <Text style={styles.typeBadgeTxt}>{wine.wine_type}</Text>
+          <Text style={styles.typeBadgeTxt}>{t(`categories.sub.${wine.wine_type}`, { defaultValue: wine.wine_type })}</Text>
         </View>
         <Text style={styles.cardTitle} numberOfLines={1}>{wine.name}</Text>
         {wine.location_name ? (

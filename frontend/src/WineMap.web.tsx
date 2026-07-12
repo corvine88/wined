@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { colors, fonts, radius, spacing, shadows } from '../src/theme';
 
 type Wine = {
@@ -9,6 +10,7 @@ type Wine = {
 };
 
 export default function WineMapWeb({ wines }: { wines: Wine[] }) {
+  const { t } = useTranslation();
   const [LeafletMap, setLeafletMap] = useState<any>(null);
 
   useEffect(() => {
@@ -29,14 +31,14 @@ export default function WineMapWeb({ wines }: { wines: Wine[] }) {
 
       <SafeAreaView edges={['top']} style={s.header} pointerEvents="box-none">
         <View style={s.headerInner}>
-          <Text style={s.title}>La Mia Mappa dei Vini</Text>
-          <Text style={s.sub}>{wines.length} {wines.length === 1 ? 'luogo' : 'luoghi'}</Text>
+          <Text style={s.title}>{t('map.webTitle')}</Text>
+          <Text style={s.sub}>{t('map.placesCount', { count: wines.length })}</Text>
         </View>
       </SafeAreaView>
 
       {LeafletMap && wines.length === 0 && (
         <View style={s.empty} pointerEvents="none">
-          <Text style={s.emptyTxt}>Nessun luogo registrato. Aggiungi un vino con la posizione!</Text>
+          <Text style={s.emptyTxt}>{t('map.emptyState')}</Text>
         </View>
       )}
     </View>

@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, ScrollView, ActivityIndicator, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { useProfile } from '../../src/profile';
 import * as storage from '../../src/storage';
 import * as googleDrive from '../../src/googleDrive';
@@ -14,18 +15,19 @@ function formatDateTime(iso: string): string {
 }
 
 export default function Profile() {
+  const { t } = useTranslation();
   const { profile } = useProfile();
   const router = useRouter();
   const [resetting, setResetting] = useState(false);
 
   const resetData = () => {
     Alert.alert(
-      'Elimina tutti i dati',
-      'Verranno eliminati il profilo e tutte le degustazioni salvate su questo dispositivo. Continuare?',
+      t('profile.resetConfirmTitle'),
+      t('profile.resetConfirmMessage'),
       [
-        { text: 'Annulla', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Elimina', style: 'destructive', onPress: async () => {
+          text: t('common.delete'), style: 'destructive', onPress: async () => {
             setResetting(true);
             try {
               await storage.clearAllData();
@@ -42,7 +44,7 @@ export default function Profile() {
   return (
     <SafeAreaView style={s.c} edges={['top']}>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-        <Text style={s.h1}>Profilo</Text>
+        <Text style={s.h1}>{t('profile.title')}</Text>
 
         <View style={s.card}>
           {profile?.picture ? (
@@ -54,28 +56,56 @@ export default function Profile() {
               </Text>
             </View>
           )}
-          <Text style={s.name}>{profile?.name || 'Utente'}</Text>
+          <Text style={s.name}>{profile?.name || t('profile.defaultUserName')}</Text>
           <View style={s.badge}>
             <Ionicons name="phone-portrait-outline" size={12} color={colors.text} />
-            <Text style={s.badgeTxt}>Solo su questo dispositivo</Text>
+            <Text style={s.badgeTxt}>{t('profile.deviceOnlyBadge')}</Text>
           </View>
         </View>
 
-        <Text style={s.sectionTitle}>Backup</Text>
+        <Text style={s.sectionTitle}>{t('profile.backupSectionTitle')}</Text>
         <GoogleDriveCard />
-        <ComingSoonCard label="Dropbox" icon="logo-dropbox" />
-        <ComingSoonCard label="OneDrive" icon="cloud-outline" />
+        <ComingSoonCard label={t('profile.dropbox')} icon="logo-dropbox" />
+        <ComingSoonCard label={t('profile.onedrive')} icon="cloud-outline" />
 
         <TouchableOpacity testID="reset-btn" style={s.resetBtn} onPress={resetData} disabled={resetting}>
           <Ionicons name="trash-outline" size={20} color={colors.danger} />
-          <Text style={s.resetTxt}>{resetting ? 'Eliminazione...' : 'Elimina tutti i dati'}</Text>
+          <Text style={s.resetTxt}>{resetting ? t('profile.resetBtnBusy') : t('profile.resetBtn')}</Text>
         </TouchableOpacity>
+
+        <View style={s.feedbackBlock}>
+          <Text style={s.feedbackTxt}>{t('profile.feedbackText')}</Text>
+          <TouchableOpacity
+            testID="feedback-email-btn"
+            onPress={() => Linking.openURL('mailto:vibico@serenabosca.it')}
+          >
+            <Text style={s.feedbackEmailTxt}>vibico@serenabosca.it</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={s.legalLinks}>
+          <TouchableOpacity
+            testID="privacy-policy-btn"
+            onPress={() => Linking.openURL('https://corvine88.github.io/vibico-privacy/')}
+          >
+            <Text style={s.privacyLinkTxt}>{t('profile.privacyPolicy')}</Text>
+          </TouchableOpacity>
+          <Text style={s.legalLinksSep}>·</Text>
+          <TouchableOpacity
+            testID="terms-of-service-btn"
+            onPress={() => Linking.openURL('https://corvine88.github.io/vibico-privacy/terms.html')}
+          >
+            <Text style={s.privacyLinkTxt}>{t('profile.termsOfService')}</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={s.copyright}>{t('profile.copyright')}</Text>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 function GoogleDriveCard() {
+  const { t } = useTranslation();
   const [connected, setConnected] = useState<boolean | null>(null);
   const [lastBackup, setLastBackup] = useState<string | null>(null);
   const [busy, setBusy] = useState<'connect' | 'backup' | 'restore' | 'disconnect' | null>(null);
@@ -95,7 +125,7 @@ function GoogleDriveCard() {
       await googleDrive.backupNow();
       await refresh();
     } catch (e: any) {
-      Alert.alert('Errore', e?.message || 'Connessione a Google Drive non riuscita');
+      Alert.alert(t('common.error'), e?.message || t('profile.googleDrive.connectErrorDefault'));
     } finally {
       setBusy(null);
     }
@@ -107,7 +137,7 @@ function GoogleDriveCard() {
       await googleDrive.backupNow();
       await refresh();
     } catch (e: any) {
-      Alert.alert('Errore', e?.message || 'Backup non riuscito');
+      Alert.alert(t('common.error'), e?.message || t('profile.googleDrive.backupErrorDefault'));
     } finally {
       setBusy(null);
     }
@@ -115,18 +145,18 @@ function GoogleDriveCard() {
 
   const handleRestore = () => {
     Alert.alert(
-      'Ripristina da Google Drive',
-      'I dati locali (profilo e degustazioni) verranno sovrascritti con quelli del backup. Continuare?',
+      t('profile.googleDrive.restoreConfirmTitle'),
+      t('profile.googleDrive.restoreConfirmMessage'),
       [
-        { text: 'Annulla', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Ripristina', onPress: async () => {
+          text: t('profile.googleDrive.restore'), onPress: async () => {
             setBusy('restore');
             try {
               await googleDrive.restore();
-              Alert.alert('Fatto', 'Dati ripristinati da Google Drive.');
+              Alert.alert(t('profile.googleDrive.restoreDoneTitle'), t('profile.googleDrive.restoreDoneMessage'));
             } catch (e: any) {
-              Alert.alert('Errore', e?.message || 'Ripristino non riuscito');
+              Alert.alert(t('common.error'), e?.message || t('profile.googleDrive.restoreErrorDefault'));
             } finally {
               setBusy(null);
             }
@@ -137,10 +167,10 @@ function GoogleDriveCard() {
   };
 
   const handleDisconnect = () => {
-    Alert.alert('Disconnetti Google Drive', 'Il backup automatico verrà interrotto. Continuare?', [
-      { text: 'Annulla', style: 'cancel' },
+    Alert.alert(t('profile.googleDrive.disconnectConfirmTitle'), t('profile.googleDrive.disconnectConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Disconnetti', style: 'destructive', onPress: async () => {
+        text: t('profile.googleDrive.disconnect'), style: 'destructive', onPress: async () => {
           setBusy('disconnect');
           try { await googleDrive.disconnect(); await refresh(); } finally { setBusy(null); }
         },
@@ -155,16 +185,16 @@ function GoogleDriveCard() {
           <Ionicons name="logo-google" size={20} color={colors.primary} />
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={s.cloudTitle}>Google Drive</Text>
+          <Text style={s.cloudTitle}>{t('profile.googleDrive.title')}</Text>
           {connected === null ? null : connected ? (
             <View style={s.statusRow}>
               <View style={[s.statusDot, { backgroundColor: '#3A9D5A' }]} />
-              <Text style={s.statusTxt}>Connesso</Text>
+              <Text style={s.statusTxt}>{t('profile.googleDrive.connected')}</Text>
             </View>
           ) : (
             <View style={s.statusRow}>
               <View style={[s.statusDot, { backgroundColor: colors.textMuted }]} />
-              <Text style={s.statusTxt}>Non connesso</Text>
+              <Text style={s.statusTxt}>{t('profile.googleDrive.notConnected')}</Text>
             </View>
           )}
         </View>
@@ -172,25 +202,25 @@ function GoogleDriveCard() {
 
       {connected && (
         <Text style={s.lastBackupTxt}>
-          {lastBackup ? `Ultimo backup: ${formatDateTime(lastBackup)}` : 'Nessun backup ancora eseguito'}
+          {lastBackup ? t('profile.googleDrive.lastBackup', { date: formatDateTime(lastBackup) }) : t('profile.googleDrive.noBackupYet')}
         </Text>
       )}
 
       <View style={s.cloudActions}>
         {!connected ? (
           <TouchableOpacity testID="gdrive-connect" style={s.primaryAction} onPress={handleConnect} disabled={busy !== null}>
-            {busy === 'connect' ? <ActivityIndicator color="#fff" size="small" /> : <Text style={s.primaryActionTxt}>Connetti</Text>}
+            {busy === 'connect' ? <ActivityIndicator color="#fff" size="small" /> : <Text style={s.primaryActionTxt}>{t('profile.googleDrive.connect')}</Text>}
           </TouchableOpacity>
         ) : (
           <>
             <TouchableOpacity testID="gdrive-backup" style={s.secondaryAction} onPress={handleBackupNow} disabled={busy !== null}>
-              {busy === 'backup' ? <ActivityIndicator color={colors.primary} size="small" /> : <Text style={s.secondaryActionTxt}>Backup ora</Text>}
+              {busy === 'backup' ? <ActivityIndicator color={colors.primary} size="small" /> : <Text style={s.secondaryActionTxt}>{t('profile.googleDrive.backupNow')}</Text>}
             </TouchableOpacity>
             <TouchableOpacity testID="gdrive-restore" style={s.secondaryAction} onPress={handleRestore} disabled={busy !== null}>
-              {busy === 'restore' ? <ActivityIndicator color={colors.primary} size="small" /> : <Text style={s.secondaryActionTxt}>Ripristina</Text>}
+              {busy === 'restore' ? <ActivityIndicator color={colors.primary} size="small" /> : <Text style={s.secondaryActionTxt}>{t('profile.googleDrive.restore')}</Text>}
             </TouchableOpacity>
             <TouchableOpacity testID="gdrive-disconnect" style={s.dangerAction} onPress={handleDisconnect} disabled={busy !== null}>
-              {busy === 'disconnect' ? <ActivityIndicator color={colors.danger} size="small" /> : <Text style={s.dangerActionTxt}>Disconnetti</Text>}
+              {busy === 'disconnect' ? <ActivityIndicator color={colors.danger} size="small" /> : <Text style={s.dangerActionTxt}>{t('profile.googleDrive.disconnect')}</Text>}
             </TouchableOpacity>
           </>
         )}
@@ -200,6 +230,7 @@ function GoogleDriveCard() {
 }
 
 function ComingSoonCard({ label, icon }: { label: string; icon: any }) {
+  const { t } = useTranslation();
   return (
     <View style={[s.cloudCard, { opacity: 0.5 }]}>
       <View style={s.cloudHeader}>
@@ -208,7 +239,7 @@ function ComingSoonCard({ label, icon }: { label: string; icon: any }) {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={s.cloudTitle}>{label}</Text>
-          <Text style={s.statusTxt}>Prossimamente</Text>
+          <Text style={s.statusTxt}>{t('profile.comingSoon')}</Text>
         </View>
       </View>
     </View>
@@ -241,4 +272,11 @@ const s = StyleSheet.create({
   dangerActionTxt: { color: colors.danger, fontFamily: fonts.bodySemi, fontSize: 13 },
   resetBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, margin: spacing.md, marginTop: spacing.lg, padding: 16, backgroundColor: colors.surface, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border },
   resetTxt: { fontFamily: fonts.bodySemi, fontSize: 15, color: colors.danger, marginLeft: 8 },
+  feedbackBlock: { alignItems: 'center', marginTop: spacing.lg },
+  feedbackTxt: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, textAlign: 'center' },
+  feedbackEmailTxt: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.primary, textDecorationLine: 'underline', marginTop: 4 },
+  legalLinks: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: spacing.lg },
+  legalLinksSep: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted },
+  privacyLinkTxt: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.primary, textDecorationLine: 'underline' },
+  copyright: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, textAlign: 'center', marginTop: spacing.sm },
 });

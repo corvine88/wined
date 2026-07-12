@@ -1,6 +1,7 @@
 // Web-only Leaflet component. Safe against SSR — imported only after mount.
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { colors } from '../src/theme';
 import { getCategoryColor } from './categories';
 
@@ -66,6 +67,7 @@ function clusterize(wines: Wine[]): Cluster[] {
 }
 
 export default function LeafletMap({ wines }: { wines: Wine[] }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const mapRef = useRef<L.Map | null>(null);
 
@@ -110,7 +112,7 @@ export default function LeafletMap({ wines }: { wines: Wine[] }) {
               <div style={{ minWidth: 200, maxWidth: 260 }}>
                 {cluster.wines.length > 1 && (
                   <div style={{ fontWeight: 700, fontSize: 13, color: '#7A7570', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-                    {cluster.wines.length} degustazioni qui
+                    {t('map.multiTastingHeader', { count: cluster.wines.length })}
                   </div>
                 )}
                 {cluster.wines.map((w, idx) => (
@@ -127,7 +129,7 @@ export default function LeafletMap({ wines }: { wines: Wine[] }) {
                       <span style={{ fontWeight: 700, fontSize: 15, color: '#2C2A29' }}>{w.name}</span>
                     </div>
                     <div style={{ fontSize: 12, color: '#7A7570', marginTop: 2 }}>
-                      {w.macro_category} · {w.wine_type}{w.rating ? ` · ${'★'.repeat(w.rating)}` : ''}
+                      {t(`categories.macro.${w.macro_category}`)} · {t(`categories.sub.${w.wine_type}`, { defaultValue: w.wine_type })}{w.rating ? ` · ${'★'.repeat(w.rating)}` : ''}
                     </div>
                     {w.location_name ? (
                       <div style={{ fontSize: 12, color: '#7A7570' }}>{w.location_name}</div>
@@ -140,7 +142,7 @@ export default function LeafletMap({ wines }: { wines: Wine[] }) {
                         cursor: 'pointer', fontWeight: 600, fontSize: 11,
                       }}
                     >
-                      Apri scheda
+                      {t('map.openCard')}
                     </button>
                   </div>
                 ))}

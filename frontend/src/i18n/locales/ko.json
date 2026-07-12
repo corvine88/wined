@@ -1,0 +1,245 @@
+{
+  "common": {
+    "cancel": "취소",
+    "delete": "삭제",
+    "error": "오류"
+  },
+  "splash": {
+    "tagline": "당신은 그 잔을 어떻게 보나요?",
+    "claim": "그 안에 무엇이 있는지에 따라 다르죠",
+    "copyright": "© 2026 Serena Bosca"
+  },
+  "onboarding": {
+    "title": "이름이 무엇인가요?",
+    "subtitle": "테이스팅 기록을 시작하려면 프로필을 설정하세요.",
+    "avatarLabel": "프로필 사진 (선택 사항)",
+    "namePlaceholder": "이름",
+    "ageConsent": "본인은 거주 국가에서 주류를 소비할 수 있는 법정 연령임을 선언합니다",
+    "continue": "계속",
+    "saving": "저장 중...",
+    "restoreBackup": "백업에서 복원 (Google 드라이브)",
+    "restoring": "복원 중...",
+    "alertEnterName": "이름을 입력하세요",
+    "alertPhotoErrorTitle": "사진 오류",
+    "alertPermissionDenied": "권한이 거부되었습니다",
+    "alertRestoreErrorDefault": "Google 드라이브에서 복원하지 못했습니다"
+  },
+  "tutorial": {
+    "slides": {
+      "welcome": {
+        "title": "ViBiCo에 오신 것을 환영합니다!",
+        "description": "나만의 테이스팅 일기"
+      },
+      "record": {
+        "title": "매 한 모금을 기록하세요",
+        "description": "와인, 맥주, 칵테일, 음료를 사진, 메모, 맛본 장소와 함께 저장하세요"
+      },
+      "map": {
+        "title": "나의 테이스팅 지도",
+        "description": "지도의 핀으로 테이스팅한 모든 장소를 확인하세요"
+      },
+      "share": {
+        "title": "친구와 공유하기",
+        "description": "테이스팅을 친구에게 보내고 친구의 추천을 받아보세요"
+      },
+      "backup": {
+        "title": "안전하게 보관되는 데이터",
+        "description": "Google 드라이브를 연결하면 자동으로 백업됩니다. 휴대폰을 바꿔도 절대 잃어버리지 않습니다."
+      }
+    },
+    "connectGoogleDrive": "Google 드라이브 연결",
+    "next": "다음",
+    "start": "시작하기!",
+    "skip": "건너뛰기",
+    "alertConnectErrorDefault": "Google 드라이브 연결에 실패했습니다"
+  },
+  "tabs": {
+    "home": "테이스팅",
+    "map": "지도",
+    "add": "추가",
+    "suggested": "추천",
+    "profile": "프로필"
+  },
+  "home": {
+    "kicker": "환영합니다",
+    "title": "나의 테이스팅",
+    "searchPlaceholder": "검색...",
+    "segmentByType": "카테고리별",
+    "segmentByLocation": "장소별",
+    "filterAll": "전체",
+    "filterAllFem": "전체",
+    "emptyState": "아직 테이스팅이 없습니다. 첫 번째 기록을 추가해보세요!"
+  },
+  "add": {
+    "chooseCategoryTitle": "무엇을 테이스팅하고 있나요?",
+    "newTitle": "새 테이스팅",
+    "editTitle": "테이스팅 수정",
+    "photoFront": "앞면",
+    "photoBack": "뒷면",
+    "photoGlass": "잔",
+    "nameLabel": "이름",
+    "namePlaceholder": "예: 바롤로 2018",
+    "subcategoryLabel": "하위 카테고리",
+    "customChip": "사용자 지정",
+    "locationLabel": "장소",
+    "locationPlaceholder": "어디서 마셨나요?",
+    "nearbyUsedLabel": "이 근처에서 이전에 사용한 장소:",
+    "ratingLabel": "평점",
+    "notesLabel": "테이스팅 노트",
+    "notesPlaceholder": "향, 맛, 페어링...",
+    "saveNew": "테이스팅 저장",
+    "saveEdit": "변경 사항 저장",
+    "disclaimer": "책임감 있게 음주하세요.\n맛은 양이 아니라 한 모금 안에 있습니다.",
+    "photoModalTitle": "갤러리에서 선택하거나 사진 촬영",
+    "takePhoto": "사진 촬영",
+    "chooseFromGallery": "갤러리에서 선택",
+    "customSubcategoryModalTitle": "새 하위 카테고리",
+    "customSubcategoryPlaceholder": "하위 카테고리 이름",
+    "addBtn": "추가",
+    "alertChooseCategory": "카테고리를 선택하세요",
+    "alertNameRequired": "이름이 필요합니다",
+    "alertChooseSubcategory": "하위 카테고리를 선택하세요",
+    "alertLoadErrorMessage": "와인을 불러올 수 없습니다",
+    "alertSaveErrorMessage": "저장에 실패했습니다",
+    "alertPermissionDenied": "권한이 거부되었습니다",
+    "alertPhotoErrorTitle": "사진 오류",
+    "alertGpsPermissionDenied": "위치 권한이 거부되었습니다",
+    "alertGpsUnavailableTitle": "GPS를 사용할 수 없습니다",
+    "alertCustomSubcategoryErrorMessage": "하위 카테고리를 저장할 수 없습니다"
+  },
+  "map": {
+    "nativeTitle": "테이스팅 지도",
+    "webTitle": "나의 와인 지도",
+    "placesCount_other": "{{count}}개 장소",
+    "errorUnavailable": "지도를 사용할 수 없습니다: {{error}}",
+    "emptyState": "아직 등록된 장소가 없습니다. 위치와 함께 와인을 추가해보세요!",
+    "singleTastingHeader": "테이스팅",
+    "multiTastingHeader": "이곳에서 {{count}}개의 테이스팅",
+    "moreCount": "+ {{count}}개 더보기",
+    "openCard": "카드 열기"
+  },
+  "profile": {
+    "title": "프로필",
+    "deviceOnlyBadge": "이 기기에서만",
+    "defaultUserName": "사용자",
+    "backupSectionTitle": "백업",
+    "dropbox": "Dropbox",
+    "onedrive": "OneDrive",
+    "comingSoon": "출시 예정",
+    "resetBtn": "모든 데이터 삭제",
+    "resetBtnBusy": "삭제 중...",
+    "resetConfirmTitle": "모든 데이터 삭제",
+    "resetConfirmMessage": "이 기기에 저장된 프로필과 모든 테이스팅이 삭제됩니다. 계속하시겠습니까?",
+    "feedbackText": "제안이나 앱 사용 중 문제가 있나요? 저에게 알려주세요!",
+    "privacyPolicy": "개인정보 처리방침",
+    "termsOfService": "이용약관",
+    "copyright": "© 2026 Serena Bosca",
+    "googleDrive": {
+      "title": "Google 드라이브",
+      "connected": "연결됨",
+      "notConnected": "연결되지 않음",
+      "connect": "연결",
+      "backupNow": "지금 백업",
+      "restore": "복원",
+      "disconnect": "연결 해제",
+      "lastBackup": "마지막 백업: {{date}}",
+      "noBackupYet": "아직 백업이 없습니다",
+      "connectErrorDefault": "Google 드라이브 연결에 실패했습니다",
+      "backupErrorDefault": "백업에 실패했습니다",
+      "restoreConfirmTitle": "Google 드라이브에서 복원",
+      "restoreConfirmMessage": "로컬 데이터(프로필 및 테이스팅)가 백업 데이터로 덮어써집니다. 계속하시겠습니까?",
+      "restoreDoneTitle": "완료",
+      "restoreDoneMessage": "Google 드라이브에서 데이터를 복원했습니다.",
+      "restoreErrorDefault": "복원에 실패했습니다",
+      "disconnectConfirmTitle": "Google 드라이브 연결 해제",
+      "disconnectConfirmMessage": "자동 백업이 중지됩니다. 계속하시겠습니까?"
+    }
+  },
+  "suggested": {
+    "kicker": "친구로부터",
+    "title": "추천",
+    "emptyState": "아직 받은 추천이 없습니다. 친구로부터 .vibico 파일을 가져와보세요!",
+    "fromLabel": "{{name}}님으로부터",
+    "addToCollectionBtn": "컬렉션에 추가",
+    "deleteConfirmTitle": "추천 삭제",
+    "deleteConfirmMessage": "\"{{name}}\"을(를) 삭제하시겠습니까?",
+    "importErrorMessage": "유효하지 않은 .vibico 파일입니다",
+    "collectErrorMessage": "컬렉션으로 이동할 수 없습니다"
+  },
+  "receive": {
+    "title": "받은 테이스팅",
+    "sharedBy": "공유자: {{name}}",
+    "notesLabel": "노트",
+    "galleryLabel": "갤러리",
+    "saveToSuggestedBtn": "추천에 저장",
+    "addToCollectionBtn": "내 컬렉션에 추가",
+    "ignoreBtn": "무시",
+    "emptyState": "가져올 테이스팅이 없습니다.",
+    "saveErrorMessage": "추천에 저장할 수 없습니다",
+    "addErrorMessage": "컬렉션에 추가할 수 없습니다"
+  },
+  "wineDetail": {
+    "notesLabel": "노트",
+    "galleryLabel": "갤러리",
+    "backLabel": "뒷면",
+    "glassLabel": "잔",
+    "editBtn": "테이스팅 수정",
+    "deleteConfirmTitle": "삭제",
+    "deleteConfirmMessage": "이 테이스팅을 삭제하시겠습니까?",
+    "notFound": "찾을 수 없습니다",
+    "shareErrorDefault": "공유에 실패했습니다",
+    "defaultSharedByName": "친구"
+  },
+  "notFound": {
+    "checking": "파일을 여는 중...",
+    "title": "이 링크를 열 수 없습니다",
+    "message": "다른 앱에서 공유된 .vibico 파일을 열려고 했다면, 직접 여는 대신 추천 탭의 \"파일 가져오기\"를 사용해보세요.",
+    "goToSuggested": "추천으로 이동",
+    "goHome": "홈으로 돌아가기",
+    "urlReceivedAlertTitle": "URL을 받았습니다"
+  },
+  "categories": {
+    "macro": {
+      "Vino": "와인",
+      "Birra": "맥주",
+      "Cocktail": "칵테일",
+      "Bibite": "음료"
+    },
+    "sub": {
+      "Rossi": "레드",
+      "Bianchi": "화이트",
+      "Rosati": "로제",
+      "Bollicine": "스파클링",
+      "Dolci": "스위트",
+      "Liquorosi": "주정강화",
+      "Macerati": "스킨 컨택트",
+      "Arancioni": "오렌지 와인",
+      "Asiatici": "아시안",
+      "Dealcolati": "무알코올",
+      "Lager": "라거",
+      "Ale": "에일",
+      "Wheat": "밀맥주",
+      "Dark / Roasted": "다크 / 로스티드",
+      "IPA / Hoppy": "IPA / 홉피",
+      "Sour / Wild": "사워 / 와일드",
+      "Belghe / Trappiste": "벨지안 / 트라피스트",
+      "Analcoliche": "무알코올",
+      "Spritz-style": "스프리츠 스타일",
+      "Long drink": "롱 드링크",
+      "Short drink": "쇼트 드링크",
+      "Sour / Citrus": "사워 / 시트러스",
+      "Tiki / Punch": "티키 / 펀치",
+      "Digestivi / Amari": "디제스티프 / 아마로",
+      "Mocktail": "목테일",
+      "Signature": "시그니처",
+      "Gassate": "탄산",
+      "Tè freddi": "아이스티",
+      "Succhi & estratti": "주스 & 엑기스",
+      "Fermentati": "발효 음료",
+      "Energy drink": "에너지 드링크",
+      "Infusi / Tisane": "허브차",
+      "Asiatiche": "아시안",
+      "Acque": "물"
+    }
+  }
+}

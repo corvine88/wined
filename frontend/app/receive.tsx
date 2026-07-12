@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIn
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import * as storage from '../src/storage';
 import * as categories from '../src/categories';
 import { takePendingSharePayload, type VibicoSharePayload } from '../src/share';
 import { colors, fonts, spacing, radius, shadows } from '../src/theme';
 
 export default function Receive() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [payload, setPayload] = useState<VibicoSharePayload | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -27,7 +29,7 @@ export default function Receive() {
       await storage.saveSuggestedWine(payload.wine, payload.shared_by);
       router.replace('/(tabs)/suggested');
     } catch {
-      Alert.alert('Errore', 'Impossibile salvare nei Suggeriti');
+      Alert.alert(t('common.error'), t('receive.saveErrorMessage'));
     } finally {
       setBusy(false);
     }
@@ -41,7 +43,7 @@ export default function Receive() {
       await storage.createWine(body);
       router.replace('/(tabs)/home');
     } catch {
-      Alert.alert('Errore', 'Impossibile aggiungere alla collezione');
+      Alert.alert(t('common.error'), t('receive.addErrorMessage'));
     } finally {
       setBusy(false);
     }
@@ -63,7 +65,7 @@ export default function Receive() {
         </View>
         <View style={s.empty}>
           <Ionicons name="alert-circle-outline" size={40} color={colors.textMuted} />
-          <Text style={s.emptyTxt}>Nessuna degustazione da importare.</Text>
+          <Text style={s.emptyTxt}>{t('receive.emptyState')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -77,14 +79,14 @@ export default function Receive() {
         <TouchableOpacity testID="back-btn" onPress={() => router.back()} style={s.backBtn}>
           <Ionicons name="chevron-back" size={22} color={colors.text} />
         </TouchableOpacity>
-        <Text style={s.h1}>Degustazione ricevuta</Text>
+        <Text style={s.h1}>{t('receive.title')}</Text>
         <View style={{ width: 40 }} />
       </View>
 
       <ScrollView contentContainerStyle={{ padding: spacing.md, paddingBottom: 40 }}>
         <View style={s.sharedBadge}>
           <Ionicons name="happy-outline" size={14} color={colors.primary} />
-          <Text style={s.sharedBadgeTxt}>Condiviso da: {shared_by}</Text>
+          <Text style={s.sharedBadgeTxt}>{t('receive.sharedBy', { name: shared_by })}</Text>
         </View>
 
         {wine.front_photo ? (
@@ -98,7 +100,7 @@ export default function Receive() {
         <View style={s.typeBadge}>
           <View style={[s.dot, { backgroundColor: categories.getCategoryColor(wine.macro_category) }]} />
           <Image source={categories.getCategoryIcon(wine.macro_category)} style={s.typeBadgeIcon} resizeMode="contain" />
-          <Text style={s.typeBadgeTxt}>{wine.macro_category} · {wine.wine_type}</Text>
+          <Text style={s.typeBadgeTxt}>{t(`categories.macro.${wine.macro_category}`)} · {t(`categories.sub.${wine.wine_type}`, { defaultValue: wine.wine_type })}</Text>
         </View>
         <Text style={s.title}>{wine.name}</Text>
         <View style={s.starsRow}>
@@ -116,14 +118,14 @@ export default function Receive() {
 
         {wine.notes ? (
           <>
-            <Text style={s.section}>Note</Text>
+            <Text style={s.section}>{t('receive.notesLabel')}</Text>
             <Text style={s.notes}>{wine.notes}</Text>
           </>
         ) : null}
 
         {(wine.back_photo || wine.glass_photo) && (
           <>
-            <Text style={s.section}>Galleria</Text>
+            <Text style={s.section}>{t('receive.galleryLabel')}</Text>
             <View style={s.gallery}>
               {wine.back_photo ? <Image source={{ uri: wine.back_photo }} style={s.galImg} /> : null}
               {wine.glass_photo ? <Image source={{ uri: wine.glass_photo }} style={s.galImg} /> : null}
@@ -132,13 +134,13 @@ export default function Receive() {
         )}
 
         <TouchableOpacity testID="save-suggested-btn" style={s.primaryBtn} onPress={saveToSuggested} disabled={busy}>
-          {busy ? <ActivityIndicator color="#fff" /> : <Text style={s.primaryBtnTxt}>Salva nei Suggeriti</Text>}
+          {busy ? <ActivityIndicator color="#fff" /> : <Text style={s.primaryBtnTxt}>{t('receive.saveToSuggestedBtn')}</Text>}
         </TouchableOpacity>
         <TouchableOpacity testID="add-collection-btn" style={s.secondaryBtn} onPress={addToCollection} disabled={busy}>
-          <Text style={s.secondaryBtnTxt}>Aggiungi alla mia collezione</Text>
+          <Text style={s.secondaryBtnTxt}>{t('receive.addToCollectionBtn')}</Text>
         </TouchableOpacity>
         <TouchableOpacity testID="ignore-btn" style={s.ignoreBtn} onPress={() => router.back()} disabled={busy}>
-          <Text style={s.ignoreBtnTxt}>Ignora</Text>
+          <Text style={s.ignoreBtnTxt}>{t('receive.ignoreBtn')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet, Image, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import * as storage from '../src/storage';
 import * as googleDrive from '../src/googleDrive';
 import { colors, fonts } from '../src/theme';
@@ -14,6 +15,7 @@ function delay(ms: number): Promise<void> {
 }
 
 export default function Index() {
+  const { t } = useTranslation();
   const router = useRouter();
 
   useEffect(() => {
@@ -44,11 +46,11 @@ export default function Index() {
     <SafeAreaView style={styles.c} edges={['bottom']} testID="splash-screen">
       <View style={styles.center}>
         <Image source={LOGO} style={styles.logo} resizeMode="contain" />
-        <Text style={styles.tagline}>e tu come lo vedi il bicchiere?</Text>
-        <Text style={styles.claim}>dipende da cosa c&apos;è dentro</Text>
+        <Text style={styles.tagline}>{t('splash.tagline')}</Text>
+        <Text style={styles.claim}>{t('splash.claim')}</Text>
         <ActivityIndicator color={colors.primary} size="large" style={styles.spinner} />
       </View>
-      <Text style={styles.copyright}>© 2026 Serena Bosca</Text>
+      <Text style={styles.copyright}>{t('splash.copyright')}</Text>
     </SafeAreaView>
   );
 }

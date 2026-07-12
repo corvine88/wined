@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ActivityIndi
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import * as storage from '../../src/storage';
 import type { SuggestedWine } from '../../src/storage';
 import * as categories from '../../src/categories';
@@ -10,6 +11,7 @@ import { pickVibicoFile, setPendingSharePayload } from '../../src/share';
 import { colors, fonts, radius, spacing, shadows } from '../../src/theme';
 
 export default function Suggested() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [suggested, setSuggested] = useState<SuggestedWine[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +36,7 @@ export default function Suggested() {
       setPendingSharePayload(payload);
       router.push('/receive');
     } catch (e: any) {
-      Alert.alert('Errore', e?.message || 'File .vibico non valido');
+      Alert.alert(t('common.error'), e?.message || t('suggested.importErrorMessage'));
     } finally {
       setImporting(false);
     }
@@ -49,17 +51,17 @@ export default function Suggested() {
       load();
       router.push('/(tabs)/home');
     } catch {
-      Alert.alert('Errore', 'Impossibile spostare nella collezione');
+      Alert.alert(t('common.error'), t('suggested.collectErrorMessage'));
     } finally {
       setBusyId(null);
     }
   };
 
   const remove = (item: SuggestedWine) => {
-    Alert.alert('Elimina suggerimento', `Eliminare "${item.name}"?`, [
-      { text: 'Annulla', style: 'cancel' },
+    Alert.alert(t('suggested.deleteConfirmTitle'), t('suggested.deleteConfirmMessage', { name: item.name }), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Elimina', style: 'destructive', onPress: async () => {
+        text: t('common.delete'), style: 'destructive', onPress: async () => {
           setBusyId(item.wine_id);
           try { await storage.deleteSuggestedWine(item.wine_id); load(); } finally { setBusyId(null); }
         },
@@ -71,8 +73,8 @@ export default function Suggested() {
     <SafeAreaView style={s.c} edges={['top']}>
       <View style={s.header}>
         <View>
-          <Text style={s.kicker}>Dagli Amici</Text>
-          <Text style={s.h1}>Suggeriti</Text>
+          <Text style={s.kicker}>{t('suggested.kicker')}</Text>
+          <Text style={s.h1}>{t('suggested.title')}</Text>
         </View>
         <TouchableOpacity testID="import-btn" onPress={importFile} style={s.importBtn} disabled={importing}>
           {importing ? <ActivityIndicator color="#fff" /> : <Ionicons name="document-attach-outline" size={20} color="#fff" />}
@@ -89,7 +91,7 @@ export default function Suggested() {
           ListEmptyComponent={
             <View style={s.empty} testID="empty-state">
               <Ionicons name="happy-outline" size={48} color={colors.textMuted} />
-              <Text style={s.emptyTxt}>Nessun suggerimento ricevuto. Importa un file .vibico da un amico!</Text>
+              <Text style={s.emptyTxt}>{t('suggested.emptyState')}</Text>
             </View>
           }
           renderItem={({ item }) => (
@@ -104,13 +106,13 @@ export default function Suggested() {
               <View style={{ flex: 1, marginLeft: spacing.md }}>
                 <View style={s.fromBadge}>
                   <Ionicons name="happy-outline" size={11} color={colors.primary} />
-                  <Text style={s.fromBadgeTxt}>Da {item.shared_by}</Text>
+                  <Text style={s.fromBadgeTxt}>{t('suggested.fromLabel', { name: item.shared_by })}</Text>
                 </View>
                 <Text style={s.cardTitle} numberOfLines={1}>{item.name}</Text>
-                <Text style={s.cardMeta} numberOfLines={1}>{item.macro_category} · {item.wine_type}</Text>
+                <Text style={s.cardMeta} numberOfLines={1}>{t(`categories.macro.${item.macro_category}`)} · {t(`categories.sub.${item.wine_type}`, { defaultValue: item.wine_type })}</Text>
                 <View style={s.actions}>
                   <TouchableOpacity testID={`collect-${item.wine_id}`} style={s.actionBtn} onPress={() => addToCollection(item)} disabled={busyId === item.wine_id}>
-                    <Text style={s.actionBtnTxt}>Nella collezione</Text>
+                    <Text style={s.actionBtnTxt}>{t('suggested.addToCollectionBtn')}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity testID={`remove-${item.wine_id}`} onPress={() => remove(item)} disabled={busyId === item.wine_id}>
                     <Ionicons name="trash-outline" size={18} color={colors.danger} />

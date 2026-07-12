@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import * as storage from '../src/storage';
 import * as googleDrive from '../src/googleDrive';
 import { fonts, spacing, radius } from '../src/theme';
@@ -13,37 +14,18 @@ const TEAL = '#2f5350';
 const TERRACOTTA = '#a65b4b';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-type Slide = { image: number; title: string; description: string };
+type Slide = { image: number; key: 'welcome' | 'record' | 'map' | 'share' | 'backup' };
 
 const SLIDES: Slide[] = [
-  {
-    image: require('../assets/tutorial/welcome.png'),
-    title: 'Benvenuto in ViBiCo!',
-    description: 'Il tuo diario personale di degustazione',
-  },
-  {
-    image: require('../assets/tutorial/record.png'),
-    title: 'Registra ogni sorso',
-    description: 'Salva vini, birre, cocktail e bibite con foto, note e la posizione dove li hai assaggiati',
-  },
-  {
-    image: require('../assets/tutorial/map.png'),
-    title: 'La tua mappa degustativa',
-    description: 'Scopri tutti i luoghi dove hai degustato con i pin sulla mappa',
-  },
-  {
-    image: require('../assets/tutorial/share.png'),
-    title: 'Condividi con gli amici',
-    description: 'Manda le tue degustazioni agli amici e ricevi i loro suggeriti',
-  },
-  {
-    image: require('../assets/tutorial/backup.png'),
-    title: 'I tuoi dati al sicuro',
-    description: 'Collega Google Drive per fare il backup automatico. Non perderai mai nulla, anche se cambi telefono.',
-  },
+  { image: require('../assets/tutorial/welcome.png'), key: 'welcome' },
+  { image: require('../assets/tutorial/record.png'), key: 'record' },
+  { image: require('../assets/tutorial/map.png'), key: 'map' },
+  { image: require('../assets/tutorial/share.png'), key: 'share' },
+  { image: require('../assets/tutorial/backup.png'), key: 'backup' },
 ];
 
 export default function Tutorial() {
+  const { t } = useTranslation();
   const router = useRouter();
   const scrollRef = useRef<ScrollView>(null);
   const [index, setIndex] = useState(0);
@@ -77,7 +59,7 @@ export default function Tutorial() {
       await googleDrive.backupNow();
       finish();
     } catch (e: any) {
-      Alert.alert('Errore', e?.message || 'Connessione a Google Drive non riuscita');
+      Alert.alert(t('common.error'), e?.message || t('tutorial.alertConnectErrorDefault'));
     } finally {
       setConnecting(false);
     }
@@ -96,12 +78,12 @@ export default function Tutorial() {
         {SLIDES.map((slide, i) => (
           <View key={i} style={[s.slide, { width: SCREEN_WIDTH }]}>
             <Image source={slide.image} style={s.image} resizeMode="contain" />
-            <Text style={s.title}>{slide.title}</Text>
-            <Text style={s.description}>{slide.description}</Text>
+            <Text style={s.title}>{t(`tutorial.slides.${slide.key}.title`)}</Text>
+            <Text style={s.description}>{t(`tutorial.slides.${slide.key}.description`)}</Text>
 
             {i === SLIDES.length - 1 && (
               <TouchableOpacity testID="connect-gdrive-btn" style={s.gdriveBtn} onPress={connectGoogleDrive} disabled={connecting}>
-                {connecting ? <ActivityIndicator color="#fff" /> : <Text style={s.gdriveBtnTxt}>Connetti Google Drive</Text>}
+                {connecting ? <ActivityIndicator color="#fff" /> : <Text style={s.gdriveBtnTxt}>{t('tutorial.connectGoogleDrive')}</Text>}
               </TouchableOpacity>
             )}
           </View>
@@ -116,12 +98,12 @@ export default function Tutorial() {
         </View>
 
         <TouchableOpacity testID="next-btn" style={s.nextBtn} onPress={goNext} disabled={connecting}>
-          <Text style={s.nextBtnTxt}>{isLast ? 'Inizia!' : 'Avanti'}</Text>
+          <Text style={s.nextBtnTxt}>{isLast ? t('tutorial.start') : t('tutorial.next')}</Text>
         </TouchableOpacity>
 
         {isLast && (
           <TouchableOpacity testID="skip-btn" onPress={finish} disabled={connecting}>
-            <Text style={s.skipTxt}>Salta</Text>
+            <Text style={s.skipTxt}>{t('tutorial.skip')}</Text>
           </TouchableOpacity>
         )}
       </View>

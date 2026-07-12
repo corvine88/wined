@@ -7,16 +7,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { useProfile } from '../src/profile';
 import * as storage from '../src/storage';
 import * as googleDrive from '../src/googleDrive';
 import { colors, fonts, spacing, radius, shadows } from '../src/theme';
 
 export default function Onboarding() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { saveProfile } = useProfile();
   const [name, setName] = useState('');
   const [picture, setPicture] = useState<string | null>(null);
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
   const [saving, setSaving] = useState(false);
   const [restoring, setRestoring] = useState(false);
 
@@ -37,7 +40,7 @@ export default function Onboarding() {
         return;
       }
       const p = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!p.granted) { Alert.alert('Permesso negato'); return; }
+      if (!p.granted) { Alert.alert(t('onboarding.alertPermissionDenied')); return; }
       const res = await ImagePicker.launchImageLibraryAsync({
         quality: 0.6, base64: true, allowsEditing: true, mediaTypes: ImagePicker.MediaTypeOptions.Images,
       });
@@ -47,14 +50,16 @@ export default function Onboarding() {
       const uri = asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri;
       setPicture(uri);
     } catch (e: any) {
-      Alert.alert('Errore foto', e?.message || '');
+      Alert.alert(t('onboarding.alertPhotoErrorTitle'), e?.message || '');
     }
   };
 
   const submit = async () => {
-    if (!name.trim()) { Alert.alert('Inserisci il tuo nome'); return; }
+    if (!name.trim()) { Alert.alert(t('onboarding.alertEnterName')); return; }
+    if (!ageConfirmed) return;
     setSaving(true);
     try {
+      await storage.setAgeConsent();
       await saveProfile({ name: name.trim(), picture: picture || undefined });
       router.replace('/tutorial');
     } finally {
@@ -74,7 +79,7 @@ export default function Onboarding() {
       await storage.setTutorialSeen(); // chi ripristina un backup è già un utente esperto
       router.replace('/(tabs)/home');
     } catch (e: any) {
-      Alert.alert('Errore', e?.message || 'Ripristino da Google Drive non riuscito');
+      Alert.alert(t('common.error'), e?.message || t('onboarding.alertRestoreErrorDefault'));
     } finally {
       setRestoring(false);
     }
@@ -84,8 +89,8 @@ export default function Onboarding() {
     <SafeAreaView style={s.c}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <View style={s.content}>
-          <Text style={s.h1}>Come ti chiami?</Text>
-          <Text style={s.subtitle}>Personalizza il tuo profilo per iniziare a registrare le tue degustazioni.</Text>
+          <Text style={s.h1}>{t('onboarding.title')}</Text>
+          <Text style={s.subtitle}>{t('onboarding.subtitle')}</Text>
 
           <TouchableOpacity testID="pick-avatar" style={s.avatarWrap} onPress={pickPhoto}>
             {picture ? (
@@ -95,12 +100,12 @@ export default function Onboarding() {
                 <Ionicons name="camera" size={28} color={colors.textMuted} />
               </View>
             )}
-            <Text style={s.avatarLabel}>Foto profilo (opzionale)</Text>
+            <Text style={s.avatarLabel}>{t('onboarding.avatarLabel')}</Text>
           </TouchableOpacity>
 
           <TextInput
             testID="name-input"
-            placeholder="Il tuo nome"
+            placeholder={t('onboarding.namePlaceholder')}
             placeholderTextColor={colors.textMuted}
             style={s.input}
             value={name}
@@ -108,13 +113,30 @@ export default function Onboarding() {
             autoFocus
           />
 
-          <TouchableOpacity testID="continue-btn" style={s.btn} onPress={submit} disabled={saving || restoring}>
-            <Text style={s.btnTxt}>{saving ? 'Salvataggio...' : 'Continua'}</Text>
+          <TouchableOpacity
+            testID="age-consent-checkbox"
+            style={s.consentRow}
+            onPress={() => setAgeConfirmed((v) => !v)}
+            activeOpacity={0.7}
+          >
+            <View style={[s.checkbox, ageConfirmed && s.checkboxChecked]}>
+              {ageConfirmed && <Ionicons name="checkmark" size={14} color="#fff" />}
+            </View>
+            <Text style={s.consentTxt}>{t('onboarding.ageConsent')}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            testID="continue-btn"
+            style={[s.btn, !ageConfirmed && s.btnDisabled]}
+            onPress={submit}
+            disabled={saving || restoring || !ageConfirmed}
+          >
+            <Text style={s.btnTxt}>{saving ? t('onboarding.saving') : t('onboarding.continue')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity testID="restore-backup-btn" style={s.restoreBtn} onPress={restoreFromGoogleDrive} disabled={saving || restoring}>
             <Ionicons name="cloud-download-outline" size={16} color={colors.primary} />
-            <Text style={s.restoreBtnTxt}>{restoring ? 'Ripristino in corso...' : 'Ripristina da backup (Google Drive)'}</Text>
+            <Text style={s.restoreBtnTxt}>{restoring ? t('onboarding.restoring') : t('onboarding.restoreBackup')}</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -136,7 +158,15 @@ const s = StyleSheet.create({
     padding: 14, fontSize: 16, color: colors.text, fontFamily: fonts.body, marginBottom: spacing.lg, textAlign: 'center',
     ...shadows.card,
   },
+  consentRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: spacing.lg },
+  checkbox: {
+    width: 22, height: 22, borderRadius: radius.sm, borderWidth: 1.5, borderColor: colors.borderStrong,
+    alignItems: 'center', justifyContent: 'center', marginTop: 1,
+  },
+  checkboxChecked: { backgroundColor: colors.primary, borderColor: colors.primary },
+  consentTxt: { flex: 1, fontFamily: fonts.body, fontSize: 13, color: colors.text, lineHeight: 18 },
   btn: { backgroundColor: colors.primary, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center' },
+  btnDisabled: { opacity: 0.4 },
   btnTxt: { color: '#fff', fontFamily: fonts.bodySemi, fontSize: 16 },
   restoreBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 14, marginTop: spacing.md },
   restoreBtnTxt: { color: colors.primary, fontFamily: fonts.bodySemi, fontSize: 14, marginLeft: 6 },

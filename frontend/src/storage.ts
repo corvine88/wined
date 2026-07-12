@@ -5,6 +5,7 @@ const WINES_KEY = 'wines';
 const PROFILE_KEY = 'profile';
 const SUGGESTED_KEY = 'suggested_wines';
 const TUTORIAL_SEEN_KEY = 'tutorial_seen';
+const AGE_CONSENT_KEY = 'age_consent';
 
 export type Wine = {
   wine_id: string;
@@ -113,7 +114,15 @@ export async function saveProfile(profile: Profile): Promise<void> {
 
 export async function clearAllData(): Promise<void> {
   winesCache = null;
-  await AsyncStorage.multiRemove([WINES_KEY, PROFILE_KEY, 'custom_subcategories', SUGGESTED_KEY, TUTORIAL_SEEN_KEY]);
+  await AsyncStorage.multiRemove([WINES_KEY, PROFILE_KEY, 'custom_subcategories', SUGGESTED_KEY, TUTORIAL_SEEN_KEY, AGE_CONSENT_KEY]);
+}
+
+export async function getAgeConsent(): Promise<boolean> {
+  return (await AsyncStorage.getItem(AGE_CONSENT_KEY)) === 'true';
+}
+
+export async function setAgeConsent(): Promise<void> {
+  await AsyncStorage.setItem(AGE_CONSENT_KEY, 'true');
 }
 
 export async function getTutorialSeen(): Promise<boolean> {

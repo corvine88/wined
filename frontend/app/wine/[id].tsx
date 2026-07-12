@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIn
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import * as storage from '../../src/storage';
 import type { Wine } from '../../src/storage';
 import * as categories from '../../src/categories';
@@ -10,6 +11,7 @@ import { shareWine } from '../../src/share';
 import { colors, fonts, spacing, radius, shadows } from '../../src/theme';
 
 export default function WineDetail() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [wine, setWine] = useState<Wine | null>(null);
@@ -27,10 +29,10 @@ export default function WineDetail() {
   }, [id]);
 
   const del = () => {
-    Alert.alert('Elimina', 'Sei sicuro di voler eliminare questa degustazione?', [
-      { text: 'Annulla', style: 'cancel' },
+    Alert.alert(t('wineDetail.deleteConfirmTitle'), t('wineDetail.deleteConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Elimina', style: 'destructive', onPress: async () => {
+        text: t('common.delete'), style: 'destructive', onPress: async () => {
           try { await storage.deleteWine(id); router.back(); } catch {}
         }
       },
@@ -46,9 +48,9 @@ export default function WineDetail() {
     setSharing(true);
     try {
       const profile = await storage.getProfile();
-      await shareWine(wine, profile?.name || 'Un amico');
+      await shareWine(wine, profile?.name || t('wineDetail.defaultSharedByName'));
     } catch (e: any) {
-      Alert.alert('Errore', e?.message || 'Condivisione non riuscita');
+      Alert.alert(t('common.error'), e?.message || t('wineDetail.shareErrorDefault'));
     } finally {
       setSharing(false);
     }
@@ -61,7 +63,7 @@ export default function WineDetail() {
   }
   if (!wine) {
     return (
-      <SafeAreaView style={s.c}><Text style={{ padding: 20, fontFamily: fonts.body }}>Non trovato</Text></SafeAreaView>
+      <SafeAreaView style={s.c}><Text style={{ padding: 20, fontFamily: fonts.body }}>{t('wineDetail.notFound')}</Text></SafeAreaView>
     );
   }
 
@@ -99,7 +101,7 @@ export default function WineDetail() {
           <View style={s.typeBadge}>
             <View style={[s.dot, { backgroundColor: categories.getCategoryColor(wine.macro_category) }]} />
             <Image source={categories.getCategoryIcon(wine.macro_category)} style={s.typeBadgeIcon} resizeMode="contain" />
-            <Text style={s.typeBadgeTxt}>{wine.macro_category} · {wine.wine_type}</Text>
+            <Text style={s.typeBadgeTxt}>{t(`categories.macro.${wine.macro_category}`)} · {t(`categories.sub.${wine.wine_type}`, { defaultValue: wine.wine_type })}</Text>
           </View>
           <Text style={s.title}>{wine.name}</Text>
           <View style={s.starsRow}>
@@ -123,25 +125,25 @@ export default function WineDetail() {
 
           {wine.notes ? (
             <>
-              <Text style={s.section}>Note</Text>
+              <Text style={s.section}>{t('wineDetail.notesLabel')}</Text>
               <Text style={s.notes}>{wine.notes}</Text>
             </>
           ) : null}
 
           {(wine.back_photo || wine.glass_photo) && (
             <>
-              <Text style={s.section}>Galleria</Text>
+              <Text style={s.section}>{t('wineDetail.galleryLabel')}</Text>
               <View style={s.gallery}>
                 {wine.back_photo ? (
                   <View style={s.galItem}>
                     <Image source={{ uri: wine.back_photo }} style={s.galImg} />
-                    <Text style={s.galLabel}>Retro</Text>
+                    <Text style={s.galLabel}>{t('wineDetail.backLabel')}</Text>
                   </View>
                 ) : null}
                 {wine.glass_photo ? (
                   <View style={s.galItem}>
                     <Image source={{ uri: wine.glass_photo }} style={s.galImg} />
-                    <Text style={s.galLabel}>Bicchiere</Text>
+                    <Text style={s.galLabel}>{t('wineDetail.glassLabel')}</Text>
                   </View>
                 ) : null}
               </View>
@@ -150,7 +152,7 @@ export default function WineDetail() {
 
           <TouchableOpacity testID="edit-btn-bottom" style={s.editBtnBottom} onPress={edit}>
             <Ionicons name="create-outline" size={18} color={colors.primary} />
-            <Text style={s.editBtnBottomTxt}>Modifica Degustazione</Text>
+            <Text style={s.editBtnBottomTxt}>{t('wineDetail.editBtn')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

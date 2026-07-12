@@ -1,0 +1,246 @@
+{
+  "common": {
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "error": "Fehler"
+  },
+  "splash": {
+    "tagline": "und wie siehst du das Glas?",
+    "claim": "es kommt darauf an, was drin ist",
+    "copyright": "© 2026 Serena Bosca"
+  },
+  "onboarding": {
+    "title": "Wie heißt du?",
+    "subtitle": "Personalisiere dein Profil, um deine Verkostungen zu erfassen.",
+    "avatarLabel": "Profilfoto (optional)",
+    "namePlaceholder": "Dein Name",
+    "ageConsent": "Ich erkläre, dass ich das gesetzliche Mindestalter für den Alkoholkonsum in meinem Land erreicht habe",
+    "continue": "Weiter",
+    "saving": "Speichern...",
+    "restoreBackup": "Aus Backup wiederherstellen (Google Drive)",
+    "restoring": "Wird wiederhergestellt...",
+    "alertEnterName": "Gib deinen Namen ein",
+    "alertPhotoErrorTitle": "Fotofehler",
+    "alertPermissionDenied": "Berechtigung verweigert",
+    "alertRestoreErrorDefault": "Wiederherstellung von Google Drive fehlgeschlagen"
+  },
+  "tutorial": {
+    "slides": {
+      "welcome": {
+        "title": "Willkommen bei ViBiCo!",
+        "description": "Dein persönliches Verkostungstagebuch"
+      },
+      "record": {
+        "title": "Erfasse jeden Schluck",
+        "description": "Speichere Weine, Biere, Cocktails und Getränke mit Fotos, Notizen und dem Ort, an dem du sie probiert hast"
+      },
+      "map": {
+        "title": "Deine Verkostungskarte",
+        "description": "Entdecke alle Orte, an denen du verkostet hast, markiert auf der Karte"
+      },
+      "share": {
+        "title": "Teile mit Freunden",
+        "description": "Sende deine Verkostungen an Freunde und erhalte ihre Empfehlungen"
+      },
+      "backup": {
+        "title": "Deine Daten sind sicher",
+        "description": "Verbinde Google Drive für ein automatisches Backup. Du verlierst nie etwas, auch wenn du das Telefon wechselst."
+      }
+    },
+    "connectGoogleDrive": "Google Drive verbinden",
+    "next": "Weiter",
+    "start": "Los geht's!",
+    "skip": "Überspringen",
+    "alertConnectErrorDefault": "Verbindung zu Google Drive fehlgeschlagen"
+  },
+  "tabs": {
+    "home": "Verkostungen",
+    "map": "Karte",
+    "add": "Hinzufügen",
+    "suggested": "Vorschläge",
+    "profile": "Profil"
+  },
+  "home": {
+    "kicker": "Willkommen",
+    "title": "Meine Verkostungen",
+    "searchPlaceholder": "Suchen...",
+    "segmentByType": "Nach Kategorie",
+    "segmentByLocation": "Nach Ort",
+    "filterAll": "Alle",
+    "filterAllFem": "Alle",
+    "emptyState": "Noch keine Verkostung. Füge deine erste hinzu!"
+  },
+  "add": {
+    "chooseCategoryTitle": "Was verkostest du?",
+    "newTitle": "Neue Verkostung",
+    "editTitle": "Verkostung bearbeiten",
+    "photoFront": "Vorderseite",
+    "photoBack": "Rückseite",
+    "photoGlass": "Glas",
+    "nameLabel": "Name",
+    "namePlaceholder": "Z.B. Barolo 2018",
+    "subcategoryLabel": "Unterkategorie",
+    "customChip": "Benutzerdefiniert",
+    "locationLabel": "Ort",
+    "locationPlaceholder": "Wo hast du es getrunken?",
+    "nearbyUsedLabel": "Zuvor in der Nähe verwendet:",
+    "ratingLabel": "Bewertung",
+    "notesLabel": "Verkostungsnotizen",
+    "notesPlaceholder": "Aromen, Geschmack, Kombinationen...",
+    "saveNew": "Verkostung speichern",
+    "saveEdit": "Änderungen speichern",
+    "disclaimer": "Trink verantwortungsbewusst.\nDer Geschmack liegt im Schluck, nicht in der Menge.",
+    "photoModalTitle": "Aus Galerie wählen oder Foto aufnehmen",
+    "takePhoto": "Foto aufnehmen",
+    "chooseFromGallery": "Aus Galerie wählen",
+    "customSubcategoryModalTitle": "Neue Unterkategorie",
+    "customSubcategoryPlaceholder": "Name der Unterkategorie",
+    "addBtn": "Hinzufügen",
+    "alertChooseCategory": "Wähle eine Kategorie",
+    "alertNameRequired": "Name erforderlich",
+    "alertChooseSubcategory": "Wähle eine Unterkategorie",
+    "alertLoadErrorMessage": "Der Wein konnte nicht geladen werden",
+    "alertSaveErrorMessage": "Speichern fehlgeschlagen",
+    "alertPermissionDenied": "Berechtigung verweigert",
+    "alertPhotoErrorTitle": "Fotofehler",
+    "alertGpsPermissionDenied": "Standortberechtigung verweigert",
+    "alertGpsUnavailableTitle": "GPS nicht verfügbar",
+    "alertCustomSubcategoryErrorMessage": "Die Unterkategorie konnte nicht gespeichert werden"
+  },
+  "map": {
+    "nativeTitle": "Verkostungskarte",
+    "webTitle": "Meine Weinkarte",
+    "placesCount_one": "{{count}} Ort",
+    "placesCount_other": "{{count}} Orte",
+    "errorUnavailable": "Karte nicht verfügbar: {{error}}",
+    "emptyState": "Noch keine Orte erfasst. Füge einen Wein mit Standort hinzu!",
+    "singleTastingHeader": "Verkostung",
+    "multiTastingHeader": "{{count}} Verkostungen hier",
+    "moreCount": "+ {{count}} weitere",
+    "openCard": "Karte öffnen"
+  },
+  "profile": {
+    "title": "Profil",
+    "deviceOnlyBadge": "Nur auf diesem Gerät",
+    "defaultUserName": "Benutzer",
+    "backupSectionTitle": "Backup",
+    "dropbox": "Dropbox",
+    "onedrive": "OneDrive",
+    "comingSoon": "Demnächst",
+    "resetBtn": "Alle Daten löschen",
+    "resetBtnBusy": "Wird gelöscht...",
+    "resetConfirmTitle": "Alle Daten löschen",
+    "resetConfirmMessage": "Dein Profil und alle auf diesem Gerät gespeicherten Verkostungen werden gelöscht. Fortfahren?",
+    "feedbackText": "Hast du Vorschläge oder Probleme mit der App? Schreib mir!",
+    "privacyPolicy": "Datenschutzerklärung",
+    "termsOfService": "Nutzungsbedingungen",
+    "copyright": "© 2026 Serena Bosca",
+    "googleDrive": {
+      "title": "Google Drive",
+      "connected": "Verbunden",
+      "notConnected": "Nicht verbunden",
+      "connect": "Verbinden",
+      "backupNow": "Jetzt sichern",
+      "restore": "Wiederherstellen",
+      "disconnect": "Trennen",
+      "lastBackup": "Letztes Backup: {{date}}",
+      "noBackupYet": "Noch kein Backup durchgeführt",
+      "connectErrorDefault": "Verbindung zu Google Drive fehlgeschlagen",
+      "backupErrorDefault": "Backup fehlgeschlagen",
+      "restoreConfirmTitle": "Von Google Drive wiederherstellen",
+      "restoreConfirmMessage": "Lokale Daten (Profil und Verkostungen) werden mit dem Backup überschrieben. Fortfahren?",
+      "restoreDoneTitle": "Fertig",
+      "restoreDoneMessage": "Daten von Google Drive wiederhergestellt.",
+      "restoreErrorDefault": "Wiederherstellung fehlgeschlagen",
+      "disconnectConfirmTitle": "Google Drive trennen",
+      "disconnectConfirmMessage": "Das automatische Backup wird gestoppt. Fortfahren?"
+    }
+  },
+  "suggested": {
+    "kicker": "Von Freunden",
+    "title": "Vorschläge",
+    "emptyState": "Noch keine Vorschläge erhalten. Importiere eine .vibico-Datei von einem Freund!",
+    "fromLabel": "Von {{name}}",
+    "addToCollectionBtn": "Zur Sammlung hinzufügen",
+    "deleteConfirmTitle": "Vorschlag löschen",
+    "deleteConfirmMessage": "\"{{name}}\" löschen?",
+    "importErrorMessage": "Ungültige .vibico-Datei",
+    "collectErrorMessage": "Konnte nicht zur Sammlung verschoben werden"
+  },
+  "receive": {
+    "title": "Verkostung erhalten",
+    "sharedBy": "Geteilt von: {{name}}",
+    "notesLabel": "Notizen",
+    "galleryLabel": "Galerie",
+    "saveToSuggestedBtn": "In Vorschlägen speichern",
+    "addToCollectionBtn": "Zu meiner Sammlung hinzufügen",
+    "ignoreBtn": "Ignorieren",
+    "emptyState": "Keine Verkostung zum Importieren.",
+    "saveErrorMessage": "Konnte nicht in Vorschlägen gespeichert werden",
+    "addErrorMessage": "Konnte nicht zur Sammlung hinzugefügt werden"
+  },
+  "wineDetail": {
+    "notesLabel": "Notizen",
+    "galleryLabel": "Galerie",
+    "backLabel": "Rückseite",
+    "glassLabel": "Glas",
+    "editBtn": "Verkostung bearbeiten",
+    "deleteConfirmTitle": "Löschen",
+    "deleteConfirmMessage": "Möchtest du diese Verkostung wirklich löschen?",
+    "notFound": "Nicht gefunden",
+    "shareErrorDefault": "Teilen fehlgeschlagen",
+    "defaultSharedByName": "Ein Freund"
+  },
+  "notFound": {
+    "checking": "Datei wird geöffnet...",
+    "title": "Dieser Link kann nicht geöffnet werden",
+    "message": "Wenn du eine von einer anderen App geteilte .vibico-Datei öffnen wolltest, versuche stattdessen \"Datei importieren\" im Tab Vorschläge zu verwenden, statt sie direkt zu öffnen.",
+    "goToSuggested": "Zu Vorschlägen",
+    "goHome": "Zurück zur Startseite",
+    "urlReceivedAlertTitle": "URL empfangen"
+  },
+  "categories": {
+    "macro": {
+      "Vino": "Wein",
+      "Birra": "Bier",
+      "Cocktail": "Cocktail",
+      "Bibite": "Getränke"
+    },
+    "sub": {
+      "Rossi": "Rotweine",
+      "Bianchi": "Weißweine",
+      "Rosati": "Roséweine",
+      "Bollicine": "Schaumweine",
+      "Dolci": "Süßweine",
+      "Liquorosi": "Likörweine",
+      "Macerati": "Maischevergoren",
+      "Arancioni": "Orange Weine",
+      "Asiatici": "Asiatisch",
+      "Dealcolati": "Alkoholfrei",
+      "Lager": "Lager",
+      "Ale": "Ale",
+      "Wheat": "Weizenbier",
+      "Dark / Roasted": "Dunkel / Geröstet",
+      "IPA / Hoppy": "IPA / Hopfig",
+      "Sour / Wild": "Sauer / Wild",
+      "Belghe / Trappiste": "Belgisch / Trappist",
+      "Analcoliche": "Alkoholfrei",
+      "Spritz-style": "Spritz-Stil",
+      "Long drink": "Long Drink",
+      "Short drink": "Short Drink",
+      "Sour / Citrus": "Sauer / Zitrus",
+      "Tiki / Punch": "Tiki / Punsch",
+      "Digestivi / Amari": "Digestifs / Bitter",
+      "Mocktail": "Mocktail",
+      "Signature": "Signature",
+      "Gassate": "Kohlensäurehaltig",
+      "Tè freddi": "Eistees",
+      "Succhi & estratti": "Säfte & Extrakte",
+      "Fermentati": "Fermentiert",
+      "Energy drink": "Energydrinks",
+      "Infusi / Tisane": "Aufgüsse / Kräutertees",
+      "Asiatiche": "Asiatisch",
+      "Acque": "Wasser"
+    }
+  }
+}

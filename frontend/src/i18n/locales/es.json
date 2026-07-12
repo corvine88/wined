@@ -1,0 +1,246 @@
+{
+  "common": {
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "error": "Error"
+  },
+  "splash": {
+    "tagline": "¿y tú cómo ves el vaso?",
+    "claim": "depende de lo que hay dentro",
+    "copyright": "© 2026 Serena Bosca"
+  },
+  "onboarding": {
+    "title": "¿Cómo te llamas?",
+    "subtitle": "Personaliza tu perfil para empezar a registrar tus catas.",
+    "avatarLabel": "Foto de perfil (opcional)",
+    "namePlaceholder": "Tu nombre",
+    "ageConsent": "Declaro que tengo la edad legal para consumir alcohol en mi país",
+    "continue": "Continuar",
+    "saving": "Guardando...",
+    "restoreBackup": "Restaurar desde copia de seguridad (Google Drive)",
+    "restoring": "Restaurando...",
+    "alertEnterName": "Introduce tu nombre",
+    "alertPhotoErrorTitle": "Error de foto",
+    "alertPermissionDenied": "Permiso denegado",
+    "alertRestoreErrorDefault": "Error al restaurar desde Google Drive"
+  },
+  "tutorial": {
+    "slides": {
+      "welcome": {
+        "title": "¡Bienvenido a ViBiCo!",
+        "description": "Tu diario personal de catas"
+      },
+      "record": {
+        "title": "Registra cada sorbo",
+        "description": "Guarda vinos, cervezas, cócteles y bebidas con fotos, notas y el lugar donde los probaste"
+      },
+      "map": {
+        "title": "Tu mapa de catas",
+        "description": "Descubre todos los lugares donde has catado con los pines en el mapa"
+      },
+      "share": {
+        "title": "Comparte con amigos",
+        "description": "Envía tus catas a tus amigos y recibe sus sugerencias"
+      },
+      "backup": {
+        "title": "Tus datos a salvo",
+        "description": "Conecta Google Drive para hacer copia de seguridad automática. Nunca perderás nada, aunque cambies de teléfono."
+      }
+    },
+    "connectGoogleDrive": "Conectar Google Drive",
+    "next": "Siguiente",
+    "start": "¡Empezar!",
+    "skip": "Saltar",
+    "alertConnectErrorDefault": "Error al conectar con Google Drive"
+  },
+  "tabs": {
+    "home": "Catas",
+    "map": "Mapa",
+    "add": "Añadir",
+    "suggested": "Sugeridos",
+    "profile": "Perfil"
+  },
+  "home": {
+    "kicker": "Bienvenido",
+    "title": "Mis Catas",
+    "searchPlaceholder": "Buscar...",
+    "segmentByType": "Por Categoría",
+    "segmentByLocation": "Por Lugar",
+    "filterAll": "Todos",
+    "filterAllFem": "Todas",
+    "emptyState": "Ninguna cata todavía. ¡Añade la primera!"
+  },
+  "add": {
+    "chooseCategoryTitle": "¿Qué estás catando?",
+    "newTitle": "Nueva Cata",
+    "editTitle": "Editar Cata",
+    "photoFront": "Frente",
+    "photoBack": "Dorso",
+    "photoGlass": "Copa",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "Ej. Barolo 2018",
+    "subcategoryLabel": "Subcategoría",
+    "customChip": "Personalizado",
+    "locationLabel": "Lugar",
+    "locationPlaceholder": "¿Dónde lo bebiste?",
+    "nearbyUsedLabel": "Usado anteriormente cerca de aquí:",
+    "ratingLabel": "Valoración",
+    "notesLabel": "Notas de Cata",
+    "notesPlaceholder": "Aromas, sabores, maridajes...",
+    "saveNew": "Guardar Cata",
+    "saveEdit": "Guardar Cambios",
+    "disclaimer": "Bebe con responsabilidad.\nEl sabor está en el sorbo, no en la cantidad.",
+    "photoModalTitle": "Elegir de la Galería o Hacer una Foto",
+    "takePhoto": "Hacer Foto",
+    "chooseFromGallery": "Elegir de la Galería",
+    "customSubcategoryModalTitle": "Nueva Subcategoría",
+    "customSubcategoryPlaceholder": "Nombre de la subcategoría",
+    "addBtn": "Añadir",
+    "alertChooseCategory": "Elige una categoría",
+    "alertNameRequired": "Nombre requerido",
+    "alertChooseSubcategory": "Elige una subcategoría",
+    "alertLoadErrorMessage": "No se pudo cargar el vino",
+    "alertSaveErrorMessage": "Error al guardar",
+    "alertPermissionDenied": "Permiso denegado",
+    "alertPhotoErrorTitle": "Error de foto",
+    "alertGpsPermissionDenied": "Permiso de ubicación denegado",
+    "alertGpsUnavailableTitle": "GPS no disponible",
+    "alertCustomSubcategoryErrorMessage": "No se pudo guardar la subcategoría"
+  },
+  "map": {
+    "nativeTitle": "Mapa de Catas",
+    "webTitle": "Mi Mapa de Vinos",
+    "placesCount_one": "{{count}} lugar",
+    "placesCount_other": "{{count}} lugares",
+    "errorUnavailable": "Mapa no disponible: {{error}}",
+    "emptyState": "Ningún lugar registrado todavía. ¡Añade un vino con ubicación!",
+    "singleTastingHeader": "Cata",
+    "multiTastingHeader": "{{count}} catas aquí",
+    "moreCount": "+ {{count}} más",
+    "openCard": "Abrir ficha"
+  },
+  "profile": {
+    "title": "Perfil",
+    "deviceOnlyBadge": "Solo en este dispositivo",
+    "defaultUserName": "Usuario",
+    "backupSectionTitle": "Copia de seguridad",
+    "dropbox": "Dropbox",
+    "onedrive": "OneDrive",
+    "comingSoon": "Próximamente",
+    "resetBtn": "Eliminar todos los datos",
+    "resetBtnBusy": "Eliminando...",
+    "resetConfirmTitle": "Eliminar todos los datos",
+    "resetConfirmMessage": "Se eliminarán el perfil y todas las catas guardadas en este dispositivo. ¿Continuar?",
+    "feedbackText": "¿Tienes sugerencias o problemas usando la app? ¡Escríbeme!",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfService": "Términos de Servicio",
+    "copyright": "© 2026 Serena Bosca",
+    "googleDrive": {
+      "title": "Google Drive",
+      "connected": "Conectado",
+      "notConnected": "No conectado",
+      "connect": "Conectar",
+      "backupNow": "Copia de seguridad ahora",
+      "restore": "Restaurar",
+      "disconnect": "Desconectar",
+      "lastBackup": "Última copia: {{date}}",
+      "noBackupYet": "Ninguna copia de seguridad todavía",
+      "connectErrorDefault": "Error al conectar con Google Drive",
+      "backupErrorDefault": "Error en la copia de seguridad",
+      "restoreConfirmTitle": "Restaurar desde Google Drive",
+      "restoreConfirmMessage": "Los datos locales (perfil y catas) se sobrescribirán con los de la copia de seguridad. ¿Continuar?",
+      "restoreDoneTitle": "Hecho",
+      "restoreDoneMessage": "Datos restaurados desde Google Drive.",
+      "restoreErrorDefault": "Error al restaurar",
+      "disconnectConfirmTitle": "Desconectar Google Drive",
+      "disconnectConfirmMessage": "La copia de seguridad automática se detendrá. ¿Continuar?"
+    }
+  },
+  "suggested": {
+    "kicker": "De Amigos",
+    "title": "Sugeridos",
+    "emptyState": "Ninguna sugerencia recibida todavía. ¡Importa un archivo .vibico de un amigo!",
+    "fromLabel": "De {{name}}",
+    "addToCollectionBtn": "A la colección",
+    "deleteConfirmTitle": "Eliminar sugerencia",
+    "deleteConfirmMessage": "¿Eliminar \"{{name}}\"?",
+    "importErrorMessage": "Archivo .vibico no válido",
+    "collectErrorMessage": "No se pudo mover a la colección"
+  },
+  "receive": {
+    "title": "Cata recibida",
+    "sharedBy": "Compartido por: {{name}}",
+    "notesLabel": "Notas",
+    "galleryLabel": "Galería",
+    "saveToSuggestedBtn": "Guardar en Sugeridos",
+    "addToCollectionBtn": "Añadir a mi colección",
+    "ignoreBtn": "Ignorar",
+    "emptyState": "Ninguna cata para importar.",
+    "saveErrorMessage": "No se pudo guardar en Sugeridos",
+    "addErrorMessage": "No se pudo añadir a la colección"
+  },
+  "wineDetail": {
+    "notesLabel": "Notas",
+    "galleryLabel": "Galería",
+    "backLabel": "Dorso",
+    "glassLabel": "Copa",
+    "editBtn": "Editar Cata",
+    "deleteConfirmTitle": "Eliminar",
+    "deleteConfirmMessage": "¿Seguro que quieres eliminar esta cata?",
+    "notFound": "No encontrado",
+    "shareErrorDefault": "Error al compartir",
+    "defaultSharedByName": "Un amigo"
+  },
+  "notFound": {
+    "checking": "Abriendo archivo...",
+    "title": "No puedo abrir este enlace",
+    "message": "Si estabas abriendo un archivo .vibico compartido desde otra app, intenta usar \"Importar archivo\" en la pestaña Sugeridos en lugar de abrirlo directamente.",
+    "goToSuggested": "Ir a Sugeridos",
+    "goHome": "Volver al inicio",
+    "urlReceivedAlertTitle": "URL recibida"
+  },
+  "categories": {
+    "macro": {
+      "Vino": "Vino",
+      "Birra": "Cerveza",
+      "Cocktail": "Cóctel",
+      "Bibite": "Bebidas"
+    },
+    "sub": {
+      "Rossi": "Tintos",
+      "Bianchi": "Blancos",
+      "Rosati": "Rosados",
+      "Bollicine": "Espumosos",
+      "Dolci": "Dulces",
+      "Liquorosi": "Generosos",
+      "Macerati": "Maceración",
+      "Arancioni": "Vinos naranja",
+      "Asiatici": "Asiáticos",
+      "Dealcolati": "Sin alcohol",
+      "Lager": "Lager",
+      "Ale": "Ale",
+      "Wheat": "De trigo",
+      "Dark / Roasted": "Oscura / Tostada",
+      "IPA / Hoppy": "IPA / Lupulada",
+      "Sour / Wild": "Ácida / Salvaje",
+      "Belghe / Trappiste": "Belgas / Trapenses",
+      "Analcoliche": "Sin alcohol",
+      "Spritz-style": "Estilo Spritz",
+      "Long drink": "Long drink",
+      "Short drink": "Short drink",
+      "Sour / Citrus": "Ácido / Cítrico",
+      "Tiki / Punch": "Tiki / Ponche",
+      "Digestivi / Amari": "Digestivos / Amargos",
+      "Mocktail": "Mocktail",
+      "Signature": "Signature",
+      "Gassate": "Gaseosas",
+      "Tè freddi": "Tés helados",
+      "Succhi & estratti": "Zumos y extractos",
+      "Fermentati": "Fermentados",
+      "Energy drink": "Bebidas energéticas",
+      "Infusi / Tisane": "Infusiones / Tisanas",
+      "Asiatiche": "Asiáticas",
+      "Acque": "Aguas"
+    }
+  }
+}

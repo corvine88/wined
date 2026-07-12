@@ -1,0 +1,245 @@
+{
+  "common": {
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "error": "エラー"
+  },
+  "splash": {
+    "tagline": "あなたはそのグラスをどう見る?",
+    "claim": "中身次第",
+    "copyright": "© 2026 Serena Bosca"
+  },
+  "onboarding": {
+    "title": "お名前は?",
+    "subtitle": "プロフィールを設定して、テイスティングの記録を始めましょう。",
+    "avatarLabel": "プロフィール写真(任意)",
+    "namePlaceholder": "お名前",
+    "ageConsent": "自分の国でアルコールを飲用できる法定年齢に達していることを宣言します",
+    "continue": "続ける",
+    "saving": "保存中...",
+    "restoreBackup": "バックアップから復元する(Google ドライブ)",
+    "restoring": "復元中...",
+    "alertEnterName": "お名前を入力してください",
+    "alertPhotoErrorTitle": "写真エラー",
+    "alertPermissionDenied": "権限がありません",
+    "alertRestoreErrorDefault": "Google ドライブからの復元に失敗しました"
+  },
+  "tutorial": {
+    "slides": {
+      "welcome": {
+        "title": "ViBiCo へようこそ!",
+        "description": "あなただけのテイスティング日記"
+      },
+      "record": {
+        "title": "一口ごとに記録",
+        "description": "ワイン、ビール、カクテル、ソフトドリンクを、写真・メモ・味わった場所とともに保存"
+      },
+      "map": {
+        "title": "あなたのテイスティングマップ",
+        "description": "地図上のピンで、テイスティングしたすべての場所を確認"
+      },
+      "share": {
+        "title": "友達とシェア",
+        "description": "テイスティングを友達に送り、友達のおすすめを受け取ろう"
+      },
+      "backup": {
+        "title": "データを安全に",
+        "description": "Google ドライブを接続すると自動バックアップができます。機種変更しても大切な記録は失われません。"
+      }
+    },
+    "connectGoogleDrive": "Google ドライブを接続",
+    "next": "次へ",
+    "start": "はじめる!",
+    "skip": "スキップ",
+    "alertConnectErrorDefault": "Google ドライブへの接続に失敗しました"
+  },
+  "tabs": {
+    "home": "テイスティング",
+    "map": "マップ",
+    "add": "追加",
+    "suggested": "おすすめ",
+    "profile": "プロフィール"
+  },
+  "home": {
+    "kicker": "ようこそ",
+    "title": "マイテイスティング",
+    "searchPlaceholder": "検索...",
+    "segmentByType": "カテゴリー別",
+    "segmentByLocation": "場所別",
+    "filterAll": "すべて",
+    "filterAllFem": "すべて",
+    "emptyState": "まだテイスティングがありません。最初の記録を追加しましょう!"
+  },
+  "add": {
+    "chooseCategoryTitle": "何をテイスティングしますか?",
+    "newTitle": "新しいテイスティング",
+    "editTitle": "テイスティングを編集",
+    "photoFront": "正面",
+    "photoBack": "背面",
+    "photoGlass": "グラス",
+    "nameLabel": "名前",
+    "namePlaceholder": "例:バローロ 2018",
+    "subcategoryLabel": "サブカテゴリー",
+    "customChip": "カスタム",
+    "locationLabel": "場所",
+    "locationPlaceholder": "どこで飲みましたか?",
+    "nearbyUsedLabel": "この近くで以前使用した場所:",
+    "ratingLabel": "評価",
+    "notesLabel": "テイスティングメモ",
+    "notesPlaceholder": "香り、味わい、相性...",
+    "saveNew": "テイスティングを保存",
+    "saveEdit": "変更を保存",
+    "disclaimer": "節度ある飲酒を。\n味わいは量ではなく、一口の中にあります。",
+    "photoModalTitle": "ギャラリーから選ぶか、写真を撮る",
+    "takePhoto": "写真を撮る",
+    "chooseFromGallery": "ギャラリーから選ぶ",
+    "customSubcategoryModalTitle": "新しいサブカテゴリー",
+    "customSubcategoryPlaceholder": "サブカテゴリー名",
+    "addBtn": "追加",
+    "alertChooseCategory": "カテゴリーを選んでください",
+    "alertNameRequired": "名前が必要です",
+    "alertChooseSubcategory": "サブカテゴリーを選んでください",
+    "alertLoadErrorMessage": "ワインを読み込めませんでした",
+    "alertSaveErrorMessage": "保存に失敗しました",
+    "alertPermissionDenied": "権限がありません",
+    "alertPhotoErrorTitle": "写真エラー",
+    "alertGpsPermissionDenied": "位置情報の権限がありません",
+    "alertGpsUnavailableTitle": "GPSが利用できません",
+    "alertCustomSubcategoryErrorMessage": "サブカテゴリーを保存できませんでした"
+  },
+  "map": {
+    "nativeTitle": "テイスティングマップ",
+    "webTitle": "マイワインマップ",
+    "placesCount_other": "{{count}} 件の場所",
+    "errorUnavailable": "マップを利用できません: {{error}}",
+    "emptyState": "まだ場所が登録されていません。位置情報付きでワインを追加しましょう!",
+    "singleTastingHeader": "テイスティング",
+    "multiTastingHeader": "ここで {{count}} 件のテイスティング",
+    "moreCount": "他 {{count}} 件",
+    "openCard": "詳細を開く"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "deviceOnlyBadge": "この端末のみ",
+    "defaultUserName": "ユーザー",
+    "backupSectionTitle": "バックアップ",
+    "dropbox": "Dropbox",
+    "onedrive": "OneDrive",
+    "comingSoon": "近日公開",
+    "resetBtn": "すべてのデータを削除",
+    "resetBtnBusy": "削除中...",
+    "resetConfirmTitle": "すべてのデータを削除",
+    "resetConfirmMessage": "この端末に保存されているプロフィールとすべてのテイスティングが削除されます。続けますか?",
+    "feedbackText": "ご意見やアプリの不具合はありますか?ぜひご連絡ください!",
+    "privacyPolicy": "プライバシーポリシー",
+    "termsOfService": "利用規約",
+    "copyright": "© 2026 Serena Bosca",
+    "googleDrive": {
+      "title": "Google ドライブ",
+      "connected": "接続済み",
+      "notConnected": "未接続",
+      "connect": "接続",
+      "backupNow": "今すぐバックアップ",
+      "restore": "復元",
+      "disconnect": "接続解除",
+      "lastBackup": "最終バックアップ: {{date}}",
+      "noBackupYet": "まだバックアップがありません",
+      "connectErrorDefault": "Google ドライブへの接続に失敗しました",
+      "backupErrorDefault": "バックアップに失敗しました",
+      "restoreConfirmTitle": "Google ドライブから復元",
+      "restoreConfirmMessage": "ローカルのデータ(プロフィールとテイスティング)はバックアップの内容で上書きされます。続けますか?",
+      "restoreDoneTitle": "完了",
+      "restoreDoneMessage": "Google ドライブからデータを復元しました。",
+      "restoreErrorDefault": "復元に失敗しました",
+      "disconnectConfirmTitle": "Google ドライブの接続を解除",
+      "disconnectConfirmMessage": "自動バックアップが停止します。続けますか?"
+    }
+  },
+  "suggested": {
+    "kicker": "友達から",
+    "title": "おすすめ",
+    "emptyState": "まだおすすめを受け取っていません。友達から .vibico ファイルをインポートしましょう!",
+    "fromLabel": "{{name}} から",
+    "addToCollectionBtn": "コレクションに追加",
+    "deleteConfirmTitle": "おすすめを削除",
+    "deleteConfirmMessage": "「{{name}}」を削除しますか?",
+    "importErrorMessage": "無効な .vibico ファイルです",
+    "collectErrorMessage": "コレクションに移動できませんでした"
+  },
+  "receive": {
+    "title": "受け取ったテイスティング",
+    "sharedBy": "共有者: {{name}}",
+    "notesLabel": "メモ",
+    "galleryLabel": "ギャラリー",
+    "saveToSuggestedBtn": "おすすめに保存",
+    "addToCollectionBtn": "コレクションに追加",
+    "ignoreBtn": "無視",
+    "emptyState": "インポートするテイスティングがありません。",
+    "saveErrorMessage": "おすすめに保存できませんでした",
+    "addErrorMessage": "コレクションに追加できませんでした"
+  },
+  "wineDetail": {
+    "notesLabel": "メモ",
+    "galleryLabel": "ギャラリー",
+    "backLabel": "背面",
+    "glassLabel": "グラス",
+    "editBtn": "テイスティングを編集",
+    "deleteConfirmTitle": "削除",
+    "deleteConfirmMessage": "このテイスティングを削除してもよろしいですか?",
+    "notFound": "見つかりません",
+    "shareErrorDefault": "共有に失敗しました",
+    "defaultSharedByName": "友達"
+  },
+  "notFound": {
+    "checking": "ファイルを開いています...",
+    "title": "このリンクを開けません",
+    "message": "他のアプリから共有された .vibico ファイルを開こうとしていた場合は、直接開く代わりに「おすすめ」タブの「ファイルをインポート」をお試しください。",
+    "goToSuggested": "おすすめへ移動",
+    "goHome": "ホームに戻る",
+    "urlReceivedAlertTitle": "URLを受信しました"
+  },
+  "categories": {
+    "macro": {
+      "Vino": "ワイン",
+      "Birra": "ビール",
+      "Cocktail": "カクテル",
+      "Bibite": "ソフトドリンク"
+    },
+    "sub": {
+      "Rossi": "赤ワイン",
+      "Bianchi": "白ワイン",
+      "Rosati": "ロゼ",
+      "Bollicine": "スパークリング",
+      "Dolci": "甘口",
+      "Liquorosi": "酒精強化ワイン",
+      "Macerati": "醸し(オレンジ)ワイン",
+      "Arancioni": "オレンジワイン",
+      "Asiatici": "アジアン",
+      "Dealcolati": "ノンアルコール",
+      "Lager": "ラガー",
+      "Ale": "エール",
+      "Wheat": "小麦ビール",
+      "Dark / Roasted": "ダーク / ロースト",
+      "IPA / Hoppy": "IPA / ホッピー",
+      "Sour / Wild": "サワー / ワイルド",
+      "Belghe / Trappiste": "ベルギー / トラピスト",
+      "Analcoliche": "ノンアルコール",
+      "Spritz-style": "スプリッツ風",
+      "Long drink": "ロングドリンク",
+      "Short drink": "ショートドリンク",
+      "Sour / Citrus": "サワー / シトラス",
+      "Tiki / Punch": "ティキ / パンチ",
+      "Digestivi / Amari": "ディジェスティフ / アマーロ",
+      "Mocktail": "モクテル",
+      "Signature": "シグネチャー",
+      "Gassate": "炭酸",
+      "Tè freddi": "アイスティー",
+      "Succhi & estratti": "ジュース&エキス",
+      "Fermentati": "発酵飲料",
+      "Energy drink": "エナジードリンク",
+      "Infusi / Tisane": "ハーブティー",
+      "Asiatiche": "アジアン",
+      "Acque": "水"
+    }
+  }
+}

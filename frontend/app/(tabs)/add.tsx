@@ -8,6 +8,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import * as storage from '../../src/storage';
 import * as categories from '../../src/categories';
 import type { MacroCategory } from '../../src/categories';
@@ -16,6 +17,7 @@ import { colors, fonts, radius, spacing, shadows } from '../../src/theme';
 type PhotoTarget = 'front' | 'back' | 'glass';
 
 export default function AddOrEditWine() {
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{ id?: string }>();
   const editingId = typeof params.id === 'string' && params.id ? params.id : null;
@@ -70,7 +72,7 @@ export default function AddOrEditWine() {
         setBackPhoto(w.back_photo || null);
         setGlassPhoto(w.glass_photo || null);
       } catch {
-        Alert.alert('Errore', 'Impossibile caricare il vino');
+        Alert.alert(t('common.error'), t('add.alertLoadErrorMessage'));
         router.back();
       } finally {
         setLoadingWine(false);
@@ -118,11 +120,11 @@ export default function AddOrEditWine() {
       let res;
       if (src === 'camera') {
         const p = await ImagePicker.requestCameraPermissionsAsync();
-        if (!p.granted) { Alert.alert('Permesso negato'); return; }
+        if (!p.granted) { Alert.alert(t('add.alertPermissionDenied')); return; }
         res = await ImagePicker.launchCameraAsync({ quality: 0.6, base64: true, allowsEditing: true });
       } else {
         const p = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (!p.granted) { Alert.alert('Permesso negato'); return; }
+        if (!p.granted) { Alert.alert(t('add.alertPermissionDenied')); return; }
         res = await ImagePicker.launchImageLibraryAsync({ quality: 0.6, base64: true, allowsEditing: true, mediaTypes: ImagePicker.MediaTypeOptions.Images });
       }
       if (res.canceled) return;
@@ -131,7 +133,7 @@ export default function AddOrEditWine() {
       const uri = asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri;
       apply(uri);
     } catch (e: any) {
-      Alert.alert('Errore foto', e?.message || '');
+      Alert.alert(t('add.alertPhotoErrorTitle'), e?.message || '');
     }
   };
 
@@ -146,7 +148,7 @@ export default function AddOrEditWine() {
     setGpsLoading(true);
     try {
       const p = await Location.requestForegroundPermissionsAsync();
-      if (!p.granted) { Alert.alert('Permesso posizione negato'); return; }
+      if (!p.granted) { Alert.alert(t('add.alertGpsPermissionDenied')); return; }
       const pos = await Location.getCurrentPositionAsync({});
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
@@ -163,7 +165,7 @@ export default function AddOrEditWine() {
         } catch {}
       }
     } catch (e: any) {
-      Alert.alert('GPS non disponibile', e?.message || '');
+      Alert.alert(t('add.alertGpsUnavailableTitle'), e?.message || '');
     } finally { setGpsLoading(false); }
   };
 
@@ -177,14 +179,14 @@ export default function AddOrEditWine() {
       setCustomName('');
       setCustomModal(false);
     } catch {
-      Alert.alert('Errore', 'Impossibile salvare la sotto-categoria');
+      Alert.alert(t('common.error'), t('add.alertCustomSubcategoryErrorMessage'));
     }
   };
 
   const save = async () => {
-    if (!macroCategory) { Alert.alert('Scegli una categoria'); return; }
-    if (!name.trim()) { Alert.alert('Nome richiesto'); return; }
-    if (!wineType) { Alert.alert('Scegli una sotto-categoria'); return; }
+    if (!macroCategory) { Alert.alert(t('add.alertChooseCategory')); return; }
+    if (!name.trim()) { Alert.alert(t('add.alertNameRequired')); return; }
+    if (!wineType) { Alert.alert(t('add.alertChooseSubcategory')); return; }
     setSaving(true);
     try {
       const body = {
@@ -208,7 +210,7 @@ export default function AddOrEditWine() {
         router.replace('/(tabs)/home');
       }
     } catch {
-      Alert.alert('Errore', 'Salvataggio fallito');
+      Alert.alert(t('common.error'), t('add.alertSaveErrorMessage'));
     } finally { setSaving(false); }
   };
 
@@ -226,7 +228,7 @@ export default function AddOrEditWine() {
       <SafeAreaView style={s.c} edges={['top']}>
         <View style={s.topBar}>
           <View style={{ width: 40 }} />
-          <Text style={s.h1}>Cosa stai degustando?</Text>
+          <Text style={s.h1}>{t('add.chooseCategoryTitle')}</Text>
           <View style={{ width: 40 }} />
         </View>
         <View style={s.macroGrid}>
@@ -238,7 +240,7 @@ export default function AddOrEditWine() {
               onPress={() => setMacroCategory(m)}
             >
               <Image source={categories.CATEGORIES[m].icon} style={s.macroIcon} resizeMode="contain" />
-              <Text style={s.macroLabel}>{m}</Text>
+              <Text style={s.macroLabel}>{t(`categories.macro.${m}`)}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -253,7 +255,7 @@ export default function AddOrEditWine() {
           <TouchableOpacity testID="back-btn" onPress={() => router.back()} style={s.backBtn}>
             <Ionicons name="chevron-back" size={22} color={colors.text} />
           </TouchableOpacity>
-          <Text style={s.h1}>{editingId ? 'Modifica Degustazione' : 'Nuova Degustazione'}</Text>
+          <Text style={s.h1}>{editingId ? t('add.editTitle') : t('add.newTitle')}</Text>
           <View style={{ width: 40 }} />
         </View>
 
@@ -264,49 +266,49 @@ export default function AddOrEditWine() {
             onPress={() => { setMacroCategory(null); setWineType(''); }}
           >
             <Image source={categories.CATEGORIES[macroCategory].icon} style={s.macroBadgeIcon} resizeMode="contain" />
-            <Text style={s.macroBadgeTxt}>{macroCategory}</Text>
+            <Text style={s.macroBadgeTxt}>{t(`categories.macro.${macroCategory}`)}</Text>
             <Ionicons name="chevron-down" size={14} color={colors.primary} />
           </TouchableOpacity>
 
           <View style={s.photoRow}>
-            <PhotoSlot label="Fronte" uri={frontPhoto} onPress={() => setPhotoTarget('front')} testID="front-photo" />
-            <PhotoSlot label="Retro" uri={backPhoto} onPress={() => setPhotoTarget('back')} testID="back-photo" />
-            <PhotoSlot label="Bicchiere" uri={glassPhoto} onPress={() => setPhotoTarget('glass')} testID="glass-photo" />
+            <PhotoSlot label={t('add.photoFront')} icon="camera-outline" uri={frontPhoto} onPress={() => setPhotoTarget('front')} testID="front-photo" />
+            <PhotoSlot label={t('add.photoBack')} icon="camera-outline" uri={backPhoto} onPress={() => setPhotoTarget('back')} testID="back-photo" />
+            <PhotoSlot label={t('add.photoGlass')} icon="wine-outline" uri={glassPhoto} onPress={() => setPhotoTarget('glass')} testID="glass-photo" />
           </View>
 
-          <Text style={s.label}>Nome</Text>
+          <Text style={s.label}>{t('add.nameLabel')}</Text>
           <TextInput
             testID="name-input"
-            placeholder="Es. Barolo 2018"
+            placeholder={t('add.namePlaceholder')}
             placeholderTextColor={colors.textMuted}
             style={s.input}
             value={name}
             onChangeText={setName}
           />
 
-          <Text style={s.label}>Sotto-categoria</Text>
+          <Text style={s.label}>{t('add.subcategoryLabel')}</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
-            {subcategories.map(t => (
+            {subcategories.map(sub => (
               <TouchableOpacity
-                key={t}
-                testID={`type-${t}`}
-                onPress={() => setWineType(t)}
-                style={[s.typeChip, wineType === t && s.typeChipActive]}
+                key={sub}
+                testID={`type-${sub}`}
+                onPress={() => setWineType(sub)}
+                style={[s.typeChip, wineType === sub && s.typeChipActive]}
               >
-                <Text style={[s.typeChipTxt, wineType === t && s.typeChipTxtActive]}>{t}</Text>
+                <Text style={[s.typeChipTxt, wineType === sub && s.typeChipTxtActive]}>{t(`categories.sub.${sub}`, { defaultValue: sub })}</Text>
               </TouchableOpacity>
             ))}
             <TouchableOpacity testID="add-custom-type" onPress={() => setCustomModal(true)} style={[s.typeChip, s.typeChipAdd]}>
               <Ionicons name="add" size={14} color={colors.primary} />
-              <Text style={[s.typeChipTxt, { color: colors.primary }]}>Personalizzato</Text>
+              <Text style={[s.typeChipTxt, { color: colors.primary }]}>{t('add.customChip')}</Text>
             </TouchableOpacity>
           </ScrollView>
 
-          <Text style={s.label}>Luogo</Text>
+          <Text style={s.label}>{t('add.locationLabel')}</Text>
           <View style={s.locationRow}>
             <TextInput
               testID="location-input"
-              placeholder="Dove lo hai bevuto?"
+              placeholder={t('add.locationPlaceholder')}
               placeholderTextColor={colors.textMuted}
               style={[s.input, { flex: 1, marginBottom: 0 }]}
               value={location}
@@ -323,7 +325,7 @@ export default function AddOrEditWine() {
           )}
           {locationSuggestions.length > 0 && (
             <View style={s.sugWrap} testID="location-suggestions">
-              <Text style={s.sugLabel}>Usato in precedenza qui vicino:</Text>
+              <Text style={s.sugLabel}>{t('add.nearbyUsedLabel')}</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {locationSuggestions.map((sug, i) => (
                   <TouchableOpacity
@@ -340,7 +342,7 @@ export default function AddOrEditWine() {
             </View>
           )}
 
-          <Text style={s.label}>Valutazione</Text>
+          <Text style={s.label}>{t('add.ratingLabel')}</Text>
           <View style={s.starsRow}>
             {[1,2,3,4,5].map(i => (
               <TouchableOpacity key={i} testID={`star-${i}`} onPress={() => setRating(i)}>
@@ -349,10 +351,10 @@ export default function AddOrEditWine() {
             ))}
           </View>
 
-          <Text style={s.label}>Note di Degustazione</Text>
+          <Text style={s.label}>{t('add.notesLabel')}</Text>
           <TextInput
             testID="notes-input"
-            placeholder="Profumi, sapori, abbinamenti..."
+            placeholder={t('add.notesPlaceholder')}
             placeholderTextColor={colors.textMuted}
             style={[s.input, { height: 120, textAlignVertical: 'top' }]}
             multiline
@@ -362,9 +364,11 @@ export default function AddOrEditWine() {
 
           <TouchableOpacity testID="save-btn" style={s.saveBtn} onPress={save} disabled={saving}>
             {saving ? <ActivityIndicator color="#fff" /> : (
-              <Text style={s.saveTxt}>{editingId ? 'Salva Modifiche' : 'Salva Degustazione'}</Text>
+              <Text style={s.saveTxt}>{editingId ? t('add.saveEdit') : t('add.saveNew')}</Text>
             )}
           </TouchableOpacity>
+
+          <Text style={s.disclaimer}>{t('add.disclaimer')}</Text>
         </ScrollView>
       </KeyboardAvoidingView>
 
@@ -372,17 +376,17 @@ export default function AddOrEditWine() {
       <Modal visible={photoTarget !== null} transparent animationType="slide" onRequestClose={() => setPhotoTarget(null)}>
         <TouchableOpacity style={s.modalOverlay} activeOpacity={1} onPress={() => setPhotoTarget(null)}>
           <View style={s.modalSheet}>
-            <Text style={s.modalTitle}>Scegli da Galleria o Scatta Foto</Text>
+            <Text style={s.modalTitle}>{t('add.photoModalTitle')}</Text>
             <TouchableOpacity testID="photo-camera" style={s.sheetBtn} onPress={() => pickPhoto('camera')}>
               <Ionicons name="camera" size={20} color={colors.text} />
-              <Text style={s.sheetBtnTxt}>Scatta Foto</Text>
+              <Text style={s.sheetBtnTxt}>{t('add.takePhoto')}</Text>
             </TouchableOpacity>
             <TouchableOpacity testID="photo-gallery" style={s.sheetBtn} onPress={() => pickPhoto('gallery')}>
               <Ionicons name="images" size={20} color={colors.text} />
-              <Text style={s.sheetBtnTxt}>Scegli da Galleria</Text>
+              <Text style={s.sheetBtnTxt}>{t('add.chooseFromGallery')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[s.sheetBtn, { justifyContent: 'center' }]} onPress={() => setPhotoTarget(null)}>
-              <Text style={[s.sheetBtnTxt, { color: colors.textMuted }]}>Annulla</Text>
+              <Text style={[s.sheetBtnTxt, { color: colors.textMuted }]}>{t('common.cancel')}</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -392,10 +396,10 @@ export default function AddOrEditWine() {
       <Modal visible={customModal} transparent animationType="fade" onRequestClose={() => setCustomModal(false)}>
         <View style={s.modalOverlay}>
           <View style={[s.modalSheet, { alignSelf: 'center', margin: spacing.lg, borderRadius: radius.xl }]}>
-            <Text style={s.modalTitle}>Nuova Sotto-categoria</Text>
+            <Text style={s.modalTitle}>{t('add.customSubcategoryModalTitle')}</Text>
             <TextInput
               testID="custom-type-input"
-              placeholder="Nome sotto-categoria"
+              placeholder={t('add.customSubcategoryPlaceholder')}
               placeholderTextColor={colors.textMuted}
               style={s.input}
               value={customName}
@@ -404,10 +408,10 @@ export default function AddOrEditWine() {
             />
             <View style={{ flexDirection: 'row', gap: 10 }}>
               <TouchableOpacity style={[s.sheetBtn, { flex: 1, justifyContent: 'center', backgroundColor: colors.surfaceAlt }]} onPress={() => setCustomModal(false)}>
-                <Text style={s.sheetBtnTxt}>Annulla</Text>
+                <Text style={s.sheetBtnTxt}>{t('common.cancel')}</Text>
               </TouchableOpacity>
               <TouchableOpacity testID="custom-type-save" style={[s.sheetBtn, { flex: 1, justifyContent: 'center', backgroundColor: colors.primary }]} onPress={addCustomSubcategory}>
-                <Text style={[s.sheetBtnTxt, { color: '#fff' }]}>Aggiungi</Text>
+                <Text style={[s.sheetBtnTxt, { color: '#fff' }]}>{t('add.addBtn')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -417,14 +421,14 @@ export default function AddOrEditWine() {
   );
 }
 
-function PhotoSlot({ label, uri, onPress, testID }: { label: string; uri: string | null; onPress: () => void; testID: string }) {
+function PhotoSlot({ label, icon, uri, onPress, testID }: { label: string; icon: keyof typeof Ionicons.glyphMap; uri: string | null; onPress: () => void; testID: string }) {
   return (
     <TouchableOpacity testID={testID} style={s.photo} onPress={onPress}>
       {uri ? (
         <Image source={{ uri }} style={s.photoImg} />
       ) : (
         <View style={s.photoPlaceholder}>
-          <Ionicons name={label === 'Bicchiere' ? 'wine-outline' : 'camera-outline'} size={26} color={colors.textMuted} />
+          <Ionicons name={icon} size={26} color={colors.textMuted} />
           <Text style={s.photoLabel}>{label}</Text>
         </View>
       )}
@@ -475,6 +479,7 @@ const s = StyleSheet.create({
   sugChipTxt: { fontFamily: fonts.bodyMedium, fontSize: 12, color: colors.primary, marginLeft: 4 },
   starsRow: { flexDirection: 'row', marginBottom: spacing.md },
   saveBtn: { backgroundColor: colors.primary, borderRadius: radius.pill, paddingVertical: 16, alignItems: 'center', marginTop: spacing.lg },
+  disclaimer: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, textAlign: 'center', lineHeight: 16, marginTop: spacing.lg },
   saveTxt: { color: '#fff', fontFamily: fonts.bodySemi, fontSize: 16 },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' },
   modalSheet: { backgroundColor: colors.surface, borderTopLeftRadius: radius.xl, borderTopRightRadius: radius.xl, padding: spacing.lg, paddingBottom: spacing.xl, gap: 10 },
