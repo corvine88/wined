@@ -245,5 +245,75 @@
       "Asiatiche": "Asiatiques",
       "Acque": "Eaux"
     }
+  },
+  "levels": {
+    "sectionTitle": "Mes Étapes",
+    "noLevelYet": "Aucun niveau débloqué pour l'instant",
+    "progressToNext": "{{current}}/{{next}} vers le niveau suivant",
+    "allUnlocked": "Tous les niveaux débloqués !",
+    "unlockedBadgeLabel": "Niveau débloqué !",
+    "rewardLabel": "Récompense",
+    "continueBtn": "Continuer",
+    "lockedHint": "Débloqué à {{threshold}} dégustations",
+    "lv1": {
+      "title": "Sommelier du Dimanche",
+      "description": "10 premières entrées terminées. Tu as débloqué le tutoriel et tu commences à voir tout un monde derrière un simple verre.",
+      "quote": "It's dangerous to go alone! Take this... verre.",
+      "reward": "Tutoriel terminé"
+    },
+    "lv2": {
+      "title": "Combo x2 !",
+      "description": "20 entrées. Tu enchaînes les dégustations et ton inventaire se remplit. Les amis te demandent conseil... et tu fais semblant de toujours savoir.",
+      "quote": "Achievement Unlocked!",
+      "reward": "Combo x2"
+    },
+    "lv3": {
+      "title": "Le Retour du Roi... du Comptoir",
+      "description": "30 entrées. Le barman te reconnaît, tu reconnais de plus en plus d'étiquettes. Ta barre d'XP continue de monter.",
+      "quote": "A, B, haut, bas... la combo secrète de l'accord parfait.",
+      "reward": "Achievement débloqué"
+    },
+    "lv4": {
+      "title": "XP Bonus : Nez Fin",
+      "description": "Assez d'expérience pour distinguer arômes, styles et parfums. Nouvelle compétence passive débloquée.",
+      "quote": "Compétence débloquée : Perception +15.",
+      "reward": "Compétence : Nez Fin"
+    },
+    "lv5": {
+      "title": "Checkpoint !",
+      "description": "À mi-chemin. Ton journal est devenu une petite encyclopédie du goût.",
+      "quote": "Partie sauvegardée.",
+      "reward": "Checkpoint atteint"
+    },
+    "lv6": {
+      "title": "Butin Épique",
+      "description": "Tu chasses les bouteilles les plus curieuses, les étiquettes rares et les cocktails dignes d'un DLC.",
+      "quote": "Tu as trouvé un objet Légendaire !",
+      "reward": "Butin Épique trouvé"
+    },
+    "lv7": {
+      "title": "Boss de Fin de Niveau",
+      "description": "Tu as affronté des dégustations ardues, des accords insolites et des menus interminables. Prêt pour le boss.",
+      "quote": "Un nouveau défi apparaît : la Planche de Charcuterie.",
+      "reward": "Boss vaincu"
+    },
+    "lv8": {
+      "title": "Speedrun du Goût",
+      "description": "Tu complètes la collection à un rythme impressionnant. Les badges tombent comme du butin rare.",
+      "quote": "Combo parfait !",
+      "reward": "Speedrun terminé"
+    },
+    "lv9": {
+      "title": "Mode New Game+",
+      "description": "Tu as tant vu, puis tu réalises que le monde est encore plus grand. Comme tout vrai RPG... le meilleur vient après.",
+      "quote": "Continue?",
+      "reward": "New Game+ disponible"
+    },
+    "lv10": {
+      "title": "Trophée de Platine",
+      "description": "Quête principale terminée. Une collection digne d'un vrai gamer du goût. Place aux quêtes secondaires : nouvelles étiquettes, nouveaux lieux, nouvelles découvertes.",
+      "quote": "100% Completion.",
+      "reward": "Trophée de Platine"
+    }
   }
 }

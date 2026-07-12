@@ -8,6 +8,9 @@ import { useProfile } from '../../src/profile';
 import * as storage from '../../src/storage';
 import * as googleDrive from '../../src/googleDrive';
 import { setAppLanguage, SUPPORTED_LANGUAGES, type SupportedLanguage } from '../../src/i18n';
+import * as levels from '../../src/levels';
+import LevelBadge from '../../src/components/LevelBadge';
+import AchievementModal from '../../src/components/AchievementModal';
 import { colors, fonts, spacing, radius, shadows } from '../../src/theme';
 
 const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
@@ -73,6 +76,9 @@ export default function Profile() {
             <Text style={s.badgeTxt}>{t('profile.deviceOnlyBadge')}</Text>
           </View>
         </View>
+
+        <Text style={s.sectionTitle}>{t('levels.sectionTitle')}</Text>
+        <LevelsSection />
 
         <Text style={s.sectionTitle}>{t('profile.languageSectionTitle')}</Text>
         <LanguageCard />
@@ -243,6 +249,73 @@ function GoogleDriveCard() {
   );
 }
 
+function LevelsSection() {
+  const { t } = useTranslation();
+  const [count, setCount] = useState(0);
+  const [unlocked, setUnlocked] = useState<number[]>([]);
+  const [viewLevel, setViewLevel] = useState<number | null>(null);
+
+  const refresh = useCallback(async () => {
+    const [wines, unlockedLevels] = await Promise.all([storage.getWines(), levels.getUnlockedLevels()]);
+    setCount(wines.length);
+    setUnlocked(unlockedLevels);
+  }, []);
+
+  useFocusEffect(useCallback(() => { refresh(); }, [refresh]));
+
+  const { level, current, next } = levels.getProgressToNext(count);
+  const progressPct = next ? Math.min(100, Math.round(((current - (next - 10)) / 10) * 100)) : 100;
+
+  const onPressBadge = (badgeLevel: number) => {
+    if (unlocked.includes(badgeLevel)) {
+      setViewLevel(badgeLevel);
+    } else {
+      Alert.alert(t('levels.lockedHint', { threshold: levels.getThresholdForLevel(badgeLevel) }));
+    }
+  };
+
+  return (
+    <View style={s.cloudCard}>
+      <View style={s.levelHeaderRow}>
+        {level > 0 ? (
+          <LevelBadge level={level} size={56} />
+        ) : (
+          <View style={s.levelHeaderIconWrap}>
+            <Ionicons name="ribbon-outline" size={26} color={colors.textMuted} />
+          </View>
+        )}
+        <View style={{ flex: 1, marginLeft: spacing.md }}>
+          <Text style={s.cloudTitle}>
+            {level > 0 ? t(`levels.lv${level}.title`) : t('levels.noLevelYet')}
+          </Text>
+          {next ? (
+            <Text style={s.statusTxt}>{t('levels.progressToNext', { current, next })}</Text>
+          ) : (
+            <Text style={s.statusTxt}>{t('levels.allUnlocked')}</Text>
+          )}
+        </View>
+      </View>
+
+      <View style={s.progressTrack}>
+        <View style={[s.progressFill, { width: `${progressPct}%` }]} />
+      </View>
+
+      <View style={s.badgeGrid}>
+        {levels.LEVEL_THRESHOLDS.map((_, idx) => {
+          const badgeLevel = idx + 1;
+          return (
+            <TouchableOpacity key={badgeLevel} testID={`level-badge-${badgeLevel}`} onPress={() => onPressBadge(badgeLevel)}>
+              <LevelBadge level={badgeLevel} size={52} locked={!unlocked.includes(badgeLevel)} />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      <AchievementModal level={viewLevel} onClose={() => setViewLevel(null)} />
+    </View>
+  );
+}
+
 function LanguageCard() {
   const { t } = useTranslation();
   const [pref, setPref] = useState<string | null>(null);
@@ -355,4 +428,9 @@ const s = StyleSheet.create({
   modalTitle: { fontFamily: fonts.headingBold, fontSize: 20, color: colors.text, marginBottom: spacing.md },
   langRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: colors.border },
   langRowTxt: { fontFamily: fonts.body, fontSize: 16, color: colors.text },
+  levelHeaderRow: { flexDirection: 'row', alignItems: 'center' },
+  levelHeaderIconWrap: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center' },
+  progressTrack: { height: 8, borderRadius: 4, backgroundColor: colors.surfaceAlt, marginTop: spacing.md, overflow: 'hidden' },
+  progressFill: { height: '100%', borderRadius: 4, backgroundColor: colors.primary },
+  badgeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.lg, justifyContent: 'center' },
 });

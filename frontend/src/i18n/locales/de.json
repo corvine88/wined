@@ -245,5 +245,75 @@
       "Asiatiche": "Asiatisch",
       "Acque": "Wasser"
     }
+  },
+  "levels": {
+    "sectionTitle": "Meine Meilensteine",
+    "noLevelYet": "Noch keine Stufe freigeschaltet",
+    "progressToNext": "{{current}}/{{next}} bis zur nächsten Stufe",
+    "allUnlocked": "Alle Stufen freigeschaltet!",
+    "unlockedBadgeLabel": "Stufe freigeschaltet!",
+    "rewardLabel": "Belohnung",
+    "continueBtn": "Weiter",
+    "lockedHint": "Wird bei {{threshold}} Verkostungen freigeschaltet",
+    "lv1": {
+      "title": "Sonntags-Sommelier",
+      "description": "Erste 10 Einträge abgeschlossen. Du hast das Tutorial freigeschaltet und merkst, dass sich hinter einem Glas eine ganze Welt verbirgt.",
+      "quote": "It's dangerous to go alone! Take this... Glas.",
+      "reward": "Tutorial abgeschlossen"
+    },
+    "lv2": {
+      "title": "Combo x2!",
+      "description": "20 Einträge. Du verkettest Verkostungen und dein Inventar füllt sich. Freunde fragen dich um Rat... und du tust so, als wüsstest du immer die Antwort.",
+      "quote": "Achievement Unlocked!",
+      "reward": "Combo x2"
+    },
+    "lv3": {
+      "title": "Rückkehr des Königs... der Theke",
+      "description": "30 Einträge. Der Barkeeper erkennt dich, du erkennst immer mehr Etiketten. Deine XP-Leiste steigt weiter.",
+      "quote": "A, B, oben, unten... die geheime Combo fürs perfekte Pairing.",
+      "reward": "Achievement freigeschaltet"
+    },
+    "lv4": {
+      "title": "Bonus-XP: Feine Nase",
+      "description": "Genug Erfahrung, um Aromen, Stile und Düfte zu unterscheiden. Neue passive Fähigkeit freigeschaltet.",
+      "quote": "Fähigkeit freigeschaltet: Wahrnehmung +15.",
+      "reward": "Skill: Feine Nase"
+    },
+    "lv5": {
+      "title": "Checkpoint!",
+      "description": "Die Hälfte geschafft. Dein Tagebuch ist eine kleine Enzyklopädie des Geschmacks.",
+      "quote": "Spiel gespeichert.",
+      "reward": "Checkpoint erreicht"
+    },
+    "lv6": {
+      "title": "Epischer Loot",
+      "description": "Jetzt jagst du die kuriosesten Flaschen, seltene Etiketten und Cocktails wie aus einem DLC.",
+      "quote": "Du hast einen legendären Gegenstand gefunden!",
+      "reward": "Epischer Loot gefunden"
+    },
+    "lv7": {
+      "title": "Endgegner",
+      "description": "Du hast harte Verkostungen, ungewöhnliche Pairings und endlose Menüs gemeistert. Bereit für den Boss.",
+      "quote": "Ein neuer Herausforderer erscheint: die Wurstplatte.",
+      "reward": "Boss besiegt"
+    },
+    "lv8": {
+      "title": "Geschmacks-Speedrun",
+      "description": "Du vervollständigst die Sammlung in beeindruckendem Tempo. Abzeichen fallen wie seltener Loot.",
+      "quote": "Perfekte Combo!",
+      "reward": "Speedrun abgeschlossen"
+    },
+    "lv9": {
+      "title": "New-Game+-Modus",
+      "description": "Du hast viel gesehen und merkst plötzlich: Die Welt ist noch größer als gedacht. Wie in jedem echten RPG kommt das Beste danach.",
+      "quote": "Continue?",
+      "reward": "New Game+ verfügbar"
+    },
+    "lv10": {
+      "title": "Platin-Trophäe",
+      "description": "Hauptquest abgeschlossen. Eine Sammlung würdig eines echten Geschmacks-Gamers. Jetzt die Nebenquests: neue Etiketten, neue Locations, neue Entdeckungen.",
+      "quote": "100% Completion.",
+      "reward": "Platin-Trophäe"
+    }
   }
 }

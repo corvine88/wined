@@ -244,5 +244,75 @@
       "Asiatiche": "アジアン",
       "Acque": "水"
     }
+  },
+  "levels": {
+    "sectionTitle": "マイマイルストーン",
+    "noLevelYet": "まだレベルは解放されていません",
+    "progressToNext": "次のレベルまで {{current}}/{{next}}",
+    "allUnlocked": "すべてのレベルを解放しました!",
+    "unlockedBadgeLabel": "レベル解放!",
+    "rewardLabel": "報酬",
+    "continueBtn": "続ける",
+    "lockedHint": "{{threshold}} 件のテイスティングで解放",
+    "lv1": {
+      "title": "日曜ソムリエ",
+      "description": "最初の10件を記録。チュートリアルを解放し、一杯の向こうに広がる世界が見えてきた。",
+      "quote": "It's dangerous to go alone! Take this... グラス。",
+      "reward": "チュートリアル完了"
+    },
+    "lv2": {
+      "title": "コンボ x2！",
+      "description": "20件記録。テイスティングを連鎖させ、インベントリが満ちてきた。友達が助言を求め始め…君は知ったかぶりをする。",
+      "quote": "Achievement Unlocked!",
+      "reward": "コンボ x2"
+    },
+    "lv3": {
+      "title": "帰ってきたカウンターの王",
+      "description": "30件記録。バーテンダーは君を覚え、君はラベルをどんどん見分ける。経験値バーは上がり続ける。",
+      "quote": "A、B、上、下…完璧なペアリングの隠しコンボ。",
+      "reward": "実績解除"
+    },
+    "lv4": {
+      "title": "ボーナスXP：利き鼻",
+      "description": "香り・スタイル・匂いを見分ける経験を得た。新しいパッシブスキルを解放。",
+      "quote": "スキル解放：知覚 +15。",
+      "reward": "スキル：利き鼻"
+    },
+    "lv5": {
+      "title": "チェックポイント！",
+      "description": "折り返し地点。君の記録はもう味の小さな百科事典だ。",
+      "quote": "セーブしました。",
+      "reward": "チェックポイント到達"
+    },
+    "lv6": {
+      "title": "エピックな戦利品",
+      "description": "珍しいボトル、レアなラベル、DLC級のカクテルを探し始めた。",
+      "quote": "レジェンダリーアイテムを発見！",
+      "reward": "エピック戦利品を発見"
+    },
+    "lv7": {
+      "title": "ステージボス",
+      "description": "手強いテイスティング、奇抜なペアリング、長大なメニューを乗り越えた。ボス戦の準備は万端。",
+      "quote": "新たな挑戦者が現れた：サラミの盛り合わせ。",
+      "reward": "ボス撃破"
+    },
+    "lv8": {
+      "title": "味覚スピードラン",
+      "description": "驚異的なペースでコレクションを完成させている。バッジがレアな戦利品のように落ちてくる。",
+      "quote": "パーフェクトコンボ！",
+      "reward": "スピードラン達成"
+    },
+    "lv9": {
+      "title": "New Game+モード",
+      "description": "多くを見てきた。だが世界はもっと広いと気づく。真のRPGのように…本番はここから。",
+      "quote": "Continue?",
+      "reward": "New Game+解放"
+    },
+    "lv10": {
+      "title": "プラチナトロフィー",
+      "description": "メインクエスト完了。真の味覚ゲーマーにふさわしいコレクション。次はサイドクエストへ：新たなラベル、店、発見。",
+      "quote": "100% Completion.",
+      "reward": "プラチナトロフィー"
+    }
   }
 }

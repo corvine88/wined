@@ -244,5 +244,75 @@
       "Asiatiche": "아시안",
       "Acque": "물"
     }
+  },
+  "levels": {
+    "sectionTitle": "나의 마일스톤",
+    "noLevelYet": "아직 해제된 레벨이 없습니다",
+    "progressToNext": "다음 레벨까지 {{current}}/{{next}}",
+    "allUnlocked": "모든 레벨 해제!",
+    "unlockedBadgeLabel": "레벨 해제!",
+    "rewardLabel": "보상",
+    "continueBtn": "계속",
+    "lockedHint": "{{threshold}}개 테이스팅에서 해제",
+    "lv1": {
+      "title": "일요일 소믈리에",
+      "description": "첫 10개 기록 완료. 튜토리얼을 해제하고 한 잔 너머의 세계를 보기 시작했다.",
+      "quote": "It's dangerous to go alone! Take this... 잔.",
+      "reward": "튜토리얼 완료"
+    },
+    "lv2": {
+      "title": "콤보 x2!",
+      "description": "20개 기록. 시음을 연속으로 이어가며 인벤토리가 채워진다. 친구들이 조언을 구하고… 넌 아는 척을 한다.",
+      "quote": "Achievement Unlocked!",
+      "reward": "콤보 x2"
+    },
+    "lv3": {
+      "title": "돌아온 카운터의 왕",
+      "description": "30개 기록. 바텐더가 널 알아보고, 넌 점점 더 많은 라벨을 알아본다. 경험치 바가 계속 오른다.",
+      "quote": "A, B, 위, 아래… 완벽한 페어링의 비밀 콤보.",
+      "reward": "업적 달성"
+    },
+    "lv4": {
+      "title": "보너스 XP: 예민한 코",
+      "description": "향, 스타일, 냄새를 구분할 경험을 얻었다. 새로운 패시브 스킬 해제.",
+      "quote": "스킬 해제: 지각 +15.",
+      "reward": "스킬: 예민한 코"
+    },
+    "lv5": {
+      "title": "체크포인트!",
+      "description": "절반 완료. 네 일지는 이제 맛의 작은 백과사전이다.",
+      "quote": "게임 저장됨.",
+      "reward": "체크포인트 도달"
+    },
+    "lv6": {
+      "title": "에픽 전리품",
+      "description": "이제 가장 신기한 병, 희귀 라벨, DLC급 칵테일을 사냥한다.",
+      "quote": "전설급 아이템을 발견했다!",
+      "reward": "에픽 전리품 획득"
+    },
+    "lv7": {
+      "title": "스테이지 보스",
+      "description": "힘든 시음, 독특한 페어링, 끝없는 메뉴를 헤쳐왔다. 보스전 준비 완료.",
+      "quote": "새로운 도전자 등장: 샤퀴테리 보드.",
+      "reward": "보스 격파"
+    },
+    "lv8": {
+      "title": "미각 스피드런",
+      "description": "놀라운 속도로 컬렉션을 완성 중. 배지가 희귀 전리품처럼 쏟아진다.",
+      "quote": "퍼펙트 콤보!",
+      "reward": "스피드런 완료"
+    },
+    "lv9": {
+      "title": "뉴 게임+ 모드",
+      "description": "많은 걸 봤지만, 세상이 더 넓다는 걸 깨닫는다. 진정한 RPG처럼… 진짜는 지금부터.",
+      "quote": "Continue?",
+      "reward": "뉴 게임+ 사용 가능"
+    },
+    "lv10": {
+      "title": "플래티넘 트로피",
+      "description": "메인 퀘스트 완료. 진정한 미각 게이머다운 컬렉션. 이제 사이드 퀘스트로: 새로운 라벨, 장소, 발견.",
+      "quote": "100% Completion.",
+      "reward": "플래티넘 트로피"
+    }
   }
 }

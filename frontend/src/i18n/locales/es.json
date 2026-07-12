@@ -245,5 +245,75 @@
       "Asiatiche": "Asiáticas",
       "Acque": "Aguas"
     }
+  },
+  "levels": {
+    "sectionTitle": "Mis Logros",
+    "noLevelYet": "Ningún nivel desbloqueado todavía",
+    "progressToNext": "{{current}}/{{next}} hacia el siguiente nivel",
+    "allUnlocked": "¡Todos los niveles desbloqueados!",
+    "unlockedBadgeLabel": "¡Nivel desbloqueado!",
+    "rewardLabel": "Recompensa",
+    "continueBtn": "Continuar",
+    "lockedHint": "Se desbloquea a las {{threshold}} catas",
+    "lv1": {
+      "title": "Sumiller de Domingo",
+      "description": "Primeras 10 entradas completadas. Has desbloqueado el tutorial y empiezas a ver todo un mundo tras una simple copa.",
+      "quote": "It's dangerous to go alone! Take this... copa.",
+      "reward": "Tutorial completado"
+    },
+    "lv2": {
+      "title": "¡Combo x2!",
+      "description": "20 entradas. Empiezas a encadenar catas y tu inventario se llena. Los amigos te piden consejo... y finges saber siempre la respuesta.",
+      "quote": "Achievement Unlocked!",
+      "reward": "Combo x2"
+    },
+    "lv3": {
+      "title": "El Retorno del Rey... de la Barra",
+      "description": "30 entradas. El camarero te reconoce, tú reconoces cada vez más etiquetas. Tu barra de XP sigue subiendo.",
+      "quote": "A, B, arriba, abajo... el combo secreto del maridaje perfecto.",
+      "reward": "Logro desbloqueado"
+    },
+    "lv4": {
+      "title": "XP Extra: Nariz Fina",
+      "description": "Suficiente experiencia para distinguir aromas, estilos y perfumes. Has desbloqueado una habilidad pasiva.",
+      "quote": "Habilidad desbloqueada: Percepción +15.",
+      "reward": "Habilidad: Nariz Fina"
+    },
+    "lv5": {
+      "title": "¡Checkpoint!",
+      "description": "A mitad de camino. Tu diario ya es una pequeña enciclopedia del gusto.",
+      "quote": "Partida guardada.",
+      "reward": "Checkpoint alcanzado"
+    },
+    "lv6": {
+      "title": "Botín Épico",
+      "description": "Ahora cazas las botellas más curiosas, etiquetas raras y cócteles que parecen de un DLC.",
+      "quote": "¡Has encontrado un objeto Legendario!",
+      "reward": "Botín Épico encontrado"
+    },
+    "lv7": {
+      "title": "Jefe de Fin de Nivel",
+      "description": "Has enfrentado catas difíciles, maridajes insólitos y menús interminables. Listo para el jefe.",
+      "quote": "Aparece un nuevo rival: la Tabla de Embutidos.",
+      "reward": "Jefe derrotado"
+    },
+    "lv8": {
+      "title": "Speedrun del Gusto",
+      "description": "Completas la colección a un ritmo impresionante. Las insignias caen como botín raro.",
+      "quote": "¡Combo perfecto!",
+      "reward": "Speedrun completada"
+    },
+    "lv9": {
+      "title": "Modo New Game+",
+      "description": "Has visto muchísimo, y de repente ves que el mundo es aún más grande. Como todo buen RPG... lo mejor viene después.",
+      "quote": "Continue?",
+      "reward": "New Game+ disponible"
+    },
+    "lv10": {
+      "title": "Trofeo de Platino",
+      "description": "Misión principal completada. Una colección digna de un verdadero gamer del gusto. Ahora las misiones secundarias: nuevas etiquetas, locales y descubrimientos.",
+      "quote": "100% Completion.",
+      "reward": "Trofeo de Platino"
+    }
   }
 }

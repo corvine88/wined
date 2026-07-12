@@ -245,5 +245,75 @@
       "Asiatiche": "Asiatiche",
       "Acque": "Acque"
     }
+  },
+  "levels": {
+    "sectionTitle": "I Miei Traguardi",
+    "noLevelYet": "Nessun livello sbloccato ancora",
+    "progressToNext": "{{current}}/{{next}} verso il prossimo livello",
+    "allUnlocked": "Tutti i livelli sbloccati!",
+    "unlockedBadgeLabel": "Livello sbloccato!",
+    "rewardLabel": "Ricompensa",
+    "continueBtn": "Continua",
+    "lockedHint": "Sblocca al traguardo di {{threshold}} degustazioni",
+    "lv1": {
+      "title": "Sommelier della Domenica",
+      "description": "Prime 10 registrazioni completate. Hai sbloccato il tutorial e inizi a capire che dietro un semplice bicchiere si nasconde un mondo intero.",
+      "quote": "It's dangerous to go alone! Take this... bicchiere.",
+      "reward": "Tutorial completato"
+    },
+    "lv2": {
+      "title": "Combo x2!",
+      "description": "20 registrazioni. Hai iniziato a fare combo di degustazioni e il tuo inventario si riempie. Gli amici iniziano a chiederti consigli... e tu fai finta di sapere sempre la risposta.",
+      "quote": "Achievement Unlocked!",
+      "reward": "Combo x2"
+    },
+    "lv3": {
+      "title": "Il Ritorno del Re... del Bancone",
+      "description": "30 registrazioni. Il barista ti riconosce, tu riconosci sempre più etichette. La tua barra dell'esperienza continua a salire.",
+      "quote": "A, B, Su, Giù... la combo segreta dell'abbinamento perfetto.",
+      "reward": "Achievement sbloccato"
+    },
+    "lv4": {
+      "title": "XP Extra: Naso Fino",
+      "description": "Hai guadagnato abbastanza esperienza da distinguere aromi, stili e profumi. Hai sbloccato una nuova abilità passiva.",
+      "quote": "Skill sbloccata: Percezione +15.",
+      "reward": "Skill: Naso Fino"
+    },
+    "lv5": {
+      "title": "Checkpoint!",
+      "description": "Metà del percorso completata. Il tuo diario ormai è una piccola enciclopedia del gusto.",
+      "quote": "Partita salvata.",
+      "reward": "Checkpoint raggiunto"
+    },
+    "lv6": {
+      "title": "Loot Epico",
+      "description": "Ora vai a caccia delle bottiglie più curiose, delle etichette rare e dei cocktail che sembrano usciti da un DLC.",
+      "quote": "Hai trovato un oggetto Leggendario!",
+      "reward": "Loot Epico trovato"
+    },
+    "lv7": {
+      "title": "Boss di Fine Livello",
+      "description": "Hai affrontato degustazioni impegnative, abbinamenti insoliti e menu chilometrici. Sei pronto per il boss.",
+      "quote": "Un nuovo sfidante appare: il Tagliere di Salumi.",
+      "reward": "Boss sconfitto"
+    },
+    "lv8": {
+      "title": "Speedrun del Gusto",
+      "description": "Stai completando la collezione a un ritmo impressionante. I badge continuano a cadere come loot raro.",
+      "quote": "Combo perfetta!",
+      "reward": "Speedrun completata"
+    },
+    "lv9": {
+      "title": "Modalità New Game+",
+      "description": "Hai visto tantissimo, ma improvvisamente ti accorgi che il mondo è ancora più grande di quanto pensassi. Come ogni vero RPG... il bello arriva dopo.",
+      "quote": "Continue?",
+      "reward": "New Game+ disponibile"
+    },
+    "lv10": {
+      "title": "Trofeo di Platino",
+      "description": "Missione principale completata. Hai creato una collezione degna di un vero gamer del gusto. Ora puoi dedicarti alle missioni secondarie: nuove etichette, nuovi locali e nuove scoperte.",
+      "quote": "100% Completion.",
+      "reward": "Trofeo di Platino"
+    }
   }
 }

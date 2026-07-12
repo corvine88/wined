@@ -11,6 +11,8 @@ import * as storage from '../../src/storage';
 import type { Wine } from '../../src/storage';
 import * as categories from '../../src/categories';
 import type { MacroCategory } from '../../src/categories';
+import * as levels from '../../src/levels';
+import AchievementModal from '../../src/components/AchievementModal';
 import { colors, fonts, radius, spacing, shadows } from '../../src/theme';
 
 export default function Home() {
@@ -25,11 +27,14 @@ export default function Home() {
   const [subOptions, setSubOptions] = useState<string[]>([]);
   const [locFilter, setLocFilter] = useState<string | null>(null);
   const [viewBy, setViewBy] = useState<'type' | 'location'>('type');
+  const [unlockedLevel, setUnlockedLevel] = useState<number | null>(null);
 
   const fetchWines = useCallback(async () => {
     try {
       const data = await storage.getWines();
       setWines(data);
+      const newlyUnlocked = await levels.checkForNewUnlocks(data.length);
+      if (newlyUnlocked.length) setUnlockedLevel(Math.max(...newlyUnlocked));
     } catch {}
     finally { setLoading(false); setRefreshing(false); }
   }, []);
@@ -186,6 +191,8 @@ export default function Home() {
           renderItem={({ item }) => <WineCard wine={item} onPress={() => router.push(`/wine/${item.wine_id}`)} />}
         />
       )}
+
+      <AchievementModal level={unlockedLevel} onClose={() => setUnlockedLevel(null)} />
     </SafeAreaView>
   );
 }

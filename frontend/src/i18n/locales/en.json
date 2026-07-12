@@ -245,5 +245,75 @@
       "Asiatiche": "Asian",
       "Acque": "Waters"
     }
+  },
+  "levels": {
+    "sectionTitle": "My Milestones",
+    "noLevelYet": "No level unlocked yet",
+    "progressToNext": "{{current}}/{{next}} to next level",
+    "allUnlocked": "All levels unlocked!",
+    "unlockedBadgeLabel": "Level unlocked!",
+    "rewardLabel": "Reward",
+    "continueBtn": "Continue",
+    "lockedHint": "Unlocks at {{threshold}} tastings",
+    "lv1": {
+      "title": "Sunday Sommelier",
+      "description": "First 10 entries completed. You've unlocked the tutorial and you're starting to see that a whole world hides behind a single glass.",
+      "quote": "It's dangerous to go alone! Take this... glass.",
+      "reward": "Tutorial completed"
+    },
+    "lv2": {
+      "title": "Combo x2!",
+      "description": "20 entries. You've started chaining tastings and your inventory is filling up. Friends start asking for advice... and you pretend to always know the answer.",
+      "quote": "Achievement Unlocked!",
+      "reward": "Combo x2"
+    },
+    "lv3": {
+      "title": "Return of the King... of the Counter",
+      "description": "30 entries. The bartender recognizes you, and you recognize more and more labels. Your XP bar keeps rising.",
+      "quote": "A, B, Up, Down... the secret combo for the perfect pairing.",
+      "reward": "Achievement unlocked"
+    },
+    "lv4": {
+      "title": "Bonus XP: Fine Nose",
+      "description": "You've earned enough experience to tell apart aromas, styles and scents. You've unlocked a new passive skill.",
+      "quote": "Skill unlocked: Perception +15.",
+      "reward": "Skill: Fine Nose"
+    },
+    "lv5": {
+      "title": "Checkpoint!",
+      "description": "Halfway there. Your journal is now a little encyclopedia of taste.",
+      "quote": "Game saved.",
+      "reward": "Checkpoint reached"
+    },
+    "lv6": {
+      "title": "Epic Loot",
+      "description": "Now you hunt the most curious bottles, the rare labels and cocktails that look straight out of a DLC.",
+      "quote": "You found a Legendary item!",
+      "reward": "Epic Loot found"
+    },
+    "lv7": {
+      "title": "End-of-Level Boss",
+      "description": "You've faced tough tastings, unusual pairings and endless menus. You're ready for the boss.",
+      "quote": "A new challenger appears: the Charcuterie Board.",
+      "reward": "Boss defeated"
+    },
+    "lv8": {
+      "title": "Taste Speedrun",
+      "description": "You're completing the collection at an impressive pace. Badges keep dropping like rare loot.",
+      "quote": "Perfect combo!",
+      "reward": "Speedrun completed"
+    },
+    "lv9": {
+      "title": "New Game+ Mode",
+      "description": "You've seen so much, then suddenly realize the world is even bigger than you thought. Like every true RPG... the best part comes after.",
+      "quote": "Continue?",
+      "reward": "New Game+ available"
+    },
+    "lv10": {
+      "title": "Platinum Trophy",
+      "description": "Main quest completed. You've built a collection worthy of a true taste gamer. Now for the side quests: new labels, new venues, new discoveries.",
+      "quote": "100% Completion.",
+      "reward": "Platinum Trophy"
+    }
   }
 }
