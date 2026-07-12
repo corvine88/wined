@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, ScrollView, ActivityIndicator, Linking } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, ScrollView, ActivityIndicator, Linking, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,7 +7,18 @@ import { useTranslation } from 'react-i18next';
 import { useProfile } from '../../src/profile';
 import * as storage from '../../src/storage';
 import * as googleDrive from '../../src/googleDrive';
+import { setAppLanguage, SUPPORTED_LANGUAGES, type SupportedLanguage } from '../../src/i18n';
 import { colors, fonts, spacing, radius, shadows } from '../../src/theme';
+
+const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
+  it: 'Italiano',
+  en: 'English',
+  de: 'Deutsch',
+  fr: 'Français',
+  es: 'Español',
+  ja: '日本語',
+  ko: '한국어',
+};
 
 function formatDateTime(iso: string): string {
   const d = new Date(iso);
@@ -62,6 +73,9 @@ export default function Profile() {
             <Text style={s.badgeTxt}>{t('profile.deviceOnlyBadge')}</Text>
           </View>
         </View>
+
+        <Text style={s.sectionTitle}>{t('profile.languageSectionTitle')}</Text>
+        <LanguageCard />
 
         <Text style={s.sectionTitle}>{t('profile.backupSectionTitle')}</Text>
         <GoogleDriveCard />
@@ -229,6 +243,63 @@ function GoogleDriveCard() {
   );
 }
 
+function LanguageCard() {
+  const { t } = useTranslation();
+  const [pref, setPref] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const refresh = useCallback(async () => {
+    setPref(await storage.getLanguagePreference());
+  }, []);
+
+  useFocusEffect(useCallback(() => { refresh(); }, [refresh]));
+
+  const select = async (lang: SupportedLanguage | null) => {
+    await setAppLanguage(lang);
+    setPref(lang);
+    setModalVisible(false);
+  };
+
+  const currentLabel = pref && LANGUAGE_LABELS[pref as SupportedLanguage]
+    ? LANGUAGE_LABELS[pref as SupportedLanguage]
+    : t('profile.languageAuto');
+
+  return (
+    <>
+      <TouchableOpacity testID="language-btn" style={s.cloudCard} onPress={() => setModalVisible(true)}>
+        <View style={s.cloudHeader}>
+          <View style={s.cloudIconWrap}>
+            <Ionicons name="language-outline" size={20} color={colors.primary} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={s.cloudTitle}>{t('profile.languageSectionTitle')}</Text>
+            <Text style={s.statusTxt}>{currentLabel}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+        </View>
+      </TouchableOpacity>
+
+      <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={() => setModalVisible(false)}>
+        <TouchableOpacity style={s.modalOverlay} activeOpacity={1} onPress={() => setModalVisible(false)}>
+          <View style={s.modalSheet}>
+            <Text style={s.modalTitle}>{t('profile.languageModalTitle')}</Text>
+            <TouchableOpacity testID="lang-auto" style={s.langRow} onPress={() => select(null)}>
+              <Text style={s.langRowTxt}>{t('profile.languageAuto')}</Text>
+              {!pref && <Ionicons name="checkmark" size={18} color={colors.primary} />}
+            </TouchableOpacity>
+            {SUPPORTED_LANGUAGES.map((lang) => (
+              <TouchableOpacity key={lang} testID={`lang-${lang}`} style={s.langRow} onPress={() => select(lang)}>
+                <Text style={s.langRowTxt}>{LANGUAGE_LABELS[lang]}</Text>
+                {pref === lang && <Ionicons name="checkmark" size={18} color={colors.primary} />}
+              </TouchableOpacity>
+            ))}
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    </>
+  );
+}
+
 function ComingSoonCard({ label, icon }: { label: string; icon: any }) {
   const { t } = useTranslation();
   return (
@@ -279,4 +350,9 @@ const s = StyleSheet.create({
   legalLinksSep: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted },
   privacyLinkTxt: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.primary, textDecorationLine: 'underline' },
   copyright: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, textAlign: 'center', marginTop: spacing.sm },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' },
+  modalSheet: { backgroundColor: colors.surface, borderTopLeftRadius: radius.xl, borderTopRightRadius: radius.xl, padding: spacing.lg, paddingBottom: spacing.xl },
+  modalTitle: { fontFamily: fonts.headingBold, fontSize: 20, color: colors.text, marginBottom: spacing.md },
+  langRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: colors.border },
+  langRowTxt: { fontFamily: fonts.body, fontSize: 16, color: colors.text },
 });

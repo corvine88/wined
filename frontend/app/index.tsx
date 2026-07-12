@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as storage from '../src/storage';
 import * as googleDrive from '../src/googleDrive';
+import { applyStoredLanguage } from '../src/i18n';
 import { colors, fonts } from '../src/theme';
 
 const LOGO = require('../assets/images/splash-icon.png');
@@ -26,6 +27,7 @@ export default function Index() {
         storage.getProfile(),
         storage.getWines(), // preload in background so home.tsx finds them already cached
         storage.getTutorialSeen(),
+        applyStoredLanguage(),
         delay(MIN_SPLASH_MS),
       ]);
       if (cancelled) return;
