@@ -44,7 +44,7 @@ export async function disconnect(): Promise<void> {
 }
 
 export async function connect(): Promise<void> {
-  const redirectUri = AuthSession.makeRedirectUri({ scheme: 'wined', path: 'oauth-callback' });
+  const redirectUri = AuthSession.makeRedirectUri({ native: 'wined://oauth-callback' });
 
   const request = new AuthSession.AuthRequest({
     clientId: CLIENT_ID,
