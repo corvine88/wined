@@ -54,6 +54,18 @@
             "BROWSABLE",
             "DEFAULT"
           ]
+        },
+        {
+          "action": "VIEW",
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ],
+          "data": [
+            {
+              "scheme": "com.googleusercontent.apps.429263071515-5jt758k5hafolpf23efml2q2fgobt3ds"
+            }
+          ]
         }
       ]
     },

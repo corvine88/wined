@@ -44,7 +44,7 @@ export async function disconnect(): Promise<void> {
 }
 
 export async function connect(): Promise<void> {
-  const redirectUri = AuthSession.makeRedirectUri({ native: 'wined://oauth-callback' });
+  const redirectUri = AuthSession.makeRedirectUri({ native: 'com.googleusercontent.apps.429263071515-5jt758k5hafolpf23efml2q2fgobt3ds:/oauth2redirect' });
 
   const request = new AuthSession.AuthRequest({
     clientId: CLIENT_ID,
