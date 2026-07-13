@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image,
   ActivityIndicator, Alert, Platform, KeyboardAvoidingView, Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
@@ -55,6 +55,7 @@ export default function AddOrEditWine() {
   // If editing, load the wine
   useEffect(() => {
     if (!editingId) return;
+    setLoadingWine(true);
     (async () => {
       try {
         const w = await storage.getWine(editingId);
@@ -80,14 +81,24 @@ export default function AddOrEditWine() {
     })();
   }, [editingId, router]);
 
-  // Reset form when the screen is re-opened in "add" mode (no id)
-  useEffect(() => {
-    if (editingId) return;
+  const resetForm = useCallback(() => {
     setMacroCategory(null);
     setName(''); setWineType(''); setRating(0); setLocation('');
     setCoords(null); setNotes(''); setFrontPhoto(null); setBackPhoto(null); setGlassPhoto(null);
     setLocationSuggestions([]);
-  }, [editingId]);
+    setPhotoTarget(null);
+    setCustomModal(false);
+    setCustomName('');
+  }, []);
+
+  // Reset the form every time the screen gains focus in "add" mode (no id), so no leftover
+  // data from a previous tasting survives — needed because expo-router keeps tab screens
+  // mounted, so switching tabs back to "Aggiungi" does not remount this component.
+  useFocusEffect(
+    useCallback(() => {
+      if (!editingId) resetForm();
+    }, [editingId, resetForm])
+  );
 
   const pickPhoto = async (src: 'camera' | 'gallery') => {
     const target = photoTarget;
@@ -121,11 +132,11 @@ export default function AddOrEditWine() {
       if (src === 'camera') {
         const p = await ImagePicker.requestCameraPermissionsAsync();
         if (!p.granted) { Alert.alert(t('add.alertPermissionDenied')); return; }
-        res = await ImagePicker.launchCameraAsync({ quality: 0.6, base64: true, allowsEditing: true });
+        res = await ImagePicker.launchCameraAsync({ quality: 0.6, base64: true, allowsEditing: false });
       } else {
         const p = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (!p.granted) { Alert.alert(t('add.alertPermissionDenied')); return; }
-        res = await ImagePicker.launchImageLibraryAsync({ quality: 0.6, base64: true, allowsEditing: true, mediaTypes: ImagePicker.MediaTypeOptions.Images });
+        res = await ImagePicker.launchImageLibraryAsync({ quality: 0.6, base64: true, allowsEditing: false, mediaTypes: ImagePicker.MediaTypeOptions.Images });
       }
       if (res.canceled) return;
       const asset = res.assets?.[0];
@@ -207,6 +218,7 @@ export default function AddOrEditWine() {
         router.replace(`/wine/${editingId}`);
       } else {
         await storage.createWine(body);
+        resetForm();
         router.replace('/(tabs)/home');
       }
     } catch {
